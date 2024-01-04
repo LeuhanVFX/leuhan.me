@@ -1,0 +1,180 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Wordle | Leuhan</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <script src="liste_mots.js"></script>
+    <meta name="viewport" content="width=device-width">
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="icon.png">
+    <link rel="manifest" href="manifest.json">
+</head>
+<main>
+    <header>
+        <nav class="menu">
+            <div class="about">
+
+                <label for="rules_button" class="menuButton">
+                    <img src="livre-alt.svg" alt="rules_icon">
+                </label>
+                <label for="settings_button" class="menuButton">
+                    <img src="settings.png" alt="rules_icon">
+                </label>
+            </div>
+            <h1 class="game_logo">WORDLE</h1>
+            <div class="theme-toggle">
+                <div class="toggleWrapper">
+                    <input class="input" id="dn" type="checkbox" checked />
+                    <label class="toggle" for="dn">
+                        <span class="toggle__handler">
+                            <span class="crater crater--1"></span>
+                            <span class="crater crater--2"></span>
+                            <span class="crater crater--3"></span>
+                        </span>
+                        <span class="star star--1"></span>
+                        <span class="star star--2"></span>
+                        <span class="star star--3"></span>
+                        <span class="star star--4"></span>
+                        <span class="star star--5"></span>
+                        <span class="star star--6"></span>
+                    </label>
+                </div>
+            </div>
+        </nav>
+
+        <div class="center">
+            <label for="rules_button" class="blurbox" id="rules_blur"></label>
+            <input type="checkbox" id="rules_button">
+            <div id="rules_chart" class="chart">
+                <h2>
+                    Comment jouer ?
+                </h2>
+                <p>
+                    Sous le même concept que le <b>Wordle</b>, Vous avez jusqu'à 6 tentatives pour trouver un mot caché.
+                    <br>
+                    <br>
+                    À chaque tentative, les lettres changeront de couleur.
+                </p>
+                <ul>
+                    <li>
+                        <b><span class="exemple" id="correctex">A</span> La lettre est bien placée</b>
+                    </li>
+                    <li>
+                        <b><span class="exemple" id="presentex">A</span> La lettre est présente mais mal placée</b>
+                    </li>
+                    <li>
+                        <b><span class="exemple" id="absentex">A</span> La lettre n'est pas dans le mot</b>
+                    </li>
+                </ul>
+                <div class="separator"></div>
+                <section id="download">
+                    <h2>Téléchargement</h2>
+                    <p>Téléchargez l'application maintenant pour y jouer hors ligne !</p>
+                    <a href="Leuhan Wordle.apk" class="downloadButton"><b>Télécharger</b></a>
+                </section>
+                <div class="separator"></div>
+                <h2>Crédits</h2>
+                <p>
+                    Site créé par <a href="https://ko-fi.com/leuhan" target="_blank"><b>Leuhan</b></a>
+                </p>
+                <p>
+                    Inspiré de <a href="https://wordle.louan.me" target="_blank"><b>Le Mot</b></a> par Louan
+                </p>
+                <label for="rules_button" id="rules_close_button" class='simple_button'>
+                    <img src="close.png" alt="close">
+                </label>
+            </div>
+            <label for="settings_button" class="blurbox" id="settings_blur"></label>
+            <input type="checkbox" id="settings_button">
+            <div class="chart" id="settings_chart">
+                <h2>Difficulté</h2>
+                <label for="difficulty" class="switch" aria-label="Toggle">
+                    <input type="checkbox" id="difficulty" />
+                    <span>Facile</span>
+                    <span>Difficile</span>
+                </label>
+                <div class="separator" style="margin-top: 20px;"></div>
+                <h2>Thème</h2>
+                <div class="row" style="width: 80%;">
+                    <p>
+                        <b>
+                            <span class="exemple" id="correctex">A</span>
+                            <span class="exemple" id="presentex">A</span>
+                            <span class="exemple" id="absentex">A</span>
+                        </b>
+                    </p>
+                    <select name="theme" id="scheme_selector">
+                        <option value="0" >🟩🟨</option>
+                        <option value="1">🟥🟨</option>
+                        <option value="2">🟪🟦</option>
+                    </select>
+                </div>
+                <div class="separator"></div>
+                <h2>Disposition</h2>
+                <div class="row" style="width: 80%;">
+                    <h3>Clavier</h3>
+                <select name="dispo_selector" id="dispo_selector">
+                    <option value="Default">Par défaut</option>
+                    <option value="Inverse">Inversé</option>
+                    <option value="Droite">Actions à droite</option>
+                </select>
+                </div>
+
+                <label for="settings_button" id="settings_close_button" class='simple_button'>
+                    <img src="close.png" alt="close">
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <body>
+        <div class="game">
+            <div class="grid" id="grid">
+
+                <span id="ligne1" class="ligne">
+                </span>
+                <span id="ligne2" class="ligne">
+                </span>
+                <span id="ligne3" class="ligne">
+                </span>
+                <span id="ligne4" class="ligne">
+                </span>
+                <span id="ligne5" class="ligne">
+                </span>
+                <span id="ligne6" class="ligne">
+                </span>
+            </div>
+            <div class="keyboard" id="keyboard">
+            </div>
+            <div class="banner" id="win_banner">
+                <div class="banner_text"><b></b></div>
+                <div class="close_button" id="close_button2"> <img src="close.png" alt="cross" width="25px"></div>
+                <div class="Null" style="height: 50px;"></div>
+                <div class="definition_button" id="def_button"></div>
+
+            </div>
+
+            <div class="banner" id="lose_banner">
+                <div class="banner_text"></div>
+                <div class="close_button" id="close_button2"> <img src="close.png" alt="cross" width="25px"></div>
+                <div class="Null" style="height: 50px;"></div>
+                <div class="button" id="replay"><b>Rejouer</b></div>
+            </div>
+
+            <div class="banner" id="generic_banner">
+                <div class="banner_text"></div>
+            </div>
+        </div>
+    </body>
+</main>
+
+</html>
+</div>
+</div>
+</body>
+</main>
+
+</html>
