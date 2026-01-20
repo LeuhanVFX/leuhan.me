@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Wordle</title>
+    <link rel="stylesheet" type="text/css" href="style.css">
+    <script src="script.js" defer></script>
+    <script src="config.js"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="icon.png">
+</head>
+<main>
+    <header>
+        <nav>
+            <h1>
+                WORDLE
+            </h1>
+        </nav>
+
+        <a id='rules' class="rules" id="rule_button">
+            <img src="rules.png" alt="rules_icon">
+        </a>
+        <div class="center">
+            <div id="rules_chart" class="chart">
+                <h2>
+                    Comment jouer ?
+                </h2>
+                <p>
+                    Vous pouvez essayer jusqu'à 6 mots différents pour trouver le mot caché
+                </p>
+                <ul>
+                    <li>
+                        <b>🟩 La lettre est bien placée</b>
+                    </li>
+                    <li>
+                        <b>🟨 La lettre est dans le mot mais mal placée</b>
+                    </li>
+                    <li>
+                        <b>⬛ La lettre n'est pas dans le mot</b>
+                    </li>
+                </ul>
+                <div id="close_button" class='simple_button'>
+                    <img src="close.png" alt="close">
+                </div>
+                <p>
+                <h2>Difficulté</h2>
+                </p>
+                <div class="difficulty">
+                    <div class="difficulty_cell" id="facile">
+                        <h3 id="t_facile">
+                            Facile
+                            <div class="explain_button" id="explain_button1">?</div>
+                        </h3>
+                        <div class='span' id="s_facile">La première lettre ainsi que 6 autres n'étant pas dans le mot
+                            sont indiquées</div>
+                    </div>
+                    <div class="toggle_button" id="dif_button">
+                        <div class="button_dot" id="button_dot"></div>
+                    </div>
+                    <div class="difficulty_cell" id="difficile">
+                        <h3 id="t_difficile">
+                            Difficile
+                            <div class="explain_button" id="explain_button2">?</div>
+                        </h3>
+                        <div class='span' id="s_difficile">Règle classique, aucune lettre n'est indiquée</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <body>
+        <div class="game">
+            <div class="grid" id="grid">
+                <span id="ligne1" class="ligne">
+                <div class="cell" id="cell1"></div>
+                <div class="cell" id="cell2"></div>
+                <div class="cell" id="cell3"></div>
+                <div class="cell" id="cell4"></div>
+                <div class="cell" id="cell5"></div>
+                </span>
+                <span id="ligne2" class="ligne">
+                <div class="cell" id="cell6"></div>
+                <div class="cell" id="cell7"></div>
+                <div class="cell" id="cell8"></div>
+                <div class="cell" id="cell9"></div>
+                <div class="cell" id="cell10"></div>
+                </span>
+                <span id="ligne3" class="ligne">
+                <div class="cell" id="cell11"></div>
+                <div class="cell" id="cell12"></div>
+                <div class="cell" id="cell13"></div>
+                <div class="cell" id="cell14"></div>
+                <div class="cell" id="cell15"></div>
+                </span>
+                <span id="ligne4" class="ligne">
+                <div class="cell" id="cell16"></div>
+                <div class="cell" id="cell17"></div>
+                <div class="cell" id="cell18"></div>
+                <div class="cell" id="cell19"></div>
+                <div class="cell" id="cell20"></div>
+                </span>
+                <span id="ligne5" class="ligne">
+                <div class="cell" id="cell21"></div>
+                <div class="cell" id="cell22"></div>
+                <div class="cell" id="cell23"></div>
+                <div class="cell" id="cell24"></div>
+                <div class="cell" id="cell25"></div>
+                </span>
+                <span id="ligne6" class="ligne">
+                <div class="cell" id="cell26"></div>
+                <div class="cell" id="cell27"></div>
+                <div class="cell" id="cell28"></div>
+                <div class="cell" id="cell29"></div>
+                <div class="cell" id="cell30"></div>
+                </span>
+            </div>
+            <div class="keyboard" id="keyboard">
+                <div class="key" id="A">A</div>
+                <div class="key" id="Z">Z</div>
+                <div class="key" id="E">E</div>
+                <div class="key" id="R">R</div>
+                <div class="key" id="T">T</div>
+                <div class="key" id="Y">Y</div>
+                <div class="key" id="U">U</div>
+                <div class="key" id="I">I</div>
+                <div class="key" id="O">O</div>
+                <div class="key" id="P">P</div>
+                <div class="key" id="Q">Q</div>
+                <div class="key" id="S">S</div>
+                <div class="key" id="D">D</div>
+                <div class="key" id="F">F</div>
+                <div class="key" id="G">G</div>
+                <div class="key" id="H">H</div>
+                <div class="key" id="J">J</div>
+                <div class="key" id="K">K</div>
+                <div class="key" id="L">L</div>
+                <div class="key" id="M">M</div>
+                <div class="key wide_key" id="Enter"><img src="enter.svg" alt="Enter"></div>
+                <div class="key" id="W">W</div>
+                <div class="key" id="X">X</div>
+                <div class="key" id="C">C</div>
+                <div class="key" id="V">V</div>
+                <div class="key" id="B">B</div>
+                <div class="key" id="N">N</div>
+                <div class="key wide_key" id="Backspace"><img src="delete.svg" alt="Back"></div>
+            </div>
+            <div class="banner" id="win_banner">
+                <div class="banner_text"><b></b></div>
+                <div class="close_button" id="close_button2"> <img src="close.png" alt="cross" width="25px"></div>
+                <div class="Null" style="height: 50px;"></div>
+                <div class="button" id="replay"><b>Rejouer</b></div>
+
+            </div>
+
+            <div class="banner" id="lose_banner">
+                <div class="banner_text"></div>
+                <div class="close_button" id="close_button2"> <img src="close.png" alt="cross" width="25px"></div>
+                <div class="Null" style="height: 50px;"></div>
+                <div class="button" id="replay"><b>Rejouer</b></div>
+            </div>
+
+            <div class="banner" id="generic_banner">
+                <div class="banner_text"></div>
+            </div>
+        </div>
+    </body>
+</main>
+
+</html>
+</div>
+</div>
+</body>
+</main>
+
+</html>
