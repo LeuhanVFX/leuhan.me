@@ -379,7 +379,7 @@ async function verification() {
                 { transform: 'translateX(-10px)', scale: 1  },
                 { transform: 'translateX(0px)', scale: 1  },
 
-            ], 1300)
+            ], 300)
     }
     keyboard = true
 };
