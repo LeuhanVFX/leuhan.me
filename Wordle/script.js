@@ -351,7 +351,7 @@ async function verification() {
                     { transform: 'translateX(-10px)' },
                     { transform: 'translateX(0px)' },
 
-                ], 200)
+                ], 300)
             }
         } else {
             summonSimpleBanner("Le mot n'est pas dans le dictionnaire", 1000)
@@ -365,21 +365,21 @@ async function verification() {
                 { transform: 'translateX(-10px)' },
                 { transform: 'translateX(0px)' },
 
-            ], 200)
+            ], 300)
         }
     } else {
         summonSimpleBanner('Veuillez rentrer un mot de 5 lettres', 1000)
         let ligne = document.getElementById('ligne' + (lignes.indexOf(ligne_active) + 1))
 
         ligne.animate([
-                { transform: 'translateX(0px)' },
-                { transform: 'translateX(5px)' },
-                { transform: 'translateX(-10px)' },
-                { transform: 'translateX(10px)' },
-                { transform: 'translateX(-10px)' },
-                { transform: 'translateX(0px)' },
+                { transform: 'translateX(0px)', scale: 1 },
+                { transform: 'translateX(5px)', scale: 1  },
+                { transform: 'translateX(-10px)', scale: 1  },
+                { transform: 'translateX(10px)', scale: 1  },
+                { transform: 'translateX(-10px)', scale: 1  },
+                { transform: 'translateX(0px)', scale: 1  },
 
-            ], 200)
+            ], 300)
     }
     keyboard = true
 };
