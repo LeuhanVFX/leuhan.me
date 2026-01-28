@@ -7151,7 +7151,7 @@ const motsFrequents = [
   'heure',
   'hiver',
   'homme',
-  'hôtel',
+  'hotel',
   'image',
   'index',
   'issue',

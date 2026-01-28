@@ -167,11 +167,11 @@ async function summonSimpleBanner(text, duration) {
     banner.style.zIndex = '100'
     document.body.appendChild(banner)
     banner.animate([
-        {opacity: 0 },
-        {opacity: 1 },
-        {opacity: 1 },
-        {opacity: 1 },
-        {opacity: 0 }
+        { opacity: 0 },
+        { opacity: 1 },
+        { opacity: 1 },
+        { opacity: 1 },
+        { opacity: 0 }
     ], duration)
     await sleep(duration)
     document.body.removeChild(banner)
@@ -372,14 +372,14 @@ async function verification() {
         let ligne = document.getElementById('ligne' + (lignes.indexOf(ligne_active) + 1))
 
         ligne.animate([
-                { transform: 'translateX(0px)', scale: 1 },
-                { transform: 'translateX(5px)', scale: 1  },
-                { transform: 'translateX(-10px)', scale: 1  },
-                { transform: 'translateX(10px)', scale: 1  },
-                { transform: 'translateX(-10px)', scale: 1  },
-                { transform: 'translateX(0px)', scale: 1  },
+            { transform: 'translateX(0px)', scale: 1 },
+            { transform: 'translateX(5px)', scale: 1 },
+            { transform: 'translateX(-10px)', scale: 1 },
+            { transform: 'translateX(10px)', scale: 1 },
+            { transform: 'translateX(-10px)', scale: 1 },
+            { transform: 'translateX(0px)', scale: 1 },
 
-            ], 300)
+        ], 300)
     }
     keyboard = true
 };
@@ -659,27 +659,32 @@ document.addEventListener("keydown", (event) => {
 keys.forEach((key) => { // Clic sur une touche
     if (key.id == 'Enter') {
         key.addEventListener("click", (event) => {
-            verification()
+            if (keyboard == true) {
+                verification()
+            }
         });
     } else if (key.id == 'Backspace') {
         key.addEventListener("click", (event) => {
-            for (let i = ligne_active.length - 1; i >= 0; i--) {
-                let cell = ligne_active[i]
-                if (cell.hasAttribute('used')) {
-                    cell.innerHTML = ''
-                    cell.removeAttribute('used')
-                    active_cell.style.borderColor = 'rgb(196, 186, 174)'
-                    active_cell.style.boxShadow = 'none'
-                    active_cell = ligne_active[i]
-                    active_cell.style.borderColor = 'rgb(249, 176, 252)'
-                    active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
-                    break
+            if (keyboard == true) {
+                for (let i = ligne_active.length - 1; i >= 0; i--) {
+                    let cell = ligne_active[i]
+                    if (cell.hasAttribute('used')) {
+                        cell.innerHTML = ''
+                        cell.removeAttribute('used')
+                        active_cell.style.borderColor = 'rgb(196, 186, 174)'
+                        active_cell.style.boxShadow = 'none'
+                        active_cell = ligne_active[i]
+                        active_cell.style.borderColor = 'rgb(249, 176, 252)'
+                        active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
+                        break
+                    }
                 }
             }
         });
     } else {
 
         key.addEventListener("click", (event) => {
+            if (keyboard==true) {
             for (let i = 0; i < ligne_active.length; i++) {
                 let cell = ligne_active[i]
                 if (!(cell.hasAttribute('used'))) {
@@ -695,6 +700,7 @@ keys.forEach((key) => { // Clic sur une touche
                     break
                 }
             }
+        }
         });
     }
 });
