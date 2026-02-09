@@ -1,59 +1,49 @@
 <!DOCTYPE html>
-
-<html lang="fr" id="home">
+<html lang="fr">
 
 <head>
-    <meta charset="utf-8">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leuhan</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="icon" href="assets/logo.png">
-    <script src="script.js" defer></script>
+    <link rel="icon" type="image/png" href="assets/logo.png">
 </head>
-<header>
-    <nav>
-        <a href="index.php#home"><img src="assets/logo.png" alt="logo" class="logo"></a>
-        <ul>
-            <li><a href="index.php#about"><b>À propos</b></a></li>
-            <li><a href="index.php#projects"><b>Projets</b></a></li>
-            <li><a href="index.php#contact"><b>Contact</b></a></li>
-        </ul>
-    </nav>
-</header>
 
 <body>
-    <section id="about" class="noBlur">
-        <div class="tableau">
-            <p>
-                I'm <b>Nahuel Dupuy</b>, a 17 years old student passionate about programming, especially in web
-                development. <br>
-                I started learning code at the age of 15, starting with Python, following with <b>HTML</b>, <b>CSS</b>
-                and <b>JavaScript</b>. <br>
-                <br>
-                My goal is to create a game website where poeple will be able to play the game I made.
-            </p>
-            <div class="tile">
-                <img src="assets/Logo v6.png" alt="">
-            </div>
-        </div>
-    </section>
-    <section id="projects">
-      <h2>Projects</h2>
-<div class="carousel">
-
-      <div class="carousel__slide">
-                <div class="desc">
-                    <h3>WORDLE</h3>
-                    <p>My first game created using <b>JavaScript</b>. Currently only available in infinite mode, I'm
-                        working on a daily version </p>
+    <header>
+        <nav class="menu">
+            <a href="index.html#accueil" class="logo">
+                <img src="assets/logo.png" alt="Logo de Leuhan">
+            </a>
+            <ul id="links">
+                <li><a href="index.html#about"><b>À propos</b></a></li>
+                <li><a href="index.html#projets"><b>Projets</b></a></li>
+                <li><a href="index.html#contact"><b>Contact</b></a></li>
+            </ul>
+            <div class="theme-toggle">
+                <div class="toggleWrapper">
+                    <input class="input" id="dn" type="checkbox" />
+                    <label class="toggle" for="dn">
+                        <span class="toggle__handler">
+                            <span class="crater crater--1"></span>
+                            <span class="crater crater--2"></span>
+                            <span class="crater crater--3"></span>
+                        </span>
+                        <span class="star star--1"></span>
+                        <span class="star star--2"></span>
+                        <span class="star star--3"></span>
+                        <span class="star star--4"></span>
+                        <span class="star star--5"></span>
+                        <span class="star star--6"></span>
+                    </label>
                 </div>
-                <img src="assets/Logo v6.png" alt="">
-
             </div>
-        </div>
-    </section>
+        </nav>
+    </header>
+    <section id="about"> 
+        <h1>À propos de moi</h1>
+        <p>Je suis un développeur passionné par la création de solutions innovantes et efficaces. Avec une solide expérience en développement web, je m'efforce de créer des applications performantes et conviviales. Mon objectif est de contribuer à des projets qui ont un impact positif sur la société.</p>
+
 </body>
-<footer id="contact">
-    <p>© 2025 Leuhan</p>
-</footer>
 
 </html>
