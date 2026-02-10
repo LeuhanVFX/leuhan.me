@@ -8,12 +8,12 @@
     <link rel="stylesheet" href="style.css">
     <script> /// Gestion du theme à l'entrée du site
         if (getCookie("theme") === "dark") {
-    themeToggle.checked = true;
-    document.documentElement.classList.add('dark-mode');
-} else {
-    themeToggle.checked = false;
-    document.documentElement.classList.remove('dark-mode');
-}
+            themeToggle.checked = true;
+            document.documentElement.classList.add('dark-mode');
+        } else {
+            themeToggle.checked = false;
+            document.documentElement.classList.remove('dark-mode');
+        }
     </script>
     <script src="script.js" defer></script>
     <link rel="icon" type="image/png" href="assets/logo.png">
@@ -22,29 +22,31 @@
 <body>
     <header> <!-- Menu de navigation -->
         <div class="burger">
-            <label class="hamburger">
-  <input type="checkbox" />
-  <svg viewBox="0 0 32 32">
-    <path
-      class="line line-top-bottom"
-      d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22"
-    ></path>
-    <path class="line" d="M7 16 27 16"></path>
-  </svg>
-</label>
+            <span class="background"> </span>
+            <span>
+                <label class="hamburger">
+                    <input type="checkbox" />
+                    <svg viewBox="0 0 32 32">
+                        <path class="line line-top-bottom"
+                            d="M27 10 13 10C10.8 10 9 8.2 9 6 9 3.5 10.8 2 13 2 15.2 2 17 3.8 17 6L17 26C17 28.2 18.8 30 21 30 23.2 30 25 28.2 25 26 25 23.8 23.2 22 21 22L7 22">
+                        </path>
+                        <path class="line" d="M7 16 27 16"></path>
+                    </svg>
+                </label>
+            </span>
         </div>
         <nav class="menu">
             <a href="index.html#accueil" class="logo">
                 <img src="assets/logo.png" alt="Logo de Leuhan">
             </a>
             <ul id="links">
-                <li><a href="index.html#about"><b>À propos</b></a></li>
-                <li><a href="index.html#projets"><b>Projets</b></a></li>
-                <li><a href="index.html#contact"><b>Contact</b></a></li>
+                <li><a href="#about"><b>À propos</b></a></li>
+                <li><a href="#projets"><b>Projets</b></a></li>
+                <li><a href="#contact"><b>Contact</b></a></li>
             </ul>
             <div class="theme-toggle">
                 <div class="toggleWrapper">
-                    <input class="input" id="dn" type="checkbox"/>
+                    <input class="input" id="dn" type="checkbox" />
                     <label class="toggle" for="dn">
                         <span class="toggle__handler">
                             <span class="crater crater--1"></span>
@@ -62,11 +64,21 @@
             </div>
         </nav>
     </header>
-    <section id="about"> 
-        <h1>À propos de moi</h1>
-        <p>Je suis un développeur passionné par la création de solutions innovantes et efficaces. Avec une solide expérience en développement web,
-             je m'efforce de créer des applications performantes et conviviales. Mon objectif est de contribuer à des projets qui ont un impact
-             positif sur la société.</p>
+    <section id="about">
+        <h1>En résumé</h1>
+        <div class="intro">
+            <p>
+                Je suis Nahuel Dupuy, un élève de 17 ans passioné par l'informatique, les jeux vidéos et la programmation .
+                J'apprends différents langages mais me spécialise actuellement dans le web dans l'optique de devenir développeur web
+            </p>
+            <div class="card">
+                <div class="img"></div>
+                <div class="caption">
+                    <h3>Nahuel Dupuy</h3>
+                    <p>élève</p>
+                </div>
+            </div>
+        </div>
 
 </body>
 
