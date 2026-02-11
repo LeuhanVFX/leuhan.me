@@ -21,8 +21,9 @@
 
 <body>
     <header> <!-- Menu de navigation -->
-        <div class="burger">
-            <span class="background"> </span>
+        <div class="hide-scroll"></div>
+        <nav class="menu">
+            <div class="burger">
             <span>
                 <label class="hamburger">
                     <input type="checkbox" />
@@ -35,18 +36,17 @@
                 </label>
             </span>
         </div>
-        <nav class="menu">
             <a href="index.html#accueil" class="logo">
                 <img src="assets/logo.png" alt="Logo de Leuhan">
             </a>
             <ul id="links">
                 <li><a href="#about"><b>À propos</b></a></li>
-                <li><a href="#projets"><b>Projets</b></a></li>
+                <li><a href="#projects"><b>Projets</b></a></li>
                 <li><a href="#contact"><b>Contact</b></a></li>
             </ul>
             <div class="theme-toggle">
                 <div class="toggleWrapper">
-                    <input class="input" id="dn" type="checkbox" />
+                    <input class="input" id="dn" type="checkbox" checked />
                     <label class="toggle" for="dn">
                         <span class="toggle__handler">
                             <span class="crater crater--1"></span>
@@ -65,21 +65,76 @@
         </nav>
     </header>
     <section id="about">
-        <h1>En résumé</h1>
+
         <div class="intro">
+            <h1>Qui suis-je ?</h1>
+            <br>
             <p>
-                Je suis Nahuel Dupuy, un élève de 17 ans passioné par l'informatique, les jeux vidéos et la programmation .
-                J'apprends différents langages mais me spécialise actuellement dans le web dans l'optique de devenir développeur web
+                Je suis Nahuel Dupuy, un élève de 17 ans passioné par l'informatique, les jeux vidéos et la
+                programmation.
+                J'apprends différents langages mais me spécialise actuellement dans le web dans l'optique de devenir
+                développeur web
             </p>
-            <div class="card">
-                <div class="img"></div>
+
+            <!-- <div class="card">
                 <div class="caption">
                     <h3>Nahuel Dupuy</h3>
                     <p>élève</p>
                 </div>
+            </div> -->
+        </div>
+        <div class="img"></div>
+    </section>
+    <section id="projects">
+        <h1 style="z-index: 5;">Projets</h1>
+        <div class="carousel">
+            <div class="carousel-item" id="slide1" onclick="window.open('https://leuhan.xyz/wordle')" target="_blank">
+                <div class="carousel-caption">
+                    <h3>Wordle</h3>
+                    <p>Jeu inspiré du Motus, créé en HTML, CSS et JavaScript.</p>
+                </div>
+            </div>
+            <div class="carousel-item" id="slide2" onclick="window.open('https://leuhan.xyz/wordle')" target="_blank">
+                <div class="carousel-caption">
+                    <h3>à venir</h3>
+                    <p>à venir</p>
+                </div>
+            </div>
+            <div class="carousel-item" id="slide3" onclick="window.open('https://leuhan.xyz/wordle')" target="_blank">
+                <div class="carousel-caption">
+                    <h3>à venir</h3>
+                    <p>à venir</p>
+                </div>
+            </div>
+            <div class="carousel-item" id="slide4" onclick="window.open('https://leuhan.xyz/wordle')" target="_blank">
+                <div class="carousel-caption">
+                    <h3>à venir</h3>
+                    <p>à venir</p>
+                </div>
             </div>
         </div>
 
+    </section>
+    <footer>
+        <p>© 2026 Nahuel Dupuy.</p>
+        <ul>
+            <li>
+                <a href="https://discord.com/users/343435951621537792" target="_blank">Discord</a>
+            </li>
+            <li>
+                <a href="mailto:support@leuhan.xyz" target="_blank">Email</a>
+            </li>
+        </ul>
+    </footer>
+    <div class="top_button" id="top-button">
+        <button class="button" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
+            <svg viewBox="0 0 384 512" class="svgIcon">
+                <path
+                    d="M214.6 41.4c-12.5-12.5-32.8-12.5-45.3 0l-160 160c-12.5 12.5-12.5 32.8 0 45.3s32.8 12.5 45.3 0L160 141.2V448c0 17.7 14.3 32 32 32s32-14.3 32-32V141.2L329.4 246.6c12.5 12.5 32.8 12.5 45.3 0s12.5-32.8 0-45.3l-160-160z">
+                </path>
+            </svg>
+        </button>
+    </div>
 </body>
 
 </html>

@@ -9,7 +9,10 @@ function getCookie(name) {
     }
     return null;
 }
-
+async function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+/// Theme toggle
 function toggleTheme() {
     if (themeToggle.checked) {
         document.documentElement.classList.add('dark-mode');
@@ -36,5 +39,48 @@ if (getCookie('theme') === 'dark') {
     themeToggle.checked = false;
 }
 
+/// Carousel
+const carousel = document.querySelector('.carousel');
+
+/// Scroll horizontal avec la molette
+carousel.addEventListener('mouseenter', () => {
+    carousel.addEventListener('wheel', (e) => {
+    const isScrollingRight = e.deltaY > 0;
+    const isScrollingLeft = e.deltaY < 0;
+
+    const canScrollRight = carousel.scrollLeft < (carousel.scrollWidth - carousel.clientWidth);
+    const canScrollLeft = carousel.scrollLeft > 0;
+
+    if ((isScrollingRight && canScrollRight) || (isScrollingLeft && canScrollLeft)) {
+        e.preventDefault();
+        carousel.scrollLeft += (2 * e.deltaY);
+    }
+});
+});
+
+carousel.addEventListener('mouseleave', () => {
+    carousel.removeEventListener('wheel', (e) => {
+    const isScrollingRight = e.deltaY > 0;
+    const isScrollingLeft = e.deltaY < 0;
+
+    const canScrollRight = carousel.scrollLeft < (carousel.scrollWidth - carousel.clientWidth);
+    const canScrollLeft = carousel.scrollLeft > 0;
+
+    if ((isScrollingRight && canScrollRight) || (isScrollingLeft && canScrollLeft)) {
+        e.preventDefault();
+        carousel.scrollLeft += (2 * e.deltaY);
+    }
+});
+});
 
 
+/// Top button
+const topButton = document.getElementById('top-button');
+
+window.addEventListener('scroll', async () => {
+    if (window.scrollY > 500) {
+        topButton.classList.add('show');
+    } else {
+        topButton.classList.remove('show');
+    }
+});
