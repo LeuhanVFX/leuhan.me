@@ -18,6 +18,7 @@ html {
     scroll-padding-top: 80px;
     scroll-behavior: smooth;
     scrollbar-width: none;
+    overflow-x: hidden;
 }
 
 body {
@@ -49,16 +50,6 @@ header {
     border-radius: 10px;
     text-align: center;
     z-index: 100;
-}
-
-.hide-scroll {
-    position: absolute;
-    top: -10px;
-    left: 0;
-    width: 100%;
-    height: 10px;
-    background-color: var(--primary);
-    z-index: 101;
 }
 
 .menu {
@@ -427,16 +418,18 @@ section h1 {
 }
 
 #projects {
+    gap: 50px;
     overflow-x: hidden;
+    align-items: center;
+    justify-content: center;
 }
 
 
 .carousel {
-    width: 60%;
-    background-color: #1b181380;
     margin: auto;
     display: grid;
-    grid-template-columns: 1fr 2fr 1fr;
+    width: 100%;
+    grid-template-columns: 1fr 40% 1fr;
     overflow-x: scroll;
     gap: 50px;
     padding: 20px 20px;
@@ -445,20 +438,46 @@ section h1 {
     z-index: 1;
     text-transform: capitalize;
     scroll-behavior: smooth;
+    align-items: center;
+    transition: all 0.2s ease;
 }
 
-.carousel .carousel-items {
-    display: none;
+#projects .table {
+    display: grid;
+    width: 100%;
+    grid-template-columns: 1fr 3fr 1fr;
+    align-items: center;
+    justify-items: center;
+}
+
+#projects .arrow {
+    display: block;
+    content: url('assets/arrow.svg');
+    scale: 2 2;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+#projects .arrow:hover {
+    scale: 2.2 2.2;
+}
+
+#left_arrow {
+    opacity: 0;
+    cursor: default;
+    transform: scaleX(-1);
 }
 
 .carousel-item {
     display: flex;
     flex-direction: column;
-    width: 30%;
+    width: 100%;
     aspect-ratio: 7/3;
     background-image: linear-gradient(45deg,rgba(0, 145, 255, 1) 0%, rgba(163, 92, 250, 1) 50%, rgba(255, 143, 249, 1) 100%);;
     background-size: cover;
     background-position: center;
+    box-shadow: 2px 2px 0px 2px var(--text-color);
     color: #1b1813;
     border-radius: 10px;
     position: relative;
@@ -475,7 +494,7 @@ section h1 {
         display: block;
         width: 100%;
         height: 0%;
-        background-color: rgba(255, 242, 225, 0.8);
+        background-color: rgba(255, 242, 225, 0.5);
         border-radius: 10px;
         backdrop-filter: blur(10px);
         font-weight: 700;
@@ -493,10 +512,11 @@ section h1 {
 
 .carousel-item:hover {
     transform: scale(1.05) rotate(-2deg);
+    box-shadow: none;
     transition: all 0.2s ease;
 
     .carousel-caption {
-        height: 40%;
+        height: 100%;
         transition: all 0.2s ease;
     }
 }
@@ -616,3 +636,4 @@ footer ul {
         display: block;
     }
 }
+

@@ -1,13 +1,12 @@
 /// Fonctions
 function getCookie(name) {
-    let cookieArr = document.cookie.split(";");
-    for (let i = 0; i < cookieArr.length; i++) {
-        let cookiePair = cookieArr[i].split("=");
-        if (name == cookiePair[0].trim()) {
-            return decodeURIComponent(cookiePair[1]);
+    const cookies = document.cookie.split(';')
+    for (let cookie of cookies) {
+        const [key, value] = cookie.split('=')
+        if (key.trim() === name) {
+            return value
         }
     }
-    return null;
 }
 async function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
@@ -23,6 +22,39 @@ function toggleTheme() {
     }
 }
 
+function showGrid(items, currentIndex) {
+    for (let i = 0; i < items.length; i++) {
+        if (i === currentIndex) {
+            items[i].style.display = 'flex';
+            items[i].style.gridColumn = 2
+        } else if (i === currentIndex + 1) {
+            items[i].style.display = 'flex';
+            items[i].style.gridColumn = 3
+        } else if (i === currentIndex - 1) {
+            items[i].style.display = 'flex';
+            items[i].style.gridColumn = 1
+        } else {
+            items[i].style.display = 'none';
+        }
+        }
+    }
+
+function showCarouselArrow(leftArrow, rightArrow, currentIndex) {
+    if (currentIndex === 0) {
+        leftArrow.style.opacity = '0';
+        rightArrow.style.cursor = 'default';
+    } else {
+        leftArrow.style.opacity = '1';
+        rightArrow.style.cursor = 'pointer';
+    }
+    if (currentIndex === carouselItems.length - 1) {
+        rightArrow.style.opacity = '0';
+        rightArrow.style.cursor = 'default';
+    } else {
+        rightArrow.style.opacity = '1';
+        rightArrow.style.cursor = 'pointer';
+    }
+}
 /// Gestion du theme
 let themeToggle = document.querySelector('.theme-toggle input');
 
@@ -31,7 +63,7 @@ themeToggle.addEventListener('change', () => {
     toggleTheme();
 });
 
-if (getCookie('theme') === 'dark') {
+if (true) {
     document.documentElement.classList.add('dark-mode');
     themeToggle.checked = true;
 } else {
@@ -41,24 +73,29 @@ if (getCookie('theme') === 'dark') {
 
 /// Carousel
 const carousel = document.querySelector('.carousel');
-const carouselItems = carousel.querySelectorAll('.carousel-item');
+const carouselItems = Array.from(carousel.querySelectorAll('.carousel-item'))
+console.log(carouselItems)
 let currentIndex = 0;
-function showGrid(items, grid) {
-    items.forEach((item, index) => {
-        if (items.indexOf(item) === currentIndex) {
-            item.style.display = 'flex';
-            item.style.gridColumn = 2
-        } else if (items.indexOf(item) === currentIndex + 1) {
-            item.style.display = 'flex';
-            item.style.gridColumn = 1
-        } else if (items.indexOf(item) === currentIndex - 1) {
-            item.style.display = 'flex';
-            item.style.gridColumn = 3
-        } else {
-            item.style.display = 'none';
-        }
-    })
-}
+
+showGrid(carouselItems, currentIndex)
+
+const leftArrow = document.getElementById('left_arrow');
+leftArrow.addEventListener('click', () => {
+    if (currentIndex > 0) {
+        currentIndex--;
+        showGrid(carouselItems, currentIndex)
+        showCarouselArrow(leftArrow, rightArrow, currentIndex)
+    }
+})
+
+const rightArrow = document.getElementById('right_arrow');
+rightArrow.addEventListener('click', () => {
+    if (currentIndex < carouselItems.length - 1) {
+        currentIndex++;
+        showGrid(carouselItems, currentIndex)
+        showCarouselArrow(leftArrow, rightArrow, currentIndex)
+    }
+})
 
 /// Top button
 const topButton = document.getElementById('top-button');

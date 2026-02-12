@@ -6,22 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Leuhan Hub</title> <!-- Site : leuhanhub.fr-->
     <link rel="stylesheet" href="style.css">
-    <script> /// Gestion du theme à l'entrée du site
-        if (getCookie("theme") === "dark") {
-            themeToggle.checked = true;
-            document.documentElement.classList.add('dark-mode');
-        } else {
-            themeToggle.checked = false;
-            document.documentElement.classList.remove('dark-mode');
-        }
-    </script>
     <script src="script.js" defer></script>
     <link rel="icon" type="image/png" href="assets/logo.png">
 </head>
 
 <body>
     <header> <!-- Menu de navigation -->
-        <div class="hide-scroll"></div>
         <nav class="menu">
             <div class="burger">
                 <span>
@@ -65,7 +55,6 @@
         </nav>
     </header>
     <section id="about">
-
         <div class="intro">
             <h1>Qui suis-je ?</h1>
             <br>
@@ -87,8 +76,9 @@
     </section>
     <section id="projects">
         <h1 style="z-index: 5;">Projets</h1>
-        <div class="carousel">
-            <div class="carousel-items">
+        <div class="table">
+            <div class="arrow" id="left_arrow"></div>
+            <div class="carousel">
                 <div class="carousel-item" id="slide1" onclick="window.open('https://leuhan.xyz/wordle')"
                     target="_blank">
                     <div class="carousel-caption">
@@ -96,16 +86,28 @@
                         <p>Jeu inspiré du Motus, créé en HTML, CSS et JavaScript.</p>
                     </div>
                 </div>
-                <div class="carousel-item" id="slide2" onclick="window.open('https://leuhan.xyz/wordle')"
-                    target="_blank">
+                <div class="carousel-item" id="slide2" onclick="" target="_blank">
                     <div class="carousel-caption">
                         <h3>à venir</h3>
                         <p>à venir</p>
                     </div>
                 </div>
-            </div>
-        </div>
+                <div class="carousel-item" id="slide3" onclick="" target="_blank">
+                    <div class="carousel-caption">
+                        <h3>à venir</h3>
+                        <p>à venir</p>
+                    </div>
+                </div>
+                <div class="carousel-item" id="slide4" onclick="" target="_blank">
+                    <div class="carousel-caption">
+                        <h3>à venir</h3>
+                        <p>à venir</p>
+                    </div>
+                </div>
 
+            </div>
+            <div class="arrow" id="right_arrow"></div>
+        </div>
     </section>
     <footer>
         <p>© 2026 Nahuel Dupuy.</p>
