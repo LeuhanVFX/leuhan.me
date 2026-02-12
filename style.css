@@ -432,8 +432,11 @@ section h1 {
 
 
 .carousel {
-    width: 100%;
-    display: flex;
+    width: 60%;
+    background-color: #1b181380;
+    margin: auto;
+    display: grid;
+    grid-template-columns: 1fr 2fr 1fr;
     overflow-x: scroll;
     gap: 50px;
     padding: 20px 20px;
@@ -442,6 +445,10 @@ section h1 {
     z-index: 1;
     text-transform: capitalize;
     scroll-behavior: smooth;
+}
+
+.carousel .carousel-items {
+    display: none;
 }
 
 .carousel-item {
