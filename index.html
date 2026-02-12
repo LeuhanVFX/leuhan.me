@@ -14,7 +14,6 @@
     <header> <!-- Menu de navigation -->
         <nav class="menu">
             <div class="burger">
-                <span>
                     <label class="hamburger">
                         <input type="checkbox" />
                         <svg viewBox="0 0 32 32">
@@ -24,9 +23,13 @@
                             <path class="line" d="M7 16 27 16"></path>
                         </svg>
                     </label>
-                </span>
+                <ul id="burger_links">
+                <li><a href="#about"><b>À propos</b></a></li>
+                <li><a href="#projects"><b>Projets</b></a></li>
+                <li><a href="#contact"><b>Contact</b></a></li>
+            </ul>
             </div>
-            <a href="index.html#accueil" class="logo">
+            <a onclick="window.scrollTo({ top: 0, behavior: 'smooth' })" class="logo">
                 <img src="assets/logo.png" alt="Logo de Leuhan">
             </a>
             <ul id="links">
@@ -79,48 +82,49 @@
         <div class="table">
             <div class="arrow" id="left_arrow"></div>
             <div class="carousel">
-                <div class="carousel-item" id="slide1" onclick="window.open('https://leuhan.xyz/wordle')"
-                    target="_blank">
-                    <div class="carousel-caption">
-                        <h3>Wordle</h3>
-                        <p>Jeu inspiré du Motus, créé en HTML, CSS et JavaScript.</p>
+                <div class="carousel-track">
+                    <div class="carousel-item" id="slide1" onclick="window.open('https://leuhan.xyz/wordle')"
+                        target="_blank">
+                        <div class="carousel-caption">
+                            <h3>Wordle</h3>
+                            <p>Jeu inspiré du Motus, créé en HTML, CSS et JavaScript.</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" id="slide2" onclick="" target="_blank">
+                        <div class="carousel-caption">
+                            <h3>à venir</h3>
+                            <p>à venir</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" id="slide3" onclick="" target="_blank">
+                        <div class="carousel-caption">
+                            <h3>à venir</h3>
+                            <p>à venir</p>
+                        </div>
+                    </div>
+                    <div class="carousel-item" id="slide4" onclick="" target="_blank">
+                        <div class="carousel-caption">
+                            <h3>à venir</h3>
+                            <p>à venir</p>
+                        </div>
                     </div>
                 </div>
-                <div class="carousel-item" id="slide2" onclick="" target="_blank">
-                    <div class="carousel-caption">
-                        <h3>à venir</h3>
-                        <p>à venir</p>
-                    </div>
-                </div>
-                <div class="carousel-item" id="slide3" onclick="" target="_blank">
-                    <div class="carousel-caption">
-                        <h3>à venir</h3>
-                        <p>à venir</p>
-                    </div>
-                </div>
-                <div class="carousel-item" id="slide4" onclick="" target="_blank">
-                    <div class="carousel-caption">
-                        <h3>à venir</h3>
-                        <p>à venir</p>
-                    </div>
-                </div>
-
             </div>
             <div class="arrow" id="right_arrow"></div>
         </div>
     </section>
-    <footer>
+    <footer id="contact">
         <p>© 2026 Nahuel Dupuy.</p>
         <ul>
             <li>
                 <a href="https://discord.com/users/343435951621537792" target="_blank">Discord</a>
             </li>
-            <li>
+            <!-- <li>
                 <a href="mailto:support@leuhan.xyz" target="_blank">Email</a>
-            </li>
+            </li> -->
         </ul>
     </footer>
-    <div class="top_button" id="top-button">
+    <div class="top_button" id="top_button">
         <button class="button" onclick="window.scrollTo({ top: 0, behavior: 'smooth' })">
             <svg viewBox="0 0 384 512" class="svgIcon">
                 <path

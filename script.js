@@ -22,23 +22,6 @@ function toggleTheme() {
     }
 }
 
-function showGrid(items, currentIndex) {
-    for (let i = 0; i < items.length; i++) {
-        if (i === currentIndex) {
-            items[i].style.display = 'flex';
-            items[i].style.gridColumn = 2
-        } else if (i === currentIndex + 1) {
-            items[i].style.display = 'flex';
-            items[i].style.gridColumn = 3
-        } else if (i === currentIndex - 1) {
-            items[i].style.display = 'flex';
-            items[i].style.gridColumn = 1
-        } else {
-            items[i].style.display = 'none';
-        }
-        }
-    }
-
 function showCarouselArrow(leftArrow, rightArrow, currentIndex) {
     if (currentIndex === 0) {
         leftArrow.style.opacity = '0';
@@ -72,38 +55,64 @@ if (true) {
 }
 
 /// Carousel
-const carousel = document.querySelector('.carousel');
-const carouselItems = Array.from(carousel.querySelectorAll('.carousel-item'))
-console.log(carouselItems)
+const track = document.querySelector('.carousel-track');
+const slides = Array.from(document.querySelectorAll('.carousel-item'));
+const leftArrow = document.getElementById('left_arrow');
+const rightArrow = document.getElementById('right_arrow');
+
 let currentIndex = 0;
 
-showGrid(carouselItems, currentIndex)
+function updateCarousel() {
 
-const leftArrow = document.getElementById('left_arrow');
+    const slideWidth = slides[0].offsetWidth;
+    const gap = 40;
+
+    const offset = (slideWidth + gap) * currentIndex;
+
+    track.style.transform = `translateX(-${offset}px)`;
+
+    slides.forEach((slide, index) => {
+        slide.classList.toggle('active', index === currentIndex);
+    });
+
+    leftArrow.style.opacity = currentIndex === 0 ? '0' : '1';
+    leftArrow.style.cursor = currentIndex === 0 ? 'default' : 'pointer';
+    rightArrow.style.opacity = currentIndex === slides.length - 1 ? '0' : '1';
+    rightArrow.style.cursor = currentIndex === 0 ? 'default' : 'pointer';
+}
+
+
+rightArrow.addEventListener('click', () => {
+    if (currentIndex < slides.length - 1) {
+        currentIndex++;
+        updateCarousel();
+    }
+});
+
 leftArrow.addEventListener('click', () => {
     if (currentIndex > 0) {
         currentIndex--;
-        showGrid(carouselItems, currentIndex)
-        showCarouselArrow(leftArrow, rightArrow, currentIndex)
+        updateCarousel();
     }
-})
+});
 
-const rightArrow = document.getElementById('right_arrow');
-rightArrow.addEventListener('click', () => {
-    if (currentIndex < carouselItems.length - 1) {
-        currentIndex++;
-        showGrid(carouselItems, currentIndex)
-        showCarouselArrow(leftArrow, rightArrow, currentIndex)
-    }
-})
+window.addEventListener('resize', updateCarousel);
+
+updateCarousel();
+
+
 
 /// Top button
-const topButton = document.getElementById('top-button');
+const topButton = document.getElementById('top_button');
 
-window.addEventListener('scroll', async () => {
-    if (window.scrollY > 500) {
-        topButton.classList.add('show');
+window.addEventListener('scroll', () => {
+    if (window.scrollY > 100) {
+        topButton.style.opacity = '1';
+        topButton.style.visibility = 'visible';
+        topButton.style.transform = 'translateY(0)';
     } else {
-        topButton.classList.remove('show');
+        topButton.style.opacity = '0';
+        topButton.style.visibility = 'hidden';
+        topButton.style.transform = 'translateY(50px)';
     }
 });
