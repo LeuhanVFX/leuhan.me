@@ -22,46 +22,6 @@ function toggleTheme() {
     }
 }
 
-function showCarouselArrow(leftArrow, rightArrow, currentIndex) {
-    if (currentIndex === 0) {
-        leftArrow.style.opacity = '0';
-        rightArrow.style.cursor = 'default';
-    } else {
-        leftArrow.style.opacity = '1';
-        rightArrow.style.cursor = 'pointer';
-    }
-    if (currentIndex === carouselItems.length - 1) {
-        rightArrow.style.opacity = '0';
-        rightArrow.style.cursor = 'default';
-    } else {
-        rightArrow.style.opacity = '1';
-        rightArrow.style.cursor = 'pointer';
-    }
-}
-/// Gestion du theme
-let themeToggle = document.querySelector('.theme-toggle input');
-
-themeToggle.addEventListener('change', () => {
-    // Vérifie si le navigateur supporte l'API (Chrome, Edge, Safari récent)
-    toggleTheme();
-});
-
-if (true) {
-    document.documentElement.classList.add('dark-mode');
-    themeToggle.checked = true;
-} else {
-    document.documentElement.classList.remove('dark-mode');
-    themeToggle.checked = false;
-}
-
-/// Carousel
-const track = document.querySelector('.carousel-track');
-const slides = Array.from(document.querySelectorAll('.carousel-item'));
-const leftArrow = document.getElementById('left_arrow');
-const rightArrow = document.getElementById('right_arrow');
-
-let currentIndex = 0;
-
 function updateCarousel() {
 
     const slideWidth = slides[0].offsetWidth;
@@ -80,6 +40,28 @@ function updateCarousel() {
     rightArrow.style.opacity = currentIndex === slides.length - 1 ? '0' : '1';
     rightArrow.style.cursor = currentIndex === 0 ? 'default' : 'pointer';
 }
+/// Gestion du theme
+let themeToggle = document.querySelector('.theme-toggle input');
+
+themeToggle.addEventListener('change', () => {
+    toggleTheme();
+});
+
+if (getCookie('theme') === 'dark') {
+    document.documentElement.classList.add('dark-mode');
+    themeToggle.checked = true;
+} else {
+    document.documentElement.classList.remove('dark-mode');
+    themeToggle.checked = false;
+}
+
+/// Carousel
+const track = document.querySelector('.carousel-track');
+const slides = Array.from(document.querySelectorAll('.carousel-item'));
+const leftArrow = document.getElementById('left_arrow');
+const rightArrow = document.getElementById('right_arrow');
+
+let currentIndex = 0;
 
 
 rightArrow.addEventListener('click', () => {
@@ -106,7 +88,7 @@ updateCarousel();
 const topButton = document.getElementById('top_button');
 
 window.addEventListener('scroll', () => {
-    if (window.scrollY > 100) {
+    if (window.scrollY > window.innerHeight/4) {
         topButton.style.opacity = '1';
         topButton.style.visibility = 'visible';
         topButton.style.transform = 'translateY(0)';

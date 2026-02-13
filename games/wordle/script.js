@@ -59,7 +59,7 @@ function reset() {
     for (let i = 0; i < cells_list.length; i++) {
         let cell = cells_list[i]
         cell.innerHTML = ''
-        cell.style.backgroundColor = 'rgb(121, 121, 121)'
+        cell.style.backgroundColor = 'var(--secondary)'
         cell.removeAttribute('used')
         cell.removeAttribute('state')
     }
@@ -475,6 +475,31 @@ async function verifRapide() {
         }
     }
 };
+
+function toggleTheme() {
+    if (themeToggle.checked) {
+        document.documentElement.classList.add('dark-mode');
+        document.cookie = "theme=dark; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+    } else {
+        document.documentElement.classList.remove('dark-mode');
+        document.cookie = "theme=light; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+    }
+}
+
+/// Gestion du theme
+let themeToggle = document.querySelector('.theme-toggle input');
+
+themeToggle.addEventListener('change', () => {
+    toggleTheme();
+});
+
+if (getCookie('theme') === 'dark') {
+    document.documentElement.classList.add('dark-mode');
+    themeToggle.checked = true;
+} else {
+    document.documentElement.classList.remove('dark-mode');
+    themeToggle.checked = false;
+}
 
 ///// Rules Button /////
 let button = document.getElementById('rules')
