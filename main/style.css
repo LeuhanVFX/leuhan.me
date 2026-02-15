@@ -46,7 +46,7 @@ header {
     position: sticky;
     width: 100%;
     height: fit-content;
-    top: 0px;
+    top: 0;
     background-color: var(--secondary);
     border-radius: 10px;
     text-align: center;
@@ -54,7 +54,8 @@ header {
 }
 
 .menu {
-    display: flex;
+    display: grid;
+    grid-template-columns: 1fr;
     align-items: center;
     justify-content: space-between;
     height: fit-content;
@@ -63,6 +64,40 @@ header {
     background-color: var(--secondary);
     box-shadow: 2px 2px 0px 1px var(--text-color);
     z-index: 100;
+    --menu-height : height;
+    transition: all 0.5s;
+}
+
+.pc-menu {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    height: fit-content;
+    justify-content: space-between;
+    transition: all 0.5s;
+}
+
+.mobile-menu {
+    display: flex;
+    position: absolute;
+    z-index: 10;
+    width: fit-content;
+    padding: 10px;
+    padding-block-start: 40px;
+    font-size: 1vw;
+    border-radius: 10px;
+    scale: 1;
+    transform: translateY(-10px);
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.2s ease-in-out;
+}
+
+.mobile-menu ul {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .menu .logo {
@@ -95,7 +130,7 @@ header {
     text-decoration: none;
     color: var(--text-color);
     border-radius: 5px;
-    font-size: 1.1em;
+    font-size: 1.1rem;
     padding: 5px 10px;
     transition: 0.2s;
     cursor: pointer;
@@ -215,7 +250,7 @@ header {
 .star--5,
 .star--6 {
     opacity: 0;
-    transition: all 300ms 0 cubic-bezier(0.445, 0.05, 0.55, 0.95);
+    transition: all 300ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
 }
 
 .star--4 {
@@ -332,20 +367,19 @@ header {
         stroke-linejoin: round;
         stroke-width: 3;
         /* Define the transition for transforming the Stroke */
-        transition:
-            stroke-dasharray 400ms cubic-bezier(0.4, 0, 0.2, 1),
-            stroke-dashoffset 400ms cubic-bezier(0.4, 0, 0.2, 1);
+        transition: stroke-dasharray 400ms cubic-bezier(0.4, 0, 0.2, 1),
+        stroke-dashoffset 400ms cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     .line-top-bottom {
         stroke-dasharray: 12 63;
     }
 
-    .hamburger input:checked+svg {
+    .hamburger input:checked + svg {
         transform: rotate(-45deg);
     }
 
-    .hamburger input:checked+svg .line-top-bottom {
+    .hamburger input:checked + svg .line-top-bottom {
         stroke-dasharray: 20 300;
         stroke-dashoffset: -32.42;
     }
@@ -355,7 +389,7 @@ header {
 section {
     width: 98%;
     height: max-content;
-    padding: 50px 20px;
+    padding: 20px;
     text-align: center;
     background-color: var(--secondary);
     color: var(--text-color);
@@ -370,10 +404,15 @@ section h1 {
     text-align: start;
     margin-top: 0;
     margin-right: 50%;
+    font-size: 3vw;
 }
 
 #about {
-    display: flex;
+    display: grid;
+    height: fit-content;
+    padding: 0;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr;
     position: relative;
     align-items: center;
     justify-content: space-between;
@@ -382,33 +421,32 @@ section h1 {
 
 .intro {
     display: flex;
-    width: 50%;
+    width: 100%;
     padding: 50px;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    font-size: 2em;
+    font-size: 2vw;
 }
 
 .intro p {
     font-family: cursive;
     display: block;
+    width: 100%;
     text-align: justify;
 }
 
 #about .img {
     display: block;
-    position: absolute;
-    bottom: 0px;
-    right: 0px;
-    width: 40%;
+    width: 100%;
     height: 100%;
     background-image: url("../assets/profile.png");
-    background-size: cover;
+    background-size: 80%;
+    background-repeat: no-repeat;
     background-position: center 20%;
     border-radius: 10px;
     transition: all 0.2s ease;
-    z-index: 3;
+    z-index: 1;
     filter: grayscale(0.7);
     opacity: 0.3;
 }
@@ -418,17 +456,18 @@ section h1 {
 }
 
 #projects {
+    padding: 0;
     gap: 50px;
     overflow-x: hidden;
     align-items: center;
     justify-content: center;
 }
 
- #projects h1 {
+#projects h1 {
     position: absolute;
-     font-size: 3em;
-     left: 10%;
- }
+    font-size: 3em;
+    margin: 2% 0 0 5%;
+}
 
 
 .carousel {
@@ -443,7 +482,7 @@ section h1 {
 
 .carousel-track {
     display: flex;
-    gap: 0px;
+    gap: 40px;
     transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
     will-change: transform;
 }
@@ -507,6 +546,7 @@ section h1 {
         box-shadow 0.2s ease;
     z-index: 2;
     filter: blur(10px);
+    pointer-events: none;
 }
 
 .carousel-item .carousel-caption {
@@ -526,6 +566,7 @@ section h1 {
 }
 
 .carousel-item.active {
+    pointer-events: all;
     opacity: 1;
     transform: scale(1);
     z-index: 2;
@@ -550,7 +591,7 @@ section h1 {
 
 .top_button {
     position: fixed;
-    bottom: 100px;
+    bottom: 50px;
     right: 10px;
     z-index: 1000;
     opacity: 0;
@@ -579,7 +620,8 @@ section h1 {
 .svgIcon {
     display: inline-block;
     width: 12px;
-    transition-duration: 0.3s;
+    transform: translateY(0);
+    transition: transform 0.3s ease-in-out;
 }
 
 .svgIcon path {
@@ -591,7 +633,7 @@ section h1 {
 }
 
 .button:hover .svgIcon {
-    animation: bounce 1s infinite ease-in-out;
+    animation: bounce 0.5s infinite alternate ease-in-out;
 }
 
 @keyframes bounce {
@@ -599,12 +641,8 @@ section h1 {
         transform: translateY(0px);
     }
 
-    50% {
-        transform: translateY(-10px);
-    }
-
     100% {
-        transform: translateY(0px);
+        transform: translateY(-10px);
     }
 }
 
@@ -620,8 +658,9 @@ footer {
     gap: 20px;
     width: 100%;
     text-align: center;
+    font-size: 1vw;
     background-color: var(--secondary);
-    border-radius: 10px;
+    border-radius: 5px;
     box-shadow: 0 5px 0px rgba(0, 0, 0, 0.5);
     font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
@@ -646,42 +685,92 @@ footer ul {
     justify-content: center;
 }
 
+* {
+    user-select: none;
+}
+
 @media (max-width: 800px) {
 
-    .menu {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        padding: 0;
-        border-radius: 0 0 10px 10px;
-        box-shadow: 0 5px 0px var(--text-color);
-    }
-
-    .menu #links, .theme-toggle {
+    .menu #links, .menu .theme-toggle {
         display: none;
     }
 
     .menu .burger {
+        position: relative;
         display: block;
-        margin-right: 5%;
         scale: 3;
     }
-    
-    .burger input:checked .menu{
-        height: 100vh;
-    }
 
-    .burger #burger_links {
-        display: none;
+    section h1{
+        text-align: center;
+        margin: auto;
+        font-size: 10vw
     }
-    
     #about {
-        flex-direction: column;
+        grid-template-columns: 80%;
+        grid-template-rows: 50% 50%;
+        align-content: center;
+        align-items: center;
+        justify-items: center;
+        font-size: 5vw;
     }
 
-}
+    #about .intro {
+        text-align: center;
+        padding: 0;
+        width: 100%;
+        align-items: center;
+        justify-content: center;
+        font-size: 1em
+    }
 
-* {
-    user-select: none;
+    .intro p {
+        text-align: center;
+        width: 100%;
+        font-size: 1em
+    }
+
+    #about .img {
+        position: relative;
+        width: 100%;
+        height: 400px;
+        background-size: 80%;
+        margin: auto;
+    }
+
+    #projects h1 {
+        position: relative;
+        left: 0;
+    }
+
+    #projects .carousel {
+        padding: 20px 50%;
+        scale: 1;
+    }
+
+    #projects .carousel-item {
+        box-shadow: 2px 2px 0 white;
+    }
+
+    .carousel-item .carousel-caption{
+        height: 40%;
+    }
+
+    .carousel-item.active:hover {
+        box-shadow: 2px 2px 0 white;
+        transform: scale(1) rotate(0deg);
+    }
+
+    .carousel-item.active:hover {
+        transform: scale(1.05) rotate(-2deg);
+        box-shadow: -20px 20px 5px rgb(0, 0, 0);
+        transition: all 0.2s ease;
+    }
+
+    footer {
+        font-size: 2vw;
+        position: relative;
+        width: 100%;
+        padding: 20px 0;
+    }
 }
