@@ -75,7 +75,7 @@ function reset() {
     mots_utilises = []
     deleteCookie('mots_utilises')
     keys.forEach((key) => {
-        key.style.backgroundColor = 'rgb(196, 186, 174)'
+        key.style.backgroundColor = 'var(--secondary)'
         key.removeAttribute('state')
     })
     if (dif == 'easy') {

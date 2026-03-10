@@ -42,10 +42,6 @@ body {
     --text-color: antiquewhite;
 }
 
-/* =====================
-   HEADER & NAVIGATION
-   ===================== */
-
 header {
     position: sticky;
     width: 100%;
@@ -68,6 +64,7 @@ header {
     background-color: var(--secondary);
     box-shadow: 2px 2px 0px 1px var(--text-color);
     z-index: 100;
+    --menu-height : height;
     transition: all 0.5s;
 }
 
@@ -80,24 +77,20 @@ header {
     transition: all 0.5s;
 }
 
-/* Menu burger mobile - dropdown */
 .mobile-menu {
     display: flex;
-    width: 100%;
-    max-height: 0;
-    overflow: hidden;
+    position: absolute;
+    z-index: 10;
+    width: fit-content;
+    padding: 10px;
+    padding-block-start: 40px;
+    font-size: 1vw;
+    border-radius: 10px;
+    scale: 1;
+    transform: translateY(-10px);
     opacity: 0;
     visibility: hidden;
-    transition: max-height 0.3s ease-in-out, opacity 0.3s ease-in-out, padding 0.3s ease-in-out;
-    padding: 0;
-    transition: 0.2s;
-}
-
-.mobile-menu.open {
-    max-height: 300px;
-    opacity: 1;
-    visibility: visible;
-    padding: 10px 0;
+    transition: all 0.2s ease-in-out;
 }
 
 .mobile-menu ul {
@@ -105,27 +98,6 @@ header {
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 10px;
-    width: 100%;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-}
-
-.mobile-menu ul li a {
-    display: block;
-    text-decoration: none;
-    color: var(--text-color);
-    font-size: 1.3rem;
-    padding: 8px 20px;
-    border-radius: 5px;
-    transition: 0.2s;
-    cursor: pointer;
-}
-
-.mobile-menu ul li a:hover {
-    background-color: var(--primary);
-    color: var(--selection);
 }
 
 .menu .logo {
@@ -175,10 +147,6 @@ header {
     width: fit-content;
 }
 
-/* =====================
-   TOGGLE THEME
-   ===================== */
-
 .toggleWrapper {
     display: flex;
     position: relative;
@@ -226,9 +194,26 @@ header {
     border-radius: 100%;
 }
 
-.toggle__handler .crater--1 { top: 18px; left: 10px; width: 4px; height: 4px; }
-.toggle__handler .crater--2 { top: 28px; left: 22px; width: 6px; height: 6px; }
-.toggle__handler .crater--3 { top: 10px; left: 25px; width: 8px; height: 8px; }
+.toggle__handler .crater--1 {
+    top: 18px;
+    left: 10px;
+    width: 4px;
+    height: 4px;
+}
+
+.toggle__handler .crater--2 {
+    top: 28px;
+    left: 22px;
+    width: 6px;
+    height: 6px;
+}
+
+.toggle__handler .crater--3 {
+    top: 10px;
+    left: 25px;
+    width: 8px;
+    height: 8px;
+}
 
 .star {
     position: absolute;
@@ -237,31 +222,113 @@ header {
     border-radius: 50%;
 }
 
-.star--1 { top: 10px; left: 35px; z-index: 0; width: 30px; height: 3px; }
-.star--2 { top: 18px; left: 28px; z-index: 1; width: 30px; height: 3px; }
-.star--3 { top: 27px; left: 40px; z-index: 0; width: 30px; height: 3px; }
+.star--1 {
+    top: 10px;
+    left: 35px;
+    z-index: 0;
+    width: 30px;
+    height: 3px;
+}
 
-.star--4, .star--5, .star--6 {
+.star--2 {
+    top: 18px;
+    left: 28px;
+    z-index: 1;
+    width: 30px;
+    height: 3px;
+}
+
+.star--3 {
+    top: 27px;
+    left: 40px;
+    z-index: 0;
+    width: 30px;
+    height: 3px;
+}
+
+.star--4,
+.star--5,
+.star--6 {
     opacity: 0;
     transition: all 300ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
 }
 
-.star--4 { top: 16px; left: 11px; z-index: 0; width: 2px; height: 2px; transform: translate3d(3px, 0, 0); }
-.star--5 { top: 32px; left: 17px; z-index: 0; width: 3px; height: 3px; transform: translate3d(3px, 0, 0); }
-.star--6 { top: 36px; left: 28px; z-index: 0; width: 2px; height: 2px; transform: translate3d(3px, 0, 0); }
+.star--4 {
+    top: 16px;
+    left: 11px;
+    z-index: 0;
+    width: 2px;
+    height: 2px;
+    transform: translate3d(3px, 0, 0);
+}
 
-.input:checked+.toggle { background-color: #749dd6; }
-.input:checked+.toggle .toggle__handler { background-color: #ffe5b5; left: calc(50%); transform: translateY(-50%) rotate(0); }
-.input:checked+.toggle .toggle__handler .crater { opacity: 1; }
-.input:checked+.toggle .star--1 { width: 2px; height: 2px; }
-.input:checked+.toggle .star--2 { width: 4px; height: 4px; transform: translate3d(-5px, 0, 0); }
-.input:checked+.toggle .star--3 { width: 2px; height: 2px; transform: translate3d(-7px, 0, 0); }
+.star--5 {
+    top: 32px;
+    left: 17px;
+    z-index: 0;
+    width: 3px;
+    height: 3px;
+    transform: translate3d(3px, 0, 0);
+}
+
+.star--6 {
+    top: 36px;
+    left: 28px;
+    z-index: 0;
+    width: 2px;
+    height: 2px;
+    transform: translate3d(3px, 0, 0);
+}
+
+.input:checked+.toggle {
+    background-color: #749dd6;
+}
+
+.input:checked+.toggle .toggle__handler {
+    background-color: #ffe5b5;
+    left: calc(50%);
+    transform: translateY(-50%) rotate(0);
+}
+
+.input:checked+.toggle .toggle__handler .crater {
+    opacity: 1;
+}
+
+.input:checked+.toggle .star--1 {
+    width: 2px;
+    height: 2px;
+}
+
+.input:checked+.toggle .star--2 {
+    width: 4px;
+    height: 4px;
+    transform: translate3d(-5px, 0, 0);
+}
+
+.input:checked+.toggle .star--3 {
+    width: 2px;
+    height: 2px;
+    transform: translate3d(-7px, 0, 0);
+}
+
 .input:checked+.toggle .star--4,
 .input:checked+.toggle .star--5,
-.input:checked+.toggle .star--6 { opacity: 1; transform: translate3d(0, 0, 0); }
-.input:checked+.toggle .star--4 { transition: all 300ms 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95); }
-.input:checked+.toggle .star--5 { transition: all 300ms 300ms cubic-bezier(0.445, 0.05, 0.55, 0.95); }
-.input:checked+.toggle .star--6 { transition: all 300ms 400ms cubic-bezier(0.445, 0.05, 0.55, 0.95); }
+.input:checked+.toggle .star--6 {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+}
+
+.input:checked+.toggle .star--4 {
+    transition: all 300ms 200ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+.input:checked+.toggle .star--5 {
+    transition: all 300ms 300ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
+
+.input:checked+.toggle .star--6 {
+    transition: all 300ms 400ms cubic-bezier(0.445, 0.05, 0.55, 0.95);
+}
 
 .theme-toggle {
     transform: scale(1);
@@ -273,20 +340,23 @@ header {
     transition: 0.2s ease-out;
 }
 
-/* =====================
-   BURGER MENU
-   ===================== */
-
 .burger {
     display: none;
-    position: relative;
-    right: 0;
+    position: absolute;
+    right: 10px;
 
-    .hamburger { cursor: pointer; }
-    .hamburger input { display: none; }
+    .hamburger {
+        cursor: pointer;
+    }
+
+    .hamburger input {
+        display: none;
+    }
 
     .hamburger svg {
+        /* The size of the SVG defines the overall size */
         height: 3em;
+        /* Define the transition for transforming the SVG */
         transition: transform 400ms cubic-bezier(0.4, 0, 0.2, 1);
     }
 
@@ -296,23 +366,25 @@ header {
         stroke-linecap: round;
         stroke-linejoin: round;
         stroke-width: 3;
-        transition:
-            stroke-dasharray 400ms cubic-bezier(0.4, 0, 0.2, 1),
-            stroke-dashoffset 400ms cubic-bezier(0.4, 0, 0.2, 1);
+        /* Define the transition for transforming the Stroke */
+        transition: stroke-dasharray 400ms cubic-bezier(0.4, 0, 0.2, 1),
+        stroke-dashoffset 400ms cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .line-top-bottom { stroke-dasharray: 12 63; }
+    .line-top-bottom {
+        stroke-dasharray: 12 63;
+    }
 
-    .hamburger input:checked + svg { transform: rotate(-45deg); }
+    .hamburger input:checked + svg {
+        transform: rotate(-45deg);
+    }
+
     .hamburger input:checked + svg .line-top-bottom {
         stroke-dasharray: 20 300;
         stroke-dashoffset: -32.42;
     }
-}
 
-/* =====================
-   SECTIONS
-   ===================== */
+}
 
 section {
     width: 98%;
@@ -332,12 +404,8 @@ section h1 {
     text-align: start;
     margin-top: 0;
     margin-right: 50%;
-    font-size: clamp(1.5rem, 3vw, 3rem);
+    font-size: 3vw;
 }
-
-/* =====================
-   SECTION ABOUT
-   ===================== */
 
 #about {
     display: grid;
@@ -358,8 +426,7 @@ section h1 {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    font-size: clamp(1rem, 2vw, 2rem);
-    box-sizing: border-box;
+    font-size: 2vw;
 }
 
 .intro p {
@@ -376,22 +443,17 @@ section h1 {
     background-image: url("../assets/profile.png");
     background-size: 80%;
     background-repeat: no-repeat;
-    background-position: center bottom;
+    background-position: center 20%;
     border-radius: 10px;
     transition: all 0.2s ease;
     z-index: 1;
     filter: grayscale(0.7);
     opacity: 0.3;
-    min-height: 300px;
 }
 
 ::selection {
     color: var(--selection);
 }
-
-/* =====================
-   SECTION PROJECTS
-   ===================== */
 
 #projects {
     padding: 0;
@@ -403,9 +465,10 @@ section h1 {
 
 #projects h1 {
     position: absolute;
-    font-size: clamp(1.5rem, 3em, 5rem);
+    font-size: 3em;
     margin: 2% 0 0 5%;
 }
+
 
 .carousel {
     position: relative;
@@ -413,8 +476,9 @@ section h1 {
     width: 100%;
     padding: 60px 100%;
     scale: 0.7;
-    font-size: clamp(0.8rem, 1.2vw, 1.5rem);
+    font-size: 1.2vw;
 }
+
 
 .carousel-track {
     display: flex;
@@ -422,6 +486,9 @@ section h1 {
     transition: transform 0.6s cubic-bezier(0.22, 1, 0.36, 1);
     will-change: transform;
 }
+
+
+
 
 #projects .table {
     display: grid;
@@ -441,7 +508,9 @@ section h1 {
     z-index: 3;
 }
 
-#projects .arrow:hover { scale: 2.2 2.2; }
+#projects .arrow:hover {
+    scale: 2.2 2.2;
+}
 
 #left_arrow {
     opacity: 0;
@@ -468,6 +537,7 @@ section h1 {
     overflow: hidden;
     min-width: 100%;
     flex: 0 0 70%;
+    /* largeur de la slide centrale */
     opacity: 1;
     transform: scale(0.65);
     transition:
@@ -490,7 +560,9 @@ section h1 {
     text-transform: capitalize;
     transition: all 0.2s ease;
 
-    h3 { color: rgb(154, 76, 255); }
+    h3 {
+        color: rgb(154, 76, 255);
+    }
 }
 
 .carousel-item.active {
@@ -516,10 +588,6 @@ section h1 {
         transition: all 0.2s ease;
     }
 }
-
-/* =====================
-   BOUTON TOP
-   ===================== */
 
 .top_button {
     position: fixed;
@@ -556,21 +624,31 @@ section h1 {
     transition: transform 0.3s ease-in-out;
 }
 
-.svgIcon path { fill: #7a18e5; }
-
-.button:hover { scale: 1.2; }
-.button:hover .svgIcon { animation: bounce 0.5s infinite alternate ease-in-out; }
-
-@keyframes bounce {
-    0%   { transform: translateY(0px); }
-    100% { transform: translateY(-10px); }
+.svgIcon path {
+    fill: #7a18e5;
 }
 
-.button:active .svgIcon { transform: translateY(5px); }
+.button:hover {
+    scale: 1.2;
+}
 
-/* =====================
-   FOOTER
-   ===================== */
+.button:hover .svgIcon {
+    animation: bounce 0.5s infinite alternate ease-in-out;
+}
+
+@keyframes bounce {
+    0% {
+        transform: translateY(0px);
+    }
+
+    100% {
+        transform: translateY(-10px);
+    }
+}
+
+.button:active .svgIcon {
+    transform: translateY(5px);
+}
 
 footer {
     display: flex;
@@ -580,7 +658,7 @@ footer {
     gap: 20px;
     width: 100%;
     text-align: center;
-    font-size: clamp(0.8rem, 1vw, 1.2rem);
+    font-size: 1vw;
     background-color: var(--secondary);
     border-radius: 5px;
     box-shadow: 0 5px 0px rgba(0, 0, 0, 0.5);
@@ -607,218 +685,100 @@ footer ul {
     justify-content: center;
 }
 
-* { user-select: none; }
-
-/* =====================
-   RESPONSIVE — TABLETTE (≤ 1024px)
-   ===================== */
-
-@media (max-width: 1024px) {
-    body {
-        font-size: 1.5vw;
-        padding: 10px;
-        gap: 6vh;
-    }
-
-    #about {
-        grid-template-columns: 1fr 1fr;
-        min-height: 350px;
-    }
-
-    .intro {
-        font-size: clamp(1rem, 1.8vw, 1.5rem);
-        padding: 30px;
-    }
-
-    .carousel {
-        scale: 0.8;
-        padding: 60px 80%;
-    }
+* {
+    user-select: none;
 }
-
-/* =====================
-   RESPONSIVE — MOBILE (≤ 800px)
-   ===================== */
 
 @media (max-width: 800px) {
 
-    body {
-        font-size: 4vw;
-        padding: 10px;
-        gap: 5vh;
-    }
-
-    /* ---- Menu ---- */
-
     .menu {
-        width: 100%;
-        box-sizing: border-box;
-        border-radius: 10px;
+        position: absolute;
+        width: calc(100vw - 50px);
+        top: 5px;
+        left: 0;
     }
 
-    .menu #links,
-    .menu .theme-toggle {
+    .menu #links, .menu .theme-toggle {
         display: none;
     }
 
-    .burger {
-        display: flex;
+    .menu .burger {
+        position: relative;
+        display: block;
+        scale: 3;
+    }
+
+    section h1{
+        text-align: center;
+        margin: auto;
+        font-size: 10vw
+    }
+    #about {
+        grid-template-columns: 80%;
+        grid-template-rows: 50% 50%;
+        align-content: center;
+        align-items: center;
+        justify-items: center;
+        font-size: 5vw;
+        padding-bottom: 0;
+        margin-top: 5vh;
+    }
+
+    #about .intro {
+        text-align: center;
+        padding: 0;
+        width: 100%;
         align-items: center;
         justify-content: center;
-        scale: 2;
-        margin-right: 15px;
-    }
-
-    /* ---- Section générique ---- */
-
-    section {
-        width: 100%;
-        box-sizing: border-box;
-    }
-
-    section h1 {
-        text-align: center;
-        margin: 0 auto 10px;
-        font-size: clamp(1.8rem, 8vw, 3rem);
-    }
-
-    /* ---- Section About : verticale ---- */
-
-    #about {
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
-        padding: 0;
-        gap: 0;
-        min-height: 520px;
-        overflow: hidden;
-    }
-
-    .intro {
-        padding: 20px 20px 10px;
-        font-size: clamp(0.9rem, 4.5vw, 1.3rem);
-        align-items: center;
-        text-align: center;
-        width: 100%;
-        box-sizing: border-box;
-        flex: 0;
-    }
-
-    .intro h1 {
-        text-align: center;
-        margin: 0 0 10px;
+        font-size: 1em
     }
 
     .intro p {
         text-align: center;
-        font-size: 1em;
-    }
-
-    /* L'image touche le bas de la section */
-    #about .img {
-        flex: 1;
         width: 100%;
-        min-height: 250px;
-        background-size: 100%;
-        background-position: center bottom;
-        border-radius: 0 0 10px 10px;
-        margin: 0;
+        font-size: 1em
     }
 
-    /* ---- Section Projects ---- */
+    #about .img {
+        width: 100%;
+        height: 400px;
+        background-size: 80%;
+        margin: auto;
+    }
 
     #projects h1 {
         position: relative;
         left: 0;
-        margin: 20px auto 10px;
-        text-align: center;
     }
 
-    /* Les slides actives prennent ≥ 70% de la largeur */
     #projects .carousel {
-        padding: 20px 15%;
+        padding: 20px 50%;
         scale: 1;
-        font-size: clamp(0.9rem, 3.5vw, 1.2rem);
-        align-items: center;
-        justify-content: center;
     }
 
-    .carousel-item {
-        flex: 70%;
-        min-width: 70%;
+    #projects .carousel-item {
         box-shadow: 2px 2px 0 white;
     }
 
-    .carousel-item .carousel-caption {
+    .carousel-item .carousel-caption{
         height: 40%;
     }
 
-    .carousel-item.active {
-        transform: scale(1);
-        box-shadow: 5px 5px 0px rgb(255, 255, 255);
+    .carousel-item.active:hover {
+        box-shadow: 2px 2px 0 white;
+        transform: scale(1) rotate(0deg);
     }
 
-    .carousel-item.active:active {
-        transform: scale(1.03) rotate(-1deg);
-        box-shadow: -10px 10px 5px rgb(0, 0, 0);
+    .carousel-item.active:hover {
+        transform: scale(1.05) rotate(-2deg);
+        box-shadow: -20px 20px 5px rgb(0, 0, 0);
+        transition: all 0.2s ease;
     }
-
-    /* ---- Footer ---- */
 
     footer {
-        font-size: clamp(0.8rem, 3vw, 1rem);
-        padding: 15px 0;
+        font-size: 2vw;
+        position: relative;
         width: 100%;
-        box-sizing: border-box;
-    }
-}
-
-/* =====================
-   RESPONSIVE — TRÈS PETIT (≤ 480px)
-   ===================== */
-
-@media (max-width: 480px) {
-    body {
-        padding: 8px;
-        gap: 4vh;
-    }
-
-    .burger {
-        scale: 1.5;
-        margin-right: 10px;
-    }
-
-    .intro {
-        font-size: clamp(0.85rem, 4vw, 1.1rem);
-        padding: 15px;
-    }
-
-    #about .img {
-        min-height: 200px;
-        background-size: 80%;
-    }
-
-    #projects .carousel {
-        padding: 20px 10%;
-    }
-
-    .carousel-item {
-        flex: 0 0 80%;
-        min-width: 80%;
-    }
-
-    #projects .arrow {
-        scale: 1.5 1.5;
-    }
-
-    #projects .arrow:hover {
-        scale: 1.7 1.7;
-    }
-
-    footer {
-        flex-direction: column;
-        gap: 10px;
-        padding: 15px;
+        padding: 20px 0;
     }
 }

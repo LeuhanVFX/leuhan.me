@@ -100,26 +100,46 @@ window.addEventListener('scroll', () => {
 });
 
 /// Menu Mobile
-let burger_button = document.querySelector('.burger .hamburger input');
-let mobile_menu = document.getElementById('mobile-menu');
+// let burger_button = document.querySelector('.burger .hamburger input');
+// let mobile_menu = document.getElementById('mobile-menu');
 
-burger_button.addEventListener('change', () => {
-    if (burger_button.checked) {
-        mobile_menu.style.visibility = 'visible';
-        mobile_menu.style.transform = 'translateY(0)';
-        mobile_menu.style.opacity = '1';
-        mobile_menu.style.position = 'relative'
-        mobile_menu.addEventListener('click', () => {
-            burger_button.checked = false
-            mobile_menu.style.visibility = 'hidden';
-            mobile_menu.style.transform = 'translateY(-10px)';
-            mobile_menu.style.opacity = '0';
-            mobile_menu.style.position = 'absolute';
-        })
+// burger_button.addEventListener('change', () => {
+//     if (burger_button.checked) {
+//         mobile_menu.style.visibility = 'visible';
+//         mobile_menu.style.transform = 'translateY(0)';
+//         mobile_menu.style.opacity = '1';
+//         mobile_menu.style.position = 'relative'
+//         mobile_menu.addEventListener('click', () => {
+//             burger_button.checked = false
+//             mobile_menu.style.visibility = 'hidden';
+//             mobile_menu.style.transform = 'translateY(-10px)';
+//             mobile_menu.style.opacity = '0';
+//             mobile_menu.style.position = 'absolute';
+//         })
+//     } else {
+//         mobile_menu.style.visibility = 'hidden';
+//         mobile_menu.style.transform = 'translateY(-10px)';
+//         mobile_menu.style.opacity = '0';
+//         mobile_menu.style.position = 'absolute';
+//     }
+// })
+
+
+const burgerCheck = document.getElementById('burger-check');
+const mobileMenu = document.getElementById('mobile-menu');
+
+burgerCheck.addEventListener('change', () => {
+    if (burgerCheck.checked) {
+        mobileMenu.classList.add('open');
     } else {
-        mobile_menu.style.visibility = 'hidden';
-        mobile_menu.style.transform = 'translateY(-10px)';
-        mobile_menu.style.opacity = '0';
-        mobile_menu.style.position = 'absolute';
+        mobileMenu.classList.remove('open');
     }
-})
+});
+
+// Fermer le menu quand on clique sur un lien
+document.querySelectorAll('#burger_links a').forEach(link => {
+    link.addEventListener('click', () => {
+        burgerCheck.checked = false;
+        mobileMenu.classList.remove('open');
+    });
+});
