@@ -42,17 +42,25 @@ function updateCarousel() {
 }
 /// Gestion du theme
 let themeToggle = document.querySelector('.theme-toggle input');
+let mobileThemeSelector = document.getElementById('theme-toggle');
 
 themeToggle.addEventListener('change', () => {
+    toggleTheme();
+});
+
+mobileThemeSelector.addEventListener('change', () => {
+    themeToggle.checked = mobileThemeSelector.value === 'Sombre';
     toggleTheme();
 });
 
 if (getCookie('theme') === 'dark') {
     document.documentElement.classList.add('dark-mode');
     themeToggle.checked = true;
+    mobileThemeSelector.value = 'Sombre';
 } else {
     document.documentElement.classList.remove('dark-mode');
     themeToggle.checked = false;
+    mobileThemeSelector.value = 'Clair';
 }
 
 /// Carousel
@@ -100,30 +108,6 @@ window.addEventListener('scroll', () => {
 });
 
 /// Menu Mobile
-// let burger_button = document.querySelector('.burger .hamburger input');
-// let mobile_menu = document.getElementById('mobile-menu');
-
-// burger_button.addEventListener('change', () => {
-//     if (burger_button.checked) {
-//         mobile_menu.style.visibility = 'visible';
-//         mobile_menu.style.transform = 'translateY(0)';
-//         mobile_menu.style.opacity = '1';
-//         mobile_menu.style.position = 'relative'
-//         mobile_menu.addEventListener('click', () => {
-//             burger_button.checked = false
-//             mobile_menu.style.visibility = 'hidden';
-//             mobile_menu.style.transform = 'translateY(-10px)';
-//             mobile_menu.style.opacity = '0';
-//             mobile_menu.style.position = 'absolute';
-//         })
-//     } else {
-//         mobile_menu.style.visibility = 'hidden';
-//         mobile_menu.style.transform = 'translateY(-10px)';
-//         mobile_menu.style.opacity = '0';
-//         mobile_menu.style.position = 'absolute';
-//     }
-// })
-
 
 const burgerCheck = document.getElementById('burger-check');
 const mobileMenu = document.getElementById('mobile-menu');
