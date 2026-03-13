@@ -465,12 +465,14 @@ section h1 {
     height: fit-content;
     padding: 0;
     grid-template-columns: 60% 40%;
+    grid-template-columns: 60% 40%;
     grid-template-rows: 1fr;
     position: relative;
     align-items: stretch;
     /* ← était "center" */
     justify-content: space-between;
     gap: 20px;
+    overflow: hidden;
     overflow: hidden;
 }
 
@@ -500,12 +502,19 @@ section h1 {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: top;
+    background-position: top;
     border-radius: 10px;
     transition: all 0.2s ease;
     z-index: 1;
     filter: grayscale(0.7);
     opacity: 0.3;
     min-height: 300px;
+    overflow: hidden;
+}
+
+#about .img img{
+    opacity: 1;
+    visibility: hidden;
     overflow: hidden;
 }
 
@@ -789,6 +798,8 @@ footer ul {
     }
 
     
+
+    
     /* ---- Menu ---- */
     header {
         position: fixed;
@@ -800,6 +811,10 @@ footer ul {
     }
 
     .menu {
+        position: fixed;
+        top: 0;
+        margin: auto;
+        padding: 0;
         position: fixed;
         top: 0;
         margin: auto;
@@ -833,6 +848,7 @@ footer ul {
     }
 
     #about {
+        margin-top: 100px;
         margin-top: 100px;
         display: flex;
         flex-direction: column;
@@ -870,6 +886,7 @@ footer ul {
         min-height: 250px;
         background-size: 100%;
         background-position: center top;
+        background-position: center top;
         border-radius: 0 0 10px 10px;
         margin: 0;
     }
@@ -890,6 +907,7 @@ footer ul {
     }
 
     .carousel-item {
+        width: 70%;
         width: 70%;
         box-shadow: 2px 2px 0 white;
     }
@@ -935,6 +953,7 @@ footer ul {
     #about .img {
         min-height: 200px;
         background-size: 100%;
+        background-size: 100%;
     }
 
         #projects .carousel {
@@ -942,6 +961,7 @@ footer ul {
         }
 
     .carousel-item {
+        width: 80%;
         width: 80%;
     }
 
