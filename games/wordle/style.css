@@ -81,7 +81,7 @@ header {
     justify-content: space-between;
     height: fit-content;
     font-size: 2vh;
-    padding: 0 10px;
+    padding: 0 5px;
     border-radius: 0 0 10px 10px;
     background-color: var(--secondary);
     z-index: 100;
@@ -89,6 +89,14 @@ header {
 
 .menu .logo {
     width: 8vh;
+}
+
+.menu .game_logo {
+    color: rgba(0, 0, 0, 0);
+    background-image: url("logo.png");
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
 }
 
 .menu ul {
@@ -654,7 +662,7 @@ p {
 }
 
 .keyboard .key:hover {
-    background-color: rgb(207, 197, 184);
+    filter: brightness(1.15);
     transition: 0.2s;
 }
 
@@ -664,6 +672,29 @@ p {
     transition: 0.1s;
 }
 
+.grid .absent {
+    background-color: rgba(80, 80, 80, 1);
+}
+
+.grid .present {
+    background-color: rgba(221, 133, 0, 1);
+}
+
+.grid .correct {
+    background-color: rgba(15, 129, 0, 1);
+}
+
+.keyboard .absent {
+    background-color: rgb(80, 80, 80);
+}
+
+.keyboard .present {
+    background-color: rgb(221, 133, 0);
+}
+
+.keyboard .correct {
+    background-color: rgb(15, 129, 0);
+}
 .keyboard .wide_key {
     grid-column: span 2;
     aspect-ratio: 7/5;
@@ -773,6 +804,14 @@ p {
 
     .banner {
         font-size: 3.5vw;
+    }
+
+    .keyboard .key:hover{
+        filter: none;
+    }
+
+    .keyboard .key:active {
+        filter: brightness(1.15);
     }
 }
 

@@ -47,7 +47,7 @@ async function hideLetters() {
     })
     for (let i = 0; i < 6; i++) {
         let key = invalid_letters[Math.floor(Math.random() * invalid_letters.length)]
-        key.style.backgroundColor = 'rgb(80, 80, 80)'
+        key.classList.add('absent')
         invalid_letters.splice(invalid_letters.indexOf(key), 1)
     }
 }
@@ -59,7 +59,9 @@ function reset() {
     for (let i = 0; i < cells_list.length; i++) {
         let cell = cells_list[i]
         cell.innerHTML = ''
-        cell.style.backgroundColor = 'var(--secondary)'
+        cell.classList.remove('correct')
+        cell.classList.remove('present')
+        cell.classList.remove('absent')
         cell.removeAttribute('used')
         cell.removeAttribute('state')
     }
@@ -75,7 +77,9 @@ function reset() {
     mots_utilises = []
     deleteCookie('mots_utilises')
     keys.forEach((key) => {
-        key.style.backgroundColor = 'var(--secondary)'
+        key.classList.remove('correct')
+        key.classList.remove('present')
+        key.classList.remove('absent')
         key.removeAttribute('state')
     })
     if (dif == 'easy') {
@@ -232,10 +236,10 @@ async function verification() {
                             { transform: 'rotateX(90deg)', backgroundColor: colorsheme['correct'] },
                             { transform: 'rotateX(0deg)', backgroundColor: colorsheme['correct'] },
                         ], 300)
-                        cell.style.backgroundColor = colorsheme[cell.getAttribute('state')]
+                        cell.classList.add('correct')
                         keys.forEach((key) => {
                             if (key.innerHTML.toUpperCase() == cell.innerHTML.toUpperCase()) {
-                                key.style.backgroundColor = colorsheme['correct']
+                                key.classList.add('correct')
                                 key.setAttribute('state', 'correct')
                             }
                         })
@@ -245,11 +249,11 @@ async function verification() {
                             { transform: 'rotateX(90deg)', backgroundColor: colorsheme['present'] },
                             { transform: 'rotateX(0deg)', backgroundColor: colorsheme['present'] },
                         ], 300)
-                        cell.style.backgroundColor = colorsheme[cell.getAttribute('state')]
+                        cell.classList.add('present')
                         keys.forEach((key) => {
                             if (key.innerHTML.toUpperCase() == cell.innerHTML.toUpperCase()) {
                                 if (!key.hasAttribute('state')) {
-                                    key.style.backgroundColor = colorsheme['present']
+                                    key.classList.add('present')
                                     key.setAttribute('state', 'present')
                                 }
                             }
@@ -260,11 +264,11 @@ async function verification() {
                             { transform: 'rotateX(90deg)', backgroundColor: colorsheme['absent'] },
                             { transform: 'rotateX(0deg)', backgroundColor: colorsheme['absent'] },
                         ], 300)
-                        cell.style.backgroundColor = colorsheme[cell.getAttribute('state')]
+                        cell.classList.add('absent')
                         keys.forEach((key) => {
                             if (key.innerHTML.toUpperCase() == cell.innerHTML.toUpperCase()) {
                                 if (!key.hasAttribute('state')) {
-                                    key.style.backgroundColor = colorsheme['absent']
+                                    key.classList.add('absent')
                                 }
                             }
                         })
@@ -435,10 +439,10 @@ async function verifRapide() {
                     { transform: 'rotateX(90deg)', backgroundColor: colorsheme['correct'] },
                     { transform: 'rotateX(0deg)', backgroundColor: colorsheme['correct'] },
                 ], 300)
-                cell.style.backgroundColor = colorsheme[cell.getAttribute('state')]
+                cell.classList.add('correct')
                 keys.forEach((key) => {
                     if (key.innerHTML.toUpperCase() == cell.innerHTML.toUpperCase()) {
-                        key.style.backgroundColor = colorsheme['correct']
+                        key.classList.add('correct')
                         key.setAttribute('state', 'correct')
                     }
                 })
@@ -448,11 +452,11 @@ async function verifRapide() {
                     { transform: 'rotateX(90deg)', backgroundColor: colorsheme['present'] },
                     { transform: 'rotateX(0deg)', backgroundColor: colorsheme['present'] },
                 ], 300)
-                cell.style.backgroundColor = colorsheme[cell.getAttribute('state')]
+                cell.classList.add('present')
                 keys.forEach((key) => {
                     if (key.innerHTML.toUpperCase() == cell.innerHTML.toUpperCase()) {
                         if (!key.hasAttribute('state')) {
-                            key.style.backgroundColor = colorsheme['present']
+                            key.classList.add('present')
                             key.setAttribute('state', 'present')
                         }
                     }
@@ -463,11 +467,11 @@ async function verifRapide() {
                     { transform: 'rotateX(90deg)', backgroundColor: colorsheme['absent'] },
                     { transform: 'rotateX(0deg)', backgroundColor: colorsheme['absent'] },
                 ], 300)
-                cell.style.backgroundColor = colorsheme[cell.getAttribute('state')]
+                cell.classList.add('absent')
                 keys.forEach((key) => {
                     if (key.innerHTML.toUpperCase() == cell.innerHTML.toUpperCase()) {
                         if (!key.hasAttribute('state')) {
-                            key.style.backgroundColor = colorsheme['absent']
+                            key.classList.add('absent')
                         }
                     }
                 })
