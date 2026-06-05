@@ -65,9 +65,12 @@ function reset() {
         cell.removeAttribute('used')
         cell.removeAttribute('state')
     }
+
     mot = liste_mots[Math.floor(Math.random() * liste_mots.length)]
     document.cookie = 'mot=' + mot + '; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT'
     mot_l = Array.from(mot.toLowerCase())
+    initGrid()
+    console.log(mot) // Debug
     ligne_active = lignes[0]
     active_cell.style.borderColor = 'rgb(196, 186, 174)'
     active_cell.style.boxShadow = 'none'
@@ -104,7 +107,35 @@ function reset() {
     if (document.cookie.includes('ligne6')) {
         deleteCookie('ligne6')
     }
+
 };
+
+function initGrid() {
+    let col = mot.length
+    let grid = document.getElementById('grid')
+    let gridLines = grid.querySelectorAll('.ligne')
+
+    /** Création de la grille */
+    gridLines.forEach((line) => {
+        line.style.gridTemplateColumns = `repeat(${col}, 1fr)`
+        Array.from(line.children).forEach((cell) => {
+            line.removeChild(cell)
+        })
+        for (let i = 0; i < col; i++) {
+            let cell = document.createElement('div')
+            cell.classList.add('cell')
+            line.appendChild(cell)
+        }
+    })
+    cells_list = Array.from(document.querySelectorAll('.cell'))
+    ligne1 = cells_list.slice(0 * mot.length, 1 * mot.length);
+    ligne2 = cells_list.slice(1 * mot.length, 2 * mot.length);
+    ligne3 = cells_list.slice(2 * mot.length, 3 * mot.length);
+    ligne4 = cells_list.slice(3 * mot.length, 4 * mot.length);
+    ligne5 = cells_list.slice(4 * mot.length, 5 * mot.length);
+    ligne6 = cells_list.slice(5 * mot.length, 6 * mot.length);
+    lignes = [ligne1, ligne2, ligne3, ligne4, ligne5, ligne6];
+}
 
 function blurexcept(itemid) {
     let item = document.getElementById(itemid)
@@ -201,9 +232,14 @@ async function verification() {
             break
         }
     } if (ligne_complete == true) {
-        let guess = ligne_active[0].innerHTML.toLowerCase() + ligne_active[1].innerHTML.toLowerCase() + ligne_active[2].innerHTML.toLowerCase() + ligne_active[3].innerHTML.toLowerCase() + ligne_active[4].innerHTML.toLowerCase()
-        if (motsTestables.includes(guess)) { // Test si le mot est dans le dictionnaire
-            if (!(mots_utilises.includes(guess.toUpperCase()))) { // Test si le mot a déjà été utilisé
+        let guess = ""
+        ligne_active.forEach((cell) => {
+            guess += cell.innerHTML.toLowerCase()
+        })
+
+        if (motsFrequents2.includes(guess)) { // Test si le mot est dans le dictionnaire
+            if (!(mots_utilises.includes(guess.toUpperCase()))) {
+                // Test si le mot a déjà été utilisé
                 for (let k = 0; k < ligne_active.length; k++) { // Test si les lettres sont bien placées
                     let cell = ligne_active[k]
                     if (cell.innerHTML.toLowerCase() == mot[k].toLowerCase()) {
@@ -277,7 +313,7 @@ async function verification() {
                     await sleep(300);
                 }
                 document.cookie = "ligne" + (lignes.indexOf(ligne_active) + 1) + "=" + guess + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/"; // stockage des lignes
-                if (juste == 5) {
+                if (juste == mot.length) {
                     summonBanner('win_banner', `<b>Vous avez trouvé le mot !</b>`);
                     deleteCookie('mot')
                     deleteCookie('mots_utilises')
@@ -372,7 +408,7 @@ async function verification() {
             ], 300)
         }
     } else {
-        summonSimpleBanner('Veuillez rentrer un mot de 5 lettres', 1000)
+        summonSimpleBanner(`Veuillez rentrer un mot de ${mot.length} lettres`, 1000)
         let ligne = document.getElementById('ligne' + (lignes.indexOf(ligne_active) + 1))
 
         ligne.animate([
@@ -509,16 +545,18 @@ if (getCookie('theme') === 'dark') {
 let button = document.getElementById('rules')
 let rules_chart = document.getElementById('rules_chart')
 let close_button = document.getElementById('close_button')
-let win_banner = document.getElementById('win_banner')
+// let win_banner = document.getElementById('win_banner')
 
 button.addEventListener("click", (event) => {
     rules_chart.style.display = 'block';
+    keyboard = false
     blurexcept(rules_chart.id)
 });
 
 close_button.addEventListener("click", (event) => {
     rules_chart.style.display = 'none';
     unblur()
+    keyboard = true
 });
 ///// Difficulty /////
 let dif_button = document.getElementById('dif_button')
@@ -555,7 +593,7 @@ let date = new Date(Date.now())
 date = date.toUTCString()
 
 ///// Mot /////
-let liste_mots = motsFrequents
+let liste_mots = motsFrequents2.filter((mot) => 5 <= mot.length && mot.length <= 10)
 
 let mot = ''
 if (!document.cookie.includes('mot')) {
@@ -567,23 +605,22 @@ if (!document.cookie.includes('mot')) {
 
 let mot_l = Array.from(mot.toLowerCase())
 
-
+console.log(mot) // Debug
 
 ///// Jeu /////
-let cells_list = Array.from(document.getElementsByClassName('cell'))
+ligne1 = []
+ligne2 = []
+ligne3 = []
+ligne4 = []
+ligne5 = []
+ligne6 = []
+cells_list = []
+let lignes = []
+initGrid()
+
 let car_possibles = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
 let keys = Array.from(document.getElementsByClassName('key'))
 keyboard = true
-
-// Lignes de Jeu
-let ligne1 = cells_list.slice(0, 5);
-let ligne2 = cells_list.slice(5, 10);
-let ligne3 = cells_list.slice(10, 15);
-let ligne4 = cells_list.slice(15, 20);
-let ligne5 = cells_list.slice(20, 25);
-let ligne6 = cells_list.slice(25, 30);
-
-let lignes = [ligne1, ligne2, ligne3, ligne4, ligne5, ligne6]
 
 let ligne_active = lignes[0] // ligne active
 
@@ -641,7 +678,7 @@ active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
 
 // Événements
 document.addEventListener("keydown", (event) => {
-    if (keyboard == true) { // clavier utilisable
+    if (keyboard == true) {
         if (car_possibles.includes(event.key.toUpperCase())) {
             for (let i = 0; i < ligne_active.length; i++) {
                 let cell = ligne_active[i]
@@ -650,7 +687,7 @@ document.addEventListener("keydown", (event) => {
                     cell.setAttribute('used', 'true')
                     active_cell.style.borderColor = 'rgb(196, 186, 174)'
                     active_cell.style.boxShadow = 'none'
-                    if (i < 4) {
+                    if (i < ligne_active.length - 1) {
                         active_cell = ligne_active[i + 1]
                         active_cell.style.borderColor = 'rgb(249, 176, 252)'
                         active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
@@ -713,23 +750,23 @@ keys.forEach((key) => { // Clic sur une touche
     } else {
 
         key.addEventListener("click", (event) => {
-            if (keyboard==true) {
-            for (let i = 0; i < ligne_active.length; i++) {
-                let cell = ligne_active[i]
-                if (!(cell.hasAttribute('used'))) {
-                    cell.innerHTML = key.innerHTML
-                    cell.setAttribute('used', 'true')
-                    active_cell.style.borderColor = 'rgb(196, 186, 174)'
-                    active_cell.style.boxShadow = 'none'
-                    if (i < 4) {
-                        active_cell = ligne_active[i + 1]
-                        active_cell.style.borderColor = 'rgb(249, 176, 252)'
-                        active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
+            if (keyboard == true) {
+                for (let i = 0; i < ligne_active.length; i++) {
+                    let cell = ligne_active[i]
+                    if (!(cell.hasAttribute('used'))) {
+                        cell.innerHTML = key.innerHTML
+                        cell.setAttribute('used', 'true')
+                        active_cell.style.borderColor = 'rgb(196, 186, 174)'
+                        active_cell.style.boxShadow = 'none'
+                        if (i < 4) {
+                            active_cell = ligne_active[i + 1]
+                            active_cell.style.borderColor = 'rgb(249, 176, 252)'
+                            active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
+                        }
+                        break
                     }
-                    break
                 }
             }
-        }
         });
     }
 });
@@ -791,5 +828,5 @@ if (screen.width < 1500) {
 // DEBUG //
 
 // document.addEventListener('dblclick', (event) => {
-//     console.log(document.cookie)
+//     console.log(keyboard)
 // })

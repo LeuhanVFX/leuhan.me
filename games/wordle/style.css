@@ -27,9 +27,17 @@ html {
     scrollbar-color: transparent transparent;
 }
 
+main {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    gap: 50px;
+}
+
 body {
     display: block;
-    margin: auto;
+    margin: 0;
     padding: 0px;
     width: 100%;
     height: 100vh;
@@ -39,6 +47,7 @@ body {
     overflow: scroll;
     color: white;
     align-items: center;
+    justify-content: space-between;
     z-index: 2;
     filter: blur(0px);
     transition: 0.5s;
@@ -47,14 +56,12 @@ body {
 .game {
     display: flex;
     flex-direction: column;
-    align-items: center;
     align-content: center;
-    justify-content: center;
-    position: relative;
+    justify-content: space-between;
     width: 100%;
     max-width: 550px;
     max-width: 600px;
-    height: 100%;
+    height: 85vh;
     margin: auto;
     padding: 0px;
 }
@@ -68,6 +75,7 @@ header {
     width: 100%;
     min-width:  400px;
     height: fit-content;
+    max-height: 75px;
     top: 0px;
     background-color: var(--secondary);
     border-radius: 10px;
@@ -384,8 +392,7 @@ header {
 
 .rules {
     display: flex;
-    position: absolute;
-    background-color: rgb(135, 135, 135);
+    background-color: rgb(135, 135, 135, 0);
     border-radius: 0px 0px 50px 50px;
     width: 35px;
     height: 35px;
@@ -399,8 +406,8 @@ header {
 }
 
 .rules:hover {
-    height: 55px;
-    transform-origin: top;
+    transform: scale(1.05);
+    background-color: rgb(135, 135, 135, 0.5);
     transition: ease-out 0.2s;
 }
 
@@ -414,7 +421,7 @@ header {
 .chart {
     display: None;
     position: absolute;
-    top: 20%;
+    top: 150%;
     left: 50%;
     transform: translatex(-50%);
     background-color: rgba(109, 109, 109, 0.336);
@@ -567,17 +574,14 @@ header {
 
 .grid {
     display: grid;
-    position: relative;
-    grid-template-rows: repeat(6, 16%);
+    grid-template-rows: repeat(6, 1fr);
     grid-template-columns: 1fr;
     gap: 5px;
     padding: 5px;
     margin: auto;
-    top: 50px;
-    width: 80vw;
-    max-width: 350px;
+    width: 100%;
+    max-width: 500px;
     min-width: 300px;
-    aspect-ratio: 5/6;
     color: rgb(255, 255, 255);
     z-index: 1;
 }
@@ -594,6 +598,8 @@ header {
     border-radius: 5px;
     align-items: center;
     justify-content: center;
+    aspect-ratio: 1/1;
+    max-width: 75px;
     font-size: 30px;
     font-family: 'Nevanta';
     border-style: solid;
@@ -633,9 +639,7 @@ p {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     gap: 5px;
-    position: relative;
     margin: auto;
-    top: 130px;
     width: 98%;
     max-width: 500px;
     min-width: 300px;
