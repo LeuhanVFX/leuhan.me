@@ -593,7 +593,7 @@ let date = new Date(Date.now())
 date = date.toUTCString()
 
 ///// Mot /////
-let liste_mots = motsFrequents2.filter((mot) => 5 <= mot.length && mot.length <= 10)
+let liste_mots = motsFrequents2.filter((mot) => 5 <= mot.length && mot.length <= 9)
 
 let mot = ''
 if (!document.cookie.includes('mot')) {
