@@ -70,7 +70,6 @@ function reset() {
     document.cookie = 'mot=' + mot + '; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT'
     mot_l = Array.from(mot.toLowerCase())
     initGrid()
-    console.log(mot) // Debug
     ligne_active = lignes[0]
     active_cell.style.borderColor = 'rgb(196, 186, 174)'
     active_cell.style.boxShadow = 'none'
@@ -237,7 +236,7 @@ async function verification() {
             guess += cell.innerHTML.toLowerCase()
         })
 
-        if (motsFrequents2.includes(guess)) { // Test si le mot est dans le dictionnaire
+        if (motsProposables.includes(guess)) { // Test si le mot est dans le dictionnaire
             if (!(mots_utilises.includes(guess.toUpperCase()))) {
                 // Test si le mot a déjà été utilisé
                 for (let k = 0; k < ligne_active.length; k++) { // Test si les lettres sont bien placées
@@ -338,7 +337,7 @@ async function verification() {
                     }
                 } else {
                     if (lignes.indexOf(ligne_active) < 5) {
-                        mots_utilises.push(ligne_active[0].innerHTML + ligne_active[1].innerHTML + ligne_active[2].innerHTML + ligne_active[3].innerHTML + ligne_active[4].innerHTML)
+                        mots_utilises.push(guess.toUpperCase())
                         document.cookie = "mots_utilises=" + mots_utilises.toString() + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/"; // stockage des mots utilisés
                         ligne_active = lignes[lignes.indexOf(ligne_active) + 1]
                         active_cell.style.borderColor = 'rgb(196, 186, 174)'
@@ -545,12 +544,19 @@ if (getCookie('theme') === 'dark') {
 let button = document.getElementById('rules')
 let rules_chart = document.getElementById('rules_chart')
 let close_button = document.getElementById('close_button')
-// let win_banner = document.getElementById('win_banner')
+let rules = false
 
 button.addEventListener("click", (event) => {
-    rules_chart.style.display = 'block';
-    keyboard = false
-    blurexcept(rules_chart.id)
+    if (rules == false) {
+        rules_chart.style.display = 'block';
+        rules = true
+        keyboard = false
+        blurexcept(rules_chart.id)
+    } else {
+        rules_chart.style.display = 'none';
+        rules = false
+        unblur()
+    }
 });
 
 close_button.addEventListener("click", (event) => {
@@ -593,7 +599,8 @@ let date = new Date(Date.now())
 date = date.toUTCString()
 
 ///// Mot /////
-let liste_mots = motsFrequents2.filter((mot) => 5 <= mot.length && mot.length <= 9)
+let liste_mots = listeMots.filter((mot) => 5 <= mot.length && mot.length <= 9)
+let motsProposables = listeMots
 
 let mot = ''
 if (!document.cookie.includes('mot')) {
@@ -604,8 +611,6 @@ if (!document.cookie.includes('mot')) {
 }
 
 let mot_l = Array.from(mot.toLowerCase())
-
-console.log(mot) // Debug
 
 ///// Jeu /////
 ligne1 = []
