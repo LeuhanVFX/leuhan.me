@@ -109,12 +109,11 @@ function reset() {
 
 };
 
-function initGrid() {
+async function initGrid() {
     let col = mot.length
     let grid = document.getElementById('grid')
     let gridLines = grid.querySelectorAll('.ligne')
 
-    /** Création de la grille */
     gridLines.forEach((line) => {
         line.style.gridTemplateColumns = `repeat(${col}, 1fr)`
         Array.from(line.children).forEach((cell) => {
@@ -124,6 +123,7 @@ function initGrid() {
             let cell = document.createElement('div')
             cell.classList.add('cell')
             line.appendChild(cell)
+            cell.style.scale = "0"
         }
     })
     cells_list = Array.from(document.querySelectorAll('.cell'))
@@ -134,6 +134,16 @@ function initGrid() {
     ligne5 = cells_list.slice(4 * mot.length, 5 * mot.length);
     ligne6 = cells_list.slice(5 * mot.length, 6 * mot.length);
     lignes = [ligne1, ligne2, ligne3, ligne4, ligne5, ligne6];
+    for (let c = 0; c < cells_list.length; c++) {
+        cells_list[c].animate(
+            [{ scale: "0" },
+            { scale: "1.15" },
+            { scale: "1" }],
+            200)
+            cells_list[c].style.scale = "1"
+            
+        await sleep(15)
+    }
 }
 
 function blurexcept(itemid) {
@@ -308,7 +318,6 @@ async function verification() {
                             }
                         })
                     }
-                    // Pause pour que l'animation soit visible
                     await sleep(300);
                 }
                 document.cookie = "ligne" + (lignes.indexOf(ligne_active) + 1) + "=" + guess + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/"; // stockage des lignes

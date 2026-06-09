@@ -8,6 +8,10 @@
     src: url('NevantaExtraBold-9MdV5.otf');
 }
 
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 :root {
     --primary: #f2e5d5;
     --secondary: #c9b8a7;
@@ -577,7 +581,7 @@ header {
     display: grid;
     grid-template-rows: repeat(6, 1fr);
     grid-template-columns: 1fr;
-    gap: 2px;
+    gap: 3px;
     padding: 5px;
     margin: auto;
     width: 98%;
@@ -593,7 +597,7 @@ header {
     grid-template-columns: repeat(5, 1fr);
     width: 95%;
     margin: auto;
-    gap: 2px;
+    gap: 3px;
 }
 
 .grid .cell {
