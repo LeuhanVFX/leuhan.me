@@ -31,7 +31,7 @@ function afficherPremereLettre(mot) {
     let first_cell = ligne_active[0]
     first_cell.innerHTML = first_letter
     first_cell.setAttribute('used', 'true')
-    active_cell.style.borderColor = 'rgb(196, 186, 174)'
+    active_cell.style.borderColor = 'var(--text-color)'
     active_cell.style.boxShadow = 'none'
     active_cell = ligne_active[1]
     active_cell.style.borderColor = 'rgb(249, 176, 252)'
@@ -71,7 +71,7 @@ function reset() {
     mot_l = Array.from(mot.toLowerCase())
     initGrid()
     ligne_active = lignes[0]
-    active_cell.style.borderColor = 'rgb(196, 186, 174)'
+    active_cell.style.borderColor = 'var(--text-color)'
     active_cell.style.boxShadow = 'none'
     active_cell = ligne_active[0]
     active_cell.style.borderColor = 'rgb(249, 176, 252)'
@@ -340,14 +340,14 @@ async function verification() {
                         mots_utilises.push(guess.toUpperCase())
                         document.cookie = "mots_utilises=" + mots_utilises.toString() + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/"; // stockage des mots utilisés
                         ligne_active = lignes[lignes.indexOf(ligne_active) + 1]
-                        active_cell.style.borderColor = 'rgb(196, 186, 174)'
+                        active_cell.style.borderColor = 'var(--text-color)'
                         active_cell.style.boxShadow = 'none'
                         active_cell = ligne_active[0]
                         active_cell.style.borderColor = 'rgb(249, 176, 252)'
                         active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
                         if (dif == 'easy') {
                             afficherPremereLettre(mot)
-                            active_cell.style.borderColor = 'rgb(196, 186, 174)'
+                            active_cell.style.borderColor = 'var(--text-color)'
                             active_cell.style.boxShadow = 'none'
                             active_cell = ligne_active[1]
                             active_cell.style.borderColor = 'rgb(249, 176, 252)'
@@ -690,7 +690,7 @@ document.addEventListener("keydown", (event) => {
                 if (!(cell.hasAttribute('used'))) {
                     cell.innerHTML = event.key.toUpperCase()
                     cell.setAttribute('used', 'true')
-                    active_cell.style.borderColor = 'rgb(196, 186, 174)'
+                    active_cell.style.borderColor = 'var(--text-color)'
                     active_cell.style.boxShadow = 'none'
                     if (i < ligne_active.length - 1) {
                         active_cell = ligne_active[i + 1]
@@ -707,7 +707,7 @@ document.addEventListener("keydown", (event) => {
                     if (cell.hasAttribute('used')) {
                         cell.innerHTML = ''
                         cell.removeAttribute('used')
-                        active_cell.style.borderColor = 'rgb(196, 186, 174)'
+                        active_cell.style.borderColor = 'var(--text-color)'
                         active_cell.style.boxShadow = 'none'
                         active_cell = ligne_active[i]
                         active_cell.style.borderColor = 'rgb(249, 176, 252)'
@@ -742,7 +742,7 @@ keys.forEach((key) => { // Clic sur une touche
                     if (cell.hasAttribute('used')) {
                         cell.innerHTML = ''
                         cell.removeAttribute('used')
-                        active_cell.style.borderColor = 'rgb(196, 186, 174)'
+                        active_cell.style.borderColor = 'var(--text-color)'
                         active_cell.style.boxShadow = 'none'
                         active_cell = ligne_active[i]
                         active_cell.style.borderColor = 'rgb(249, 176, 252)'
@@ -761,7 +761,7 @@ keys.forEach((key) => { // Clic sur une touche
                     if (!(cell.hasAttribute('used'))) {
                         cell.innerHTML = key.innerHTML
                         cell.setAttribute('used', 'true')
-                        active_cell.style.borderColor = 'rgb(196, 186, 174)'
+                        active_cell.style.borderColor = 'var(--text-color)'
                         active_cell.style.boxShadow = 'none'
                         if (i < 4) {
                             active_cell = ligne_active[i + 1]
