@@ -8,8 +8,10 @@
     src: url('NevantaExtraBold-9MdV5.otf');
 }
 
-*, *::before, *::after {
-  box-sizing: border-box;
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
 }
 
 :root {
@@ -65,7 +67,7 @@ body {
     width: 100%;
     max-width: 550px;
     max-width: 600px;
-    height: 85vh;
+    height: 80vh;
     margin: auto;
     padding: 0px;
 }
@@ -88,9 +90,10 @@ header {
 }
 
 .menu {
-    display: flex;
+    display: grid;
+    width: 100%;
+    grid-template-columns: 25% 50% 25%;
     align-items: center;
-    justify-content: space-between;
     height: fit-content;
     font-size: 2vh;
     padding: 0 5px;
@@ -122,15 +125,11 @@ header {
 }
 
 .theme-toggle {
-    position: static;
     display: flex;
+    margin: auto;
+    scale: 0.75;
     align-items: center;
     background-color: transparent;
-}
-
-.logo img {
-    width: 100%;
-    height: auto;
 }
 
 .menu a {
@@ -397,11 +396,10 @@ header {
 
 .rules {
     display: flex;
+    margin: auto;
     background-color: rgb(135, 135, 135, 0);
     border-radius: 0px 0px 50px 50px;
-    width: 35px;
-    height: 35px;
-    right: 5px;
+    width: 40px;
     transform: scaleY(1);
     transform-origin: top;
     transition: ease-out 0.2s;
@@ -410,16 +408,10 @@ header {
     z-index: 1;
 }
 
-/* .rules:hover {
-    transform: scale(1.05);
-    background-color: rgb(135, 135, 135, 0.5);
-    transition: ease-out 0.2s;
-} */
-
 .rules img {
-    width: 50%;
+    width: 100%;
     margin: auto;
-    padding: 1px;
+    padding: 0px;
     transition: 0.2s;
 }
 
@@ -492,89 +484,161 @@ header {
     transition: 0.2s;
 }
 
-.difficulty {
+.switch {
+    --_switch-bg-clr: #c9b8a7;
+    --_switch-padding: 4px;
+    /* padding around button*/
+    --_slider-bg-clr: #80735e;
+    /* slider color unchecked */
+    --_slider-bg-clr-on: #80735e;
+    /* slider color checked */
+    --_slider-txt-clr: #ffffff;
+    --_label-padding: 1rem 2rem;
+    /* padding around the labels -  this gives the switch it's global width and height */
+    --_switch-easing: cubic-bezier(0.47,
+            1.64,
+            0.41,
+            0.8);
+    /* easing on toggle switch */
+    color: white;
+    width: fit-content;
+    margin: auto;
     display: flex;
-    width: 100%;
-    grid-row: 1;
-    grid-column: 1fr 1fr 1fr;
-    gap: 25px;
-    align-items: center;
     justify-content: center;
-}
-
-.toggle_button {
-    width: 15%;
-    max-width: 50px;
-    aspect-ratio: 2/1;
-    background-color: antiquewhite;
-    padding: 5px;
-    border-radius: 50px;
-    align-items: center;
+    position: relative;
+    border-radius: 9999px;
     cursor: pointer;
-    transform: scale(1);
-    transition: 0.25s;
-}
-
-.toggle_button:hover {
-    transform: scale(1.1);
-    transition: 0.25s;
-}
-
-.toggle_button .button_dot {
-    display: block;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     position: relative;
-    left: 0%;
-    width: 50%;
-    height: 100%;
-    background-color: rgb(199, 186, 168);
-    border-radius: 50px;
-    transition: ease-out 0.25s;
+    isolation: isolate;
 }
 
-.difficulty_cell {
-    display: flex;
-    position: relative;
-    width: 50%;
-    height: 100%;
-    align-items: center;
-    justify-content: center;
-    gap: 10px;
-}
-
-.difficulty_cell h3 {
-    display: flex;
-    grid-template-columns: 1fr 1fr;
-}
-
-.explain_button {
-    display: flex;
-    padding: 2px;
-    font-size: 0.5em;
-    width: 15px;
-    aspect-ratio: 1/1;
-}
-
-#s_facile,
-#s_difficile {
-    display: none;
+.switch input[type="checkbox"] {
     position: absolute;
-    width: 100%;
-    top: 75%;
-    height: fit-content;
-    background-color: rgba(0, 0, 0, 0.75);
-    border-radius: 15px;
-    padding: 5px;
-    text-align: center;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+}
+
+.switch>span {
+    display: grid;
+    place-content: center;
+    transition: opacity 300ms ease-in-out 150ms;
+    padding: var(--_label-padding);
+}
+
+.switch::before,
+.switch::after {
+    content: "";
+    position: absolute;
+    border-radius: inherit;
+    transition: inset 150ms ease-in-out;
+}
+
+/* switch slider */
+.switch::before {
+    background-color: var(--_slider-bg-clr);
+    inset: var(--_switch-padding) 50% var(--_switch-padding) var(--_switch-padding);
+    transition:
+        inset 500ms var(--_switch-easing),
+        background-color 500ms ease-in-out;
+    z-index: -1;
+    box-shadow:
+        inset 0 1px 1px rgba(0, 0, 0, 0.3),
+        0 1px rgba(255, 255, 255, 0.3);
+}
+
+/* switch bg color */
+.switch::after {
+    background-color: var(--_switch-bg-clr);
+    inset: -0.25rem;
+    z-index: -2;
+}
+
+/* switch hover & focus */
+.switch:active::after {
+    inset: 0;
+    ;
+}
+
+.switch:has(input:checked):hover>span:first-of-type,
+.switch:has(input:not(:checked)):hover>span:last-of-type {
+    opacity: 1;
+    transition-delay: 0ms;
+    transition-duration: 100ms;
+}
+
+/* switch hover */
+.switch:has(input:checked):hover::before {
+    inset: var(--_switch-padding) var(--_switch-padding) var(--_switch-padding) 45%;
+}
+
+.switch:has(input:not(:checked)):hover::before {
+    inset: var(--_switch-padding) 45% var(--_switch-padding) var(--_switch-padding);
+}
+
+/* checked - move slider to right */
+.switch:has(input:checked)::before {
+    background-color: var(--_slider-bg-clr-on);
+    inset: var(--_switch-padding) var(--_switch-padding) var(--_switch-padding) 50%;
+}
+
+/* checked - set opacity */
+.switch>span:last-of-type,
+.switch>input:checked+span:first-of-type {
+    opacity: 0.75;
+}
+
+.switch>input:checked~span:last-of-type {
+    opacity: 1;
+}
+
+.reset_button {
+    display: flex;
+    margin: 0 auto;
+    width: 40%;
+    max-width: 150px;
+    border-radius: 10px;
+    aspect-ratio: 3/1;
+    background-color: var(--secondary);
+    padding: 15px;
+    gap: 10px;
     align-content: center;
     justify-content: center;
+    cursor: pointer;
+    transition: 0.2s;
 }
 
-.difficulty_cell #explain_button1:hover .difficulty_cell #s_facile {
-    display: block;
+.reset_button img {
+    filter: invert();
+    margin: auto;
+    width: 20px;
+    transition: 0.3s;
 }
 
-.explain_button:hover {
-    text-decoration: underline;
+.reset_button p {
+    margin: auto;
+}
+
+.reset_button:hover {
+    scale: 1.05;
+    filter: brightness(1.1);
+}
+
+.reset_button:active {
+    scale: 0.9;
+    filter: brightness(0.9);
+}
+
+.reset_button:active img {
+    transform: rotate(45deg);
+    transition: 0.3s;
 }
 
 .grid {
@@ -603,9 +667,10 @@ header {
 .grid .cell {
     display: flex;
     background-color: var(--secondary);
-    border-radius: 5px;
+    border-radius: 8%;
     align-items: center;
     justify-content: center;
+    width: 100%;
     aspect-ratio: 1/1;
     font-size: 30px;
     font-family: 'Nevanta';
@@ -802,6 +867,24 @@ p {
         font-size: 3.5vw;
     }
 
+    /* rules switch hover */
+    .switch:has(input:checked):hover::before {
+        inset: var(--_switch-padding) var(--_switch-padding) var(--_switch-padding) 50%;
+    }
+
+    .switch:has(input:not(:checked)):hover::before {
+        inset: var(--_switch-padding) 50% var(--_switch-padding) var(--_switch-padding);
+    }
+
+    /* rules switch active */
+    .switch:has(input:checked):active::before {
+        inset: var(--_switch-padding) var(--_switch-padding) var(--_switch-padding) 45%;
+    }
+
+    .switch:has(input:not(:checked)):active::before {
+        inset: var(--_switch-padding) 45% var(--_switch-padding) var(--_switch-padding);
+    }
+
     .banner {
         font-size: 3.5vw;
     }
@@ -825,6 +908,21 @@ p {
         scale: 1.15;
         color: var(--selection);
         transition: all 0.2s;
+    }
+
+    .reset_button:hover {
+        scale: 1;
+        filter: none;
+    }
+
+    .reset_button:active {
+        scale: 0.9;
+        filter: brightness(0.9);
+    }
+
+    .reset_button:active img {
+        transform: rotate(45deg);
+        transition: 0.3s;
     }
 }
 

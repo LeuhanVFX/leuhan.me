@@ -107488,6 +107488,8 @@ const listeMots = [
   "drolesses",
   "dromadaire",
   "dromadaires",
+  "drone",
+  "drones",
   "dronte",
   "drontes",
   "drop",

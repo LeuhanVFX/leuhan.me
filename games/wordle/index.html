@@ -10,6 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <link rel="icon" type="image/png" href="icon.png">
+    <link rel="manifest" href="manifest.json">
 </head>
 <main>
     <header>
@@ -64,32 +65,21 @@
                 <p>
                 <h2>Difficulté</h2>
                 </p>
-                <div class="difficulty">
-                    <div class="difficulty_cell" id="facile">
-                        <h3 id="t_facile">
-                            Facile
-                            <div class="explain_button" id="explain_button1">?</div>
-                        </h3>
-                        <div class='span' id="s_facile">La première lettre ainsi que 6 autres n'étant pas dans le mot
-                            sont indiquées</div>
-                    </div>
-                    <div class="toggle_button" id="dif_button">
-                        <div class="button_dot" id="button_dot"></div>
-                    </div>
-                    <div class="difficulty_cell" id="difficile">
-                        <h3 id="t_difficile">
-                            Difficile
-                            <div class="explain_button" id="explain_button2">?</div>
-                        </h3>
-                        <div class='span' id="s_difficile">Règle classique, aucune lettre n'est indiquée</div>
-                    </div>
-                </div>
+                <label for="difficulty" class="switch" aria-label="Toggle Filter">
+                    <input type="checkbox" id="difficulty" />
+                    <span>Facile</span>
+                    <span>Difficile</span>
+                </label>
             </div>
         </div>
     </header>
 
     <body>
         <div class="game">
+            <div class="reset_button" id="resButton">
+                <p>CHANGER</p>
+                <img src="circular.png" alt="cycle">
+            </div>
             <div class="grid" id="grid">
 
                 <span id="ligne1" class="ligne">

@@ -17,10 +17,6 @@ function deleteCookie(name) {
     document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
 }
 
-function getName(variable) {
-    return Object.keys(variable)[0]
-}
-
 function afficherPremereLettre(mot) {
     /**
      * Affiche la première lettre du mot
@@ -38,21 +34,7 @@ function afficherPremereLettre(mot) {
     active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
 }
 
-async function hideLetters() {
-    let invalid_letters = []
-    keys.forEach((key) => {
-        if (!mot.includes(key.innerHTML.toLowerCase()) && (key.id != 'Backspace' && key.id != 'Enter')) {
-            invalid_letters.push(key)
-        }
-    })
-    for (let i = 0; i < 6; i++) {
-        let key = invalid_letters[Math.floor(Math.random() * invalid_letters.length)]
-        key.classList.add('absent')
-        invalid_letters.splice(invalid_letters.indexOf(key), 1)
-    }
-}
-
-function reset() {
+async function reset() {
     /**
      * Réinitialise la grille
      */
@@ -84,10 +66,7 @@ function reset() {
         key.classList.remove('absent')
         key.removeAttribute('state')
     })
-    if (dif == 'easy') {
-        afficherPremereLettre(mot)
-        hideLetters()
-    }
+    afficherPremereLettre(mot)
     if (document.cookie.includes('ligne1')) {
         deleteCookie('ligne1')
     }
@@ -106,6 +85,8 @@ function reset() {
     if (document.cookie.includes('ligne6')) {
         deleteCookie('ligne6')
     }
+
+    await sleep(500)
 
 };
 
@@ -126,6 +107,7 @@ async function initGrid() {
             cell.style.scale = "0"
         }
     })
+    grid.style.width = `min(${col * 60}px, 90vw)`
     cells_list = Array.from(document.querySelectorAll('.cell'))
     ligne1 = cells_list.slice(0 * mot.length, 1 * mot.length);
     ligne2 = cells_list.slice(1 * mot.length, 2 * mot.length);
@@ -140,9 +122,9 @@ async function initGrid() {
             { scale: "1.15" },
             { scale: "1" }],
             200)
-            cells_list[c].style.scale = "1"
-            
-        await sleep(15)
+        cells_list[c].style.scale = 1
+
+        await sleep(8)
     }
 }
 
@@ -277,9 +259,9 @@ async function verification() {
                     let cell = ligne_active[m]
                     if (cell.getAttribute('state') == 'correct') {
                         cell.animate([
-                            { transform: 'rotateX(0deg)', backgroundColor: 'rgb(121, 121, 121)' },
-                            { transform: 'rotateX(90deg)', backgroundColor: colorsheme['correct'] },
-                            { transform: 'rotateX(0deg)', backgroundColor: colorsheme['correct'] },
+                            { transform: 'rotateX(0deg)', backgroundColor: 'rgb(121, 121, 121)', scale: 1 },
+                            { transform: 'rotateX(90deg)', backgroundColor: colorsheme['correct'], scale: 1.25 },
+                            { transform: 'rotateX(0deg)', backgroundColor: colorsheme['correct'], scale: 1 },
                         ], 300)
                         cell.classList.add('correct')
                         keys.forEach((key) => {
@@ -290,9 +272,9 @@ async function verification() {
                         })
                     } else if (cell.getAttribute('state') == 'present') {
                         cell.animate([
-                            { transform: 'rotateX(0deg)', backgroundColor: 'rgb(121, 121, 121)' },
-                            { transform: 'rotateX(90deg)', backgroundColor: colorsheme['present'] },
-                            { transform: 'rotateX(0deg)', backgroundColor: colorsheme['present'] },
+                            { transform: 'rotateX(0deg)', backgroundColor: 'rgb(121, 121, 121)', scale: 1 },
+                            { transform: 'rotateX(90deg)', backgroundColor: colorsheme['present'], scale: 1.25 },
+                            { transform: 'rotateX(0deg)', backgroundColor: colorsheme['present'], scale: 1 },
                         ], 300)
                         cell.classList.add('present')
                         keys.forEach((key) => {
@@ -305,9 +287,9 @@ async function verification() {
                         })
                     } else if (cell.getAttribute('state') == 'absent') {
                         cell.animate([
-                            { transform: 'rotateX(0deg)', backgroundColor: 'rgb(121, 121, 121)' },
-                            { transform: 'rotateX(90deg)', backgroundColor: colorsheme['absent'] },
-                            { transform: 'rotateX(0deg)', backgroundColor: colorsheme['absent'] },
+                            { transform: 'rotateX(0deg)', backgroundColor: 'rgb(121, 121, 121)', scale: 1 },
+                            { transform: 'rotateX(90deg)', backgroundColor: colorsheme['absent'], scale: 1.25 },
+                            { transform: 'rotateX(0deg)', backgroundColor: colorsheme['absent'], scale: 1 },
                         ], 300)
                         cell.classList.add('absent')
                         keys.forEach((key) => {
@@ -318,10 +300,11 @@ async function verification() {
                             }
                         })
                     }
-                    await sleep(300);
+                    await sleep(100);
                 }
-                document.cookie = "ligne" + (lignes.indexOf(ligne_active) + 1) + "=" + guess + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/"; // stockage des lignes
+                document.cookie = "ligne" + (lignes.indexOf(ligne_active) + 1) + "=" + guess + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/"; // stockage de la ligne
                 if (juste == mot.length) {
+                    await sleep(500)
                     summonBanner('win_banner', `<b>Vous avez trouvé le mot !</b>`);
                     deleteCookie('mot')
                     deleteCookie('mots_utilises')
@@ -349,19 +332,13 @@ async function verification() {
                         mots_utilises.push(guess.toUpperCase())
                         document.cookie = "mots_utilises=" + mots_utilises.toString() + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/"; // stockage des mots utilisés
                         ligne_active = lignes[lignes.indexOf(ligne_active) + 1]
+                        afficherPremereLettre(mot)
                         active_cell.style.borderColor = 'var(--text-color)'
                         active_cell.style.boxShadow = 'none'
-                        active_cell = ligne_active[0]
+                        active_cell = ligne_active[1]
                         active_cell.style.borderColor = 'rgb(249, 176, 252)'
                         active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
-                        if (dif == 'easy') {
-                            afficherPremereLettre(mot)
-                            active_cell.style.borderColor = 'var(--text-color)'
-                            active_cell.style.boxShadow = 'none'
-                            active_cell = ligne_active[1]
-                            active_cell.style.borderColor = 'rgb(249, 176, 252)'
-                            active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
-                        }
+
                     } else {
                         summonBanner('lose_banner', `<b>Perdu ! Le mot était : <br>${mot.toUpperCase()}</b>`);
                         ligne_active = []
@@ -478,11 +455,11 @@ async function verifRapide() {
         for (let m = 0; m < ligne_active.length; m++) { // Changement de couleur des cases
             let cell = ligne_active[m]
             if (cell.getAttribute('state') == 'correct') {
-                cell.animate([
-                    { transform: 'rotateX(0deg)', backgroundColor: 'rgb(121, 121, 121)' },
-                    { transform: 'rotateX(90deg)', backgroundColor: colorsheme['correct'] },
-                    { transform: 'rotateX(0deg)', backgroundColor: colorsheme['correct'] },
-                ], 300)
+                // cell.animate([
+                //     { transform: 'rotateX(0deg)', backgroundColor: 'rgb(121, 121, 121)' },
+                //     { transform: 'rotateX(90deg)', backgroundColor: colorsheme['correct'] },
+                //     { transform: 'rotateX(0deg)', backgroundColor: colorsheme['correct'] },
+                // ], 300)
                 cell.classList.add('correct')
                 keys.forEach((key) => {
                     if (key.innerHTML.toUpperCase() == cell.innerHTML.toUpperCase()) {
@@ -491,11 +468,11 @@ async function verifRapide() {
                     }
                 })
             } else if (cell.getAttribute('state') == 'present') {
-                cell.animate([
-                    { transform: 'rotateX(0deg)', backgroundColor: 'rgb(121, 121, 121)' },
-                    { transform: 'rotateX(90deg)', backgroundColor: colorsheme['present'] },
-                    { transform: 'rotateX(0deg)', backgroundColor: colorsheme['present'] },
-                ], 300)
+                // cell.animate([
+                //     { transform: 'rotateX(0deg)', backgroundColor: 'rgb(121, 121, 121)' },
+                //     { transform: 'rotateX(90deg)', backgroundColor: colorsheme['present'] },
+                //     { transform: 'rotateX(0deg)', backgroundColor: colorsheme['present'] },
+                // ], 300)
                 cell.classList.add('present')
                 keys.forEach((key) => {
                     if (key.innerHTML.toUpperCase() == cell.innerHTML.toUpperCase()) {
@@ -506,11 +483,11 @@ async function verifRapide() {
                     }
                 })
             } else if (cell.getAttribute('state') == 'absent') {
-                cell.animate([
-                    { transform: 'rotateX(0deg)', backgroundColor: 'rgb(121, 121, 121)' },
-                    { transform: 'rotateX(90deg)', backgroundColor: colorsheme['absent'] },
-                    { transform: 'rotateX(0deg)', backgroundColor: colorsheme['absent'] },
-                ], 300)
+                // cell.animate([
+                //     { transform: 'rotateX(0deg)', backgroundColor: 'rgb(121, 121, 121)' },
+                //     { transform: 'rotateX(90deg)', backgroundColor: colorsheme['absent'] },
+                //     { transform: 'rotateX(0deg)', backgroundColor: colorsheme['absent'] },
+                // ], 300)
                 cell.classList.add('absent')
                 keys.forEach((key) => {
                     if (key.innerHTML.toUpperCase() == cell.innerHTML.toUpperCase()) {
@@ -574,8 +551,8 @@ close_button.addEventListener("click", (event) => {
     keyboard = true
 });
 ///// Difficulty /////
-let dif_button = document.getElementById('dif_button')
-let but_dot = document.getElementById('button_dot')
+let liste_mots = []
+let dif_button = document.getElementById('difficulty')
 
 if (!document.cookie.includes('difficulty=')) {
     document.cookie = 'difficulty=hard; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT'
@@ -584,20 +561,23 @@ if (!document.cookie.includes('difficulty=')) {
     dif = getCookie('difficulty')
 }
 if (dif == 'easy') {
-    but_dot.style.left = '0%'
+    dif_button.checked = false
+    liste_mots = listeMots.filter((mot) => 5 <= mot.length && mot.length <= 6)
 } else {
-    but_dot.style.left = '50%'
+    dif_button.checked = true
+    liste_mots = listeMots.filter((mot) => 7 <= mot.length && mot.length <= 9)
 }
 dif_button.addEventListener("click", (event) => {
     if (dif == 'easy') {
         dif = 'hard'
-        but_dot.style.left = '50%'
-        but_dot.style.transition = '0.2s ease-out'
+        dif_button.checked = true
+        liste_mots = listeMots.filter((mot) => 7 <= mot.length && mot.length <= 9)
         document.cookie = 'difficulty=hard; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT'
         reset()
     } else {
         dif = 'easy'
-        but_dot.style.left = '0%'
+        dif_button.checked = false
+        liste_mots = listeMots.filter((mot) => 5 <= mot.length && mot.length <= 6)
         document.cookie = 'difficulty=easy; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT'
         reset()
     }
@@ -608,7 +588,6 @@ let date = new Date(Date.now())
 date = date.toUTCString()
 
 ///// Mot /////
-let liste_mots = listeMots.filter((mot) => 5 <= mot.length && mot.length <= 9)
 let motsProposables = listeMots
 
 let mot = ''
@@ -772,7 +751,7 @@ keys.forEach((key) => { // Clic sur une touche
                         cell.setAttribute('used', 'true')
                         active_cell.style.borderColor = 'var(--text-color)'
                         active_cell.style.boxShadow = 'none'
-                        if (i < 4) {
+                        if (i < ligne_active.length - 1) {
                             active_cell = ligne_active[i + 1]
                             active_cell.style.borderColor = 'rgb(249, 176, 252)'
                             active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
@@ -785,59 +764,13 @@ keys.forEach((key) => { // Clic sur une touche
     }
 });
 
-if (dif == 'easy') {
-    afficherPremereLettre(mot)
-    hideLetters()
-}
+afficherPremereLettre(mot)
 
-let explain_button1 = document.getElementById('explain_button1')
-let span1 = document.getElementById('s_facile')
-let explain_button2 = document.getElementById('explain_button2')
-let span2 = document.getElementById('s_difficile')
-
-/* Span mode facile */
-explain_button1.addEventListener("mouseover", (event) => {
-    span1.style.display = 'block'
+const reset_button = document.getElementById('resButton')
+reset_button.addEventListener("click", (event) => {
+    reset()
+    console.log('reset')
 })
-
-explain_button1.addEventListener("mouseout", (event) => {
-    span1.style.display = 'none'
-})
-
-/* Span mode difficile */
-explain_button2.addEventListener("mouseover", (event) => {
-    span2.style.display = 'block'
-})
-
-explain_button2.addEventListener("mouseout", (event) => {
-    span2.style.display = 'none'
-})
-
-if (screen.width < 1500) {
-    explain_button1.addEventListener('click', (event) => {
-        if (span1.style.display == 'none') {
-            span1.style.display = 'block'
-        } else {
-            span1.style.display = 'none'
-        }
-    });
-    explain_button2.addEventListener('click', (event) => {
-        if (span2.style.display == 'none') {
-            span2.style.display = 'block'
-        } else {
-            span2.style.display = 'none'
-        }
-    });
-    document.addEventListener("mousedown", (event) => {
-        if (span1.style.display == 'block') {
-            span1.style.display = 'none'
-        }
-
-        if (span2.style.display == 'block') {
-            span2.style.display = 'none'
-        }
-    })
-}
 
 // DEBUG //
 
