@@ -19,7 +19,7 @@
     --secondary: #c9b8a7;
     --text-color: #1b1813;
     --selection: #b55bff;
-    --button-color: rgb(196, 182, 164);
+    --button-color: rgb(165, 154, 140);
 }
 
 .dark-mode {
@@ -371,6 +371,7 @@ header {
     display: flex;
     margin: auto;
     background-color: var(--button-color);
+    border: solid 2px var(--text-color);
     width: 40px;
     aspect-ratio: 1/1;
     border-radius: 5px;
@@ -928,6 +929,13 @@ p {
         transform-origin: center;
         transition: 0.1s;
     }
+
+    .menu .menuButton:active {
+    transform: scale(0.9);
+    filter: brightness(0.9);
+    transform-origin: center;
+    transition: 0.1s;
+}
 
     .chart {
         font-size: 3.5vw;

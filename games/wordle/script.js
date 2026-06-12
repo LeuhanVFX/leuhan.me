@@ -543,22 +543,22 @@ if (!document.cookie.includes('difficulty=')) {
 }
 if (dif == 'easy') {
     dif_button.checked = false
-    liste_mots = listeMots.filter((mot) => 5 <= mot.length && mot.length <= 6)
+    liste_mots = motsFrequents.filter((mot) => 5 <= mot.length && mot.length <= 6)
 } else {
     dif_button.checked = true
-    liste_mots = listeMots.filter((mot) => 7 <= mot.length && mot.length <= 9)
+    liste_mots = motsFrequents.filter((mot) => 7 <= mot.length && mot.length <= 9)
 }
 dif_button.addEventListener("click", (event) => {
     if (dif == 'easy') {
         dif = 'hard'
         dif_button.checked = true
-        liste_mots = listeMots.filter((mot) => 7 <= mot.length && mot.length <= 9)
+        liste_mots = motsFrequents.filter((mot) => 7 <= mot.length && mot.length <= 9)
         document.cookie = 'difficulty=hard; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT'
         reset()
     } else {
         dif = 'easy'
         dif_button.checked = false
-        liste_mots = listeMots.filter((mot) => 5 <= mot.length && mot.length <= 6)
+        liste_mots = motsFrequents.filter((mot) => 5 <= mot.length && mot.length <= 6)
         document.cookie = 'difficulty=easy; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT'
         reset()
     }
