@@ -27,8 +27,10 @@ function afficherPremereLettre(mot) {
     let first_cell = ligne_active[0]
     first_cell.innerHTML = first_letter
     first_cell.setAttribute('used', 'true')
-    active_cell.style.borderColor = 'var(--text-color)'
-    active_cell.style.boxShadow = 'none'
+    if (active_cell) {
+        active_cell.style.borderColor = 'var(--text-color)'
+        active_cell.style.boxShadow = 'none'
+    }
     active_cell = ligne_active[1]
     active_cell.style.borderColor = 'rgb(249, 176, 252)'
     active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
@@ -53,8 +55,10 @@ async function reset() {
     mot_l = Array.from(mot.toLowerCase())
     initGrid()
     ligne_active = lignes[0]
-    active_cell.style.borderColor = 'var(--text-color)'
-    active_cell.style.boxShadow = 'none'
+    if (active_cell) {
+        active_cell.style.borderColor = 'var(--text-color)'
+        active_cell.style.boxShadow = 'none'
+    }
     active_cell = ligne_active[0]
     active_cell.style.borderColor = 'rgb(249, 176, 252)'
     active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
@@ -85,8 +89,7 @@ async function reset() {
     if (document.cookie.includes('ligne6')) {
         deleteCookie('ligne6')
     }
-
-    await sleep(500)
+    deleteCookie('trouve')
 
 };
 
@@ -130,17 +133,8 @@ async function initGrid() {
 
 function blurexcept(itemid) {
     let item = document.getElementById(itemid)
-    blurbox = document.createElement('div')
-    document.body.appendChild(blurbox)
-    blurbox.style.width = '100vw'
-    blurbox.style.height = '100vh'
-    blurbox.style.position = 'fixed'
-    blurbox.style.top = '0'
-    blurbox.style.left = '0'
-    blurbox.style.zIndex = '10'
-    blurbox.style.backgroundColor = 'rgba(0, 0, 0, 0.4)'
-    blurbox.style.backdropFilter = 'blur(10px)'
     item.style.zIndex = '11'
+    blurbox.style.display = "block"
     blurbox.addEventListener("click", (event) => {
         item.style.display = 'none';
         unblur()
@@ -149,7 +143,7 @@ function blurexcept(itemid) {
 }
 
 function unblur() {
-    document.body.removeChild(blurbox)
+    blurbox.style.display = 'none'
     keyboard = true
 }
 
@@ -172,16 +166,6 @@ function summonBanner(bannerid, text) {
 
 }
 
-async function summonTempBanner(bannerid, text, duration) {
-    let banner = document.getElementById(bannerid)
-    banner.getElementsByClassName('banner_text')[0].innerHTML = text
-    banner.style.display = 'block';
-    blurexcept(bannerid)
-    await sleep(duration)
-    banner.style.display = 'none';
-    unblur()
-}
-
 async function summonSimpleBanner(text, duration) {
     let banner = document.createElement('div')
     banner.setAttribute('class', 'simple_banner')
@@ -195,15 +179,25 @@ async function summonSimpleBanner(text, duration) {
     banner.animate([
         { opacity: 0 },
         { opacity: 1 },
-        { opacity: 1 },
+    ], 200)
+    banner.style.opacity = 1
+    await sleep(duration)
+    banner.animate([
         { opacity: 1 },
         { opacity: 0 }
-    ], duration)
-    await sleep(duration)
+    ], 200)
+    banner.style.opacity = 0
+    await sleep(200)
     document.body.removeChild(banner)
 }
 
 async function verification() {
+
+    if (!ligne_active) {
+        summonSimpleBanner(`Le mot était : ${mot.toUpperCase()}`, 2000)
+        return
+    }
+
     let ligne_complete = true
     let juste = 0
     let dico_mot = {}
@@ -260,8 +254,8 @@ async function verification() {
                     if (cell.getAttribute('state') == 'correct') {
                         cell.animate([
                             { transform: 'rotateX(0deg)', backgroundColor: 'rgb(121, 121, 121)', scale: 1 },
-                            { transform: 'rotateX(90deg)', backgroundColor: colorsheme['correct'], scale: 1.25 },
-                            { transform: 'rotateX(0deg)', backgroundColor: colorsheme['correct'], scale: 1 },
+                            { transform: 'rotateX(90deg)', backgroundColor: "var(--correct)", scale: 1.25 },
+                            { transform: 'rotateX(0deg)', backgroundColor: "var(--correct)", scale: 1 },
                         ], 300)
                         cell.classList.add('correct')
                         keys.forEach((key) => {
@@ -273,8 +267,8 @@ async function verification() {
                     } else if (cell.getAttribute('state') == 'present') {
                         cell.animate([
                             { transform: 'rotateX(0deg)', backgroundColor: 'rgb(121, 121, 121)', scale: 1 },
-                            { transform: 'rotateX(90deg)', backgroundColor: colorsheme['present'], scale: 1.25 },
-                            { transform: 'rotateX(0deg)', backgroundColor: colorsheme['present'], scale: 1 },
+                            { transform: 'rotateX(90deg)', backgroundColor: "var(--present)", scale: 1.25 },
+                            { transform: 'rotateX(0deg)', backgroundColor: "var(--present)", scale: 1 },
                         ], 300)
                         cell.classList.add('present')
                         keys.forEach((key) => {
@@ -288,8 +282,8 @@ async function verification() {
                     } else if (cell.getAttribute('state') == 'absent') {
                         cell.animate([
                             { transform: 'rotateX(0deg)', backgroundColor: 'rgb(121, 121, 121)', scale: 1 },
-                            { transform: 'rotateX(90deg)', backgroundColor: colorsheme['absent'], scale: 1.25 },
-                            { transform: 'rotateX(0deg)', backgroundColor: colorsheme['absent'], scale: 1 },
+                            { transform: 'rotateX(90deg)', backgroundColor: "var(--absent)", scale: 1.25 },
+                            { transform: 'rotateX(0deg)', backgroundColor: "var(--absent)", scale: 1 },
                         ], 300)
                         cell.classList.add('absent')
                         keys.forEach((key) => {
@@ -306,27 +300,9 @@ async function verification() {
                 if (juste == mot.length) {
                     await sleep(500)
                     summonBanner('win_banner', `<b>Vous avez trouvé le mot !</b>`);
-                    deleteCookie('mot')
-                    deleteCookie('mots_utilises')
-                    ligne_active = []
-                    if (document.cookie.includes('ligne1')) {
-                        deleteCookie('ligne1')
-                    }
-                    if (document.cookie.includes('ligne2')) {
-                        deleteCookie('ligne2')
-                    }
-                    if (document.cookie.includes('ligne3')) {
-                        deleteCookie('ligne3')
-                    }
-                    if (document.cookie.includes('ligne4')) {
-                        deleteCookie('ligne4')
-                    }
-                    if (document.cookie.includes('ligne5')) {
-                        deleteCookie('ligne5')
-                    }
-                    if (document.cookie.includes('ligne6')) {
-                        deleteCookie('ligne6')
-                    }
+                    ligne_active = null
+                    trouve = true
+                    document.cookie = "trouve=true; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/"
                 } else {
                     if (lignes.indexOf(ligne_active) < 5) {
                         mots_utilises.push(guess.toUpperCase())
@@ -341,27 +317,7 @@ async function verification() {
 
                     } else {
                         summonBanner('lose_banner', `<b>Perdu ! Le mot était : <br>${mot.toUpperCase()}</b>`);
-                        ligne_active = []
-                        deleteCookie('mot')
-                        deleteCookie('mots_utilises')
-                        if (document.cookie.includes('ligne1')) {
-                            deleteCookie('ligne1')
-                        }
-                        if (document.cookie.includes('ligne2')) {
-                            deleteCookie('ligne2')
-                        }
-                        if (document.cookie.includes('ligne3')) {
-                            deleteCookie('ligne3')
-                        }
-                        if (document.cookie.includes('ligne4')) {
-                            deleteCookie('ligne4')
-                        }
-                        if (document.cookie.includes('ligne5')) {
-                            deleteCookie('ligne5')
-                        }
-                        if (document.cookie.includes('ligne6')) {
-                            deleteCookie('ligne6')
-                        }
+                        ligne_active = null
                     }
                 }
             } else {
@@ -455,11 +411,6 @@ async function verifRapide() {
         for (let m = 0; m < ligne_active.length; m++) { // Changement de couleur des cases
             let cell = ligne_active[m]
             if (cell.getAttribute('state') == 'correct') {
-                // cell.animate([
-                //     { transform: 'rotateX(0deg)', backgroundColor: 'rgb(121, 121, 121)' },
-                //     { transform: 'rotateX(90deg)', backgroundColor: colorsheme['correct'] },
-                //     { transform: 'rotateX(0deg)', backgroundColor: colorsheme['correct'] },
-                // ], 300)
                 cell.classList.add('correct')
                 keys.forEach((key) => {
                     if (key.innerHTML.toUpperCase() == cell.innerHTML.toUpperCase()) {
@@ -468,11 +419,6 @@ async function verifRapide() {
                     }
                 })
             } else if (cell.getAttribute('state') == 'present') {
-                // cell.animate([
-                //     { transform: 'rotateX(0deg)', backgroundColor: 'rgb(121, 121, 121)' },
-                //     { transform: 'rotateX(90deg)', backgroundColor: colorsheme['present'] },
-                //     { transform: 'rotateX(0deg)', backgroundColor: colorsheme['present'] },
-                // ], 300)
                 cell.classList.add('present')
                 keys.forEach((key) => {
                     if (key.innerHTML.toUpperCase() == cell.innerHTML.toUpperCase()) {
@@ -483,11 +429,6 @@ async function verifRapide() {
                     }
                 })
             } else if (cell.getAttribute('state') == 'absent') {
-                // cell.animate([
-                //     { transform: 'rotateX(0deg)', backgroundColor: 'rgb(121, 121, 121)' },
-                //     { transform: 'rotateX(90deg)', backgroundColor: colorsheme['absent'] },
-                //     { transform: 'rotateX(0deg)', backgroundColor: colorsheme['absent'] },
-                // ], 300)
                 cell.classList.add('absent')
                 keys.forEach((key) => {
                     if (key.innerHTML.toUpperCase() == cell.innerHTML.toUpperCase()) {
@@ -518,38 +459,78 @@ themeToggle.addEventListener('change', () => {
     toggleTheme();
 });
 
-if (getCookie('theme') === 'dark') {
-    document.documentElement.classList.add('dark-mode');
-    themeToggle.checked = true;
-} else {
+if (getCookie('theme') === 'light') {
     document.documentElement.classList.remove('dark-mode');
     themeToggle.checked = false;
+} else {
+    document.documentElement.classList.add('dark-mode');
+    themeToggle.checked = true;
 }
 
-///// Rules Button /////
-let button = document.getElementById('rules')
-let rules_chart = document.getElementById('rules_chart')
-let close_button = document.getElementById('close_button')
-let rules = false
+///// Gestion des couleurs /////
+const colorshemes = [
+        {
+            correct: 'rgba(15, 129, 0, 1)',
+            present: 'rgba(221, 133, 0, 1)',
+            absent: 'rgba(80, 80, 80, 1)'
+        },
+        {
+            correct: 'rgb(255, 0, 0)',
+            present: '#FFBD00',
+            absent: 'rgba(80, 80, 80, 1)'
+        },
+        {
+            correct: 'rgb(255, 151, 246)',
+            present: 'rgb(76, 219, 255)',
+            absent: 'rgba(80, 80, 80, 1)'
+        }
+    ]
+const selector = document.getElementById('scheme_selector');
 
-button.addEventListener("click", (event) => {
-    if (rules == false) {
-        rules_chart.style.display = 'block';
-        rules = true
-        keyboard = false
-        blurexcept(rules_chart.id)
-    } else {
-        rules_chart.style.display = 'none';
-        rules = false
-        unblur()
+selector.addEventListener('change', (event) => {
+    colorsheme = colorshemes[selector.value]
+    document.cookie = 'colorsheme=' + selector.value + '; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT'
+    let root = document.documentElement;
+    root.style.setProperty('--correct', colorsheme['correct']);
+    root.style.setProperty('--present', colorsheme['present']);
+    root.style.setProperty('--absent', colorsheme['absent']);
+})
+
+if (document.cookie.includes('colorsheme')) {
+    selector.value = getCookie('colorsheme')
+    colorsheme = colorshemes[selector.value]
+    let root = document.documentElement;
+    root.style.setProperty('--correct', colorsheme['correct']);
+    root.style.setProperty('--present', colorsheme['present']);
+    root.style.setProperty('--absent', colorsheme['absent']);
+} else {
+    selector.value = 0
+    colorsheme = colorshemes[0]
+    let root = document.documentElement;
+    root.style.setProperty('--correct', colorsheme['correct']);
+    root.style.setProperty('--present', colorsheme['present']);
+    root.style.setProperty('--absent', colorsheme['absent']);
+}
+
+///// Rules & Settings /////
+const rules_button = document.getElementById('rules_button')
+const settings_button = document.getElementById('settings_button')
+
+rules_button.checked = false
+settings_button.checked = false
+
+rules_button.addEventListener(("change"), () => {
+    if (settings_button.checked) {
+        settings_button.checked = false
     }
-});
+})
 
-close_button.addEventListener("click", (event) => {
-    rules_chart.style.display = 'none';
-    unblur()
-    keyboard = true
-});
+settings_button.addEventListener(('change'), () => {
+    if (rules_button.checked) {
+        rules_button.checked = false
+    }
+})
+
 ///// Difficulty /////
 let liste_mots = []
 let dif_button = document.getElementById('difficulty')
@@ -601,13 +582,26 @@ if (!document.cookie.includes('mot')) {
 let mot_l = Array.from(mot.toLowerCase())
 
 ///// Jeu /////
-ligne1 = []
-ligne2 = []
-ligne3 = []
-ligne4 = []
-ligne5 = []
-ligne6 = []
-cells_list = []
+const blurbox = document.createElement('div')
+document.body.appendChild(blurbox)
+blurbox.style.width = '100vw'
+blurbox.style.height = '100vh'
+blurbox.style.position = 'fixed'
+blurbox.style.top = '0'
+blurbox.style.left = '0'
+blurbox.style.zIndex = '10'
+blurbox.style.backgroundColor = 'rgba(0, 0, 0, 0.4)'
+blurbox.style.backdropFilter = 'blur(10px)'
+blurbox.style.display = 'none'
+
+let trouve = false
+let ligne1 = []
+let ligne2 = []
+let ligne3 = []
+let ligne4 = []
+let ligne5 = []
+let ligne6 = []
+let cells_list = []
 let lignes = []
 initGrid()
 
@@ -624,51 +618,38 @@ if (document.cookie.includes('mots_utilises')) {
 }
 
 // Restoration des lignes
-if (document.cookie.includes('ligne1')) {
-    ligne1.forEach((cell, i) => {
-        cell.innerHTML = getCookie('ligne1')[i].toUpperCase()
-        cell.setAttribute('used', 'true')
-    })
-    verifRapide()
-    ligne_active = lignes[1]
+
+for (let i = 0; i < 7; i++) {
+    if (document.cookie.includes('ligne' + (i + 1))) {
+        let ligne = lignes[i]
+        let cookie_ligne = getCookie('ligne' + (i + 1))
+        ligne.forEach((cell, j) => {
+            cell.innerHTML = cookie_ligne[j].toUpperCase()
+            cell.setAttribute('used', 'true')
+        })
+        verifRapide()
+        if (i < 6) {
+            ligne_active = lignes[i + 1]
+        } else {
+            ligne_active = null
+        }
+    }
+};
+if (document.cookie.includes("trouve")) {
+    trouve = true
 }
-if (document.cookie.includes('ligne2')) {
-    ligne2.forEach((cell, i) => {
-        cell.innerHTML = getCookie('ligne2')[i].toUpperCase()
-        cell.setAttribute('used', 'true')
-    })
-    verifRapide()
-    ligne_active = lignes[2]
-}
-if (document.cookie.includes('ligne3')) {
-    ligne3.forEach((cell, i) => {
-        cell.innerHTML = getCookie('ligne3')[i].toUpperCase()
-        cell.setAttribute('used', 'true')
-    })
-    verifRapide()
-    ligne_active = lignes[3]
-}
-if (document.cookie.includes('ligne4')) {
-    ligne4.forEach((cell, i) => {
-        cell.innerHTML = getCookie('ligne4')[i].toUpperCase()
-        cell.setAttribute('used', 'true')
-    })
-    verifRapide()
-    ligne_active = lignes[4]
-}
-if (document.cookie.includes('ligne5')) {
-    ligne5.forEach((cell, i) => {
-        cell.innerHTML = getCookie('ligne5')[i].toUpperCase()
-        cell.setAttribute('used', 'true')
-    })
-    verifRapide()
-    ligne_active = lignes[5]
+if (trouve) {
+    ligne_active = null
 }
 
-let active_cell = ligne_active[0] // Cellule active
-active_cell.style.borderColor = 'rgb(249, 176, 252)'
-active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
+active_cell = null
 
+if (ligne_active) {
+    let active_cell = ligne_active[1] // Cellule active
+    active_cell.style.borderColor = 'rgb(249, 176, 252)'
+    active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
+    afficherPremereLettre(mot)
+}
 // Événements
 document.addEventListener("keydown", (event) => {
     if (keyboard == true) {
@@ -764,16 +745,13 @@ keys.forEach((key) => { // Clic sur une touche
     }
 });
 
-afficherPremereLettre(mot)
-
 const reset_button = document.getElementById('resButton')
 reset_button.addEventListener("click", (event) => {
     reset()
-    console.log('reset')
 })
 
 // DEBUG //
 
 // document.addEventListener('dblclick', (event) => {
-//     console.log(keyboard)
+//     console.log(settings_chart.style.display)
 // })

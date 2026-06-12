@@ -19,6 +19,7 @@
     --secondary: #c9b8a7;
     --text-color: #1b1813;
     --selection: #b55bff;
+    --button-color: rgb(196, 182, 164);
 }
 
 .dark-mode {
@@ -31,6 +32,9 @@ html {
     transition: 0.5s;
     cursor: default;
     scrollbar-color: transparent transparent;
+    --correct: rgba(15, 129, 0, 1);
+    --present: rgba(221, 133, 0, 1);
+    --absent: rgba(80, 80, 80, 1);
 }
 
 main {
@@ -72,17 +76,13 @@ body {
     padding: 0px;
 }
 
-.fichier {
-    display: none;
-}
-
 header {
     position: sticky;
     width: 100%;
     min-width: 400px;
-    height: fit-content;
     max-height: 75px;
     top: 0px;
+    padding: 0;
     background-color: var(--secondary);
     border-radius: 10px;
     text-align: center;
@@ -94,64 +94,27 @@ header {
     width: 100%;
     grid-template-columns: 25% 50% 25%;
     align-items: center;
-    height: fit-content;
-    font-size: 2vh;
-    padding: 0 5px;
+    padding: 0;
     border-radius: 0 0 10px 10px;
     background-color: var(--secondary);
     z-index: 100;
 }
 
-.menu .logo {
-    width: 8vh;
-}
-
 .menu .game_logo {
     color: rgba(0, 0, 0, 0);
+    padding: 0;
     background-image: url("logo.png");
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
 }
 
-.menu ul {
-    display: flex;
-    gap: 20px;
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    flex: 1;
-    justify-content: center;
-}
-
 .theme-toggle {
     display: flex;
     margin: auto;
-    scale: 0.75;
+    scale: 0.8;
     align-items: center;
     background-color: transparent;
-}
-
-.menu a {
-    text-decoration: none;
-    color: var(--text-color);
-    border-radius: 5px;
-    font-size: 1.1em;
-    padding: 5px 10px;
-    transition: 0.1s;
-    cursor: pointer;
-}
-
-.menu a:hover {
-    scale: 1.05;
-    background-color: rgba(255, 255, 255, 0.2);
-    color: var(--selection);
-    transition: all 0.1s;
-}
-
-.menu ul li {
-    display: inline-block;
-    width: fit-content;
 }
 
 .toggleWrapper {
@@ -394,12 +357,23 @@ header {
 
 }
 
-.rules {
+.menu .about {
+    display: flex;
+    width: fit-content;
+    margin: auto;
+    flex-direction: row;
+    gap: 5px;
+    justify-content: center;
+    align-items: center;
+}
+
+.menu .menuButton {
     display: flex;
     margin: auto;
-    background-color: rgb(135, 135, 135, 0);
-    border-radius: 0px 0px 50px 50px;
+    background-color: var(--button-color);
     width: 40px;
+    aspect-ratio: 1/1;
+    border-radius: 5px;
     transform: scaleY(1);
     transform-origin: top;
     transition: ease-out 0.2s;
@@ -408,11 +382,25 @@ header {
     z-index: 1;
 }
 
-.rules img {
-    width: 100%;
+.menu .menuButton img {
+    width: 50%;
     margin: auto;
     padding: 0px;
     transition: 0.2s;
+}
+
+.menu .menuButton:hover {
+    transform: scale(1.1);
+    filter: brightness(1.05);
+    transform-origin: center;
+    transition: 0.1s;
+}
+
+.menu .menuButton:active {
+    transform: scale(0.9);
+    filter: brightness(0.9);
+    transform-origin: center;
+    transition: 0.1s;
 }
 
 .chart {
@@ -422,12 +410,14 @@ header {
     left: 50%;
     transform: translatex(-50%);
     background-color: rgba(109, 109, 109, 0.336);
+    background-color: var(--secondary);
     color: antiquewhite;
+    color: var(--text-color);
     border-radius: 5px;
     width: 90%;
     max-width: 600px;
     margin: auto;
-    padding: 10px;
+    padding: 15px;
     height: fit-content;
     text-align: justify;
     z-index: 11;
@@ -438,7 +428,6 @@ header {
     font-size: 1vw;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     transition: 0.5s;
-    backdrop-filter: blur(15px);
 }
 
 .chart h2 {
@@ -460,7 +449,7 @@ header {
     top: 10px;
     right: 10px;
     border-radius: 5px;
-    background-color: rgb(141, 141, 141);
+    background-color: var(--button-color);
     align-content: center;
     justify-content: center;
     cursor: pointer;
@@ -480,8 +469,78 @@ header {
 }
 
 .chart .simple_button:hover {
-    background-color: rgb(168, 168, 168);
+    filter: brightness(1.1);
     transition: 0.2s;
+}
+
+.chart .separator {
+    display: block;
+    height: 2px;
+    width: 80%;
+    border-radius: 50px;
+    background-color: antiquewhite;
+    margin: auto;
+}
+
+.chart a {
+    color: var(--text-color);
+    text-decoration: none;
+}
+
+.chart a:hover{
+    filter: brightness(0.8);
+}
+
+.row {
+    display: flex;
+    margin: auto;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+}
+
+select {
+    height: 30px;
+    background-color: var(--button-color);
+    border: solid 2px var(--text-color);
+    border-radius: 7px;
+}
+
+.exemple {
+    display: inline-block;
+    aspect-ratio: 1/1;
+    padding: 0 5px;
+    background-color: var(--correct);
+    border: solid 2px var(--text-color);
+    color: antiquewhite;
+    border-radius: 5px;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+}
+
+#correctex {
+    background-color: var(--correct);
+}
+
+#presentex {
+    background-color: var(--present);
+}
+
+#absentex {
+    background-color: var(--absent);
+}
+
+input[type="checkbox"] {
+    display : none
+}
+
+#rules_button:checked+ #rules_chart {
+    display: block;
+}
+
+#settings_button:checked + #settings_chart {
+    display: block;
 }
 
 .switch {
@@ -749,27 +808,27 @@ p {
 }
 
 .grid .absent {
-    background-color: rgba(80, 80, 80, 1);
+    background-color: var(--absent);
 }
 
 .grid .present {
-    background-color: rgba(221, 133, 0, 1);
+    background-color: var(--present);
 }
 
 .grid .correct {
-    background-color: rgba(15, 129, 0, 1);
+    background-color: var(--correct);
 }
 
 .keyboard .absent {
-    background-color: rgb(80, 80, 80);
+    background-color: var(--absent);
 }
 
 .keyboard .present {
-    background-color: rgb(221, 133, 0);
+    background-color: var(--present);
 }
 
 .keyboard .correct {
-    background-color: rgb(15, 129, 0);
+    background-color: var(--correct);
 }
 
 .keyboard .wide_key {
@@ -863,6 +922,13 @@ p {
 }
 
 @media screen and (max-width: 1024px) {
+    .menu .menuButton:hover {
+        transform: scale(1);
+        filter: brightness(1);
+        transform-origin: center;
+        transition: 0.1s;
+    }
+
     .chart {
         font-size: 3.5vw;
     }

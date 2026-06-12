@@ -15,9 +15,15 @@
 <main>
     <header>
         <nav class="menu">
-            <a id='rules' class="rules" id="rule_button">
-                <img src="livre-alt.svg" alt="rules_icon">
-            </a>
+            <div class="about">
+
+                <label for="rules_button" class="menuButton">
+                    <img src="livre-alt.svg" alt="rules_icon">
+                </label>
+                <label for="settings_button" class="menuButton">
+                    <img src="settings.png" alt="rules_icon">
+                </label>
+            </div>
             <h1 class="game_logo">WORDLE</h1>
             <div class="theme-toggle">
                 <div class="toggleWrapper">
@@ -39,36 +45,71 @@
             </div>
         </nav>
 
-
         <div class="center">
+            <input type="checkbox" id="rules_button">
             <div id="rules_chart" class="chart">
                 <h2>
                     Comment jouer ?
                 </h2>
                 <p>
-                    Vous pouvez essayer jusqu'à 6 mots différents pour trouver le mot caché
+                    Sous le même concept que le <b>Wordle</b>, Vous avez jusqu'à 6 tentatives pour trouver un mot caché.
+                    <br>
+                    <br>
+                    À chaque tentative, les lettres changeront de couleur.
                 </p>
                 <ul>
                     <li>
-                        <b>🟩 La lettre est bien placée</b>
+                        <b><span class="exemple" id="correctex">A</span> La lettre est bien placée</b>
                     </li>
                     <li>
-                        <b>🟨 La lettre est dans le mot mais mal placée</b>
+                        <b><span class="exemple" id="presentex">A</span> La lettre est présente mais mal placée</b>
                     </li>
                     <li>
-                        <b>⬛ La lettre n'est pas dans le mot</b>
+                        <b><span class="exemple" id="absentex">A</span> La lettre n'est pas dans le mot</b>
                     </li>
                 </ul>
-                <div id="close_button" class='simple_button'>
-                    <img src="close.png" alt="close">
-                </div>
+                <div class="separator"></div>
+                <h2>Crédits</h2>
                 <p>
-                <h2>Difficulté</h2>
+                    Site créé par <a href="https://ko-fi.com/leuhan" target="_blank"><b>Leuhan</b></a>
                 </p>
-                <label for="difficulty" class="switch" aria-label="Toggle Filter">
+                <p>
+                    Inspiré de <a href="https://wordle.louan.me" target="_blank"><b>Le Mot</b></a> par Louan
+                </p>
+                <p>
+                    Hébergé par <a href="https://lws.fr" target="_blank"><b>LWS</b></a> - 10 RUE PENTHIEVRE 75008 PARIS
+                </p>
+                <label for="rules_button" id="rules_close_button" class='simple_button'>
+                    <img src="close.png" alt="close">
+                </label>
+            </div>
+            <input type="checkbox" id="settings_button">
+            <div class="chart" id="settings_chart">
+                <h2>Difficulté</h2>
+                <label for="difficulty" class="switch" aria-label="Toggle">
                     <input type="checkbox" id="difficulty" />
                     <span>Facile</span>
                     <span>Difficile</span>
+                </label>
+                <div class="separator" style="margin-top: 20px;"></div>
+                <h2>Thème</h2>
+                <div class="row" style="width: 80%;">
+                    <p>
+                        <b>
+                            <span class="exemple" id="correctex">A</span>
+                            <span class="exemple" id="presentex">A</span>
+                            <span class="exemple" id="absentex">A</span>
+                        </b>
+                    </p>
+                    <select name="theme" id="scheme_selector">
+                        <option value="0" >🟩🟨</option>
+                        <option value="1">🟥🟨</option>
+                        <option value="2">🟪🟦</option>
+                    </select>
+                </div>
+
+                <label for="settings_button" id="settings_close_button" class='simple_button'>
+                    <img src="close.png" alt="close">
                 </label>
             </div>
         </div>
@@ -83,52 +124,16 @@
             <div class="grid" id="grid">
 
                 <span id="ligne1" class="ligne">
-
-                    <!-- <div class="cell" id="cell1"></div>
-                <div class="cell" id="cell2"></div>
-                <div class="cell" id="cell3"></div>
-                <div class="cell" id="cell4"></div>
-                <div class="cell" id="cell5"></div> -->
                 </span>
                 <span id="ligne2" class="ligne">
-
-                    <!-- <div class="cell" id="cell6"></div>
-                <div class="cell" id="cell7"></div>
-                <div class="cell" id="cell8"></div>
-                <div class="cell" id="cell9"></div>
-                <div class="cell" id="cell10"></div> -->
                 </span>
                 <span id="ligne3" class="ligne">
-
-                    <!-- <div class="cell" id="cell11"></div>
-                <div class="cell" id="cell12"></div>
-                <div class="cell" id="cell13"></div>
-                <div class="cell" id="cell14"></div>
-                <div class="cell" id="cell15"></div> -->
                 </span>
                 <span id="ligne4" class="ligne">
-
-                    <!-- <div class="cell" id="cell16"></div>
-                <div class="cell" id="cell17"></div>
-                <div class="cell" id="cell18"></div>
-                <div class="cell" id="cell19"></div>
-                <div class="cell" id="cell20"></div> -->
                 </span>
                 <span id="ligne5" class="ligne">
-
-                    <!-- <div class="cell " id="cell21"></div>
-                <div class="cell" id="cell22"></div>
-                <div class="cell" id="cell23"></div>
-                <div class="cell" id="cell24"></div>
-                <div class="cell" id="cell25"></div> -->
                 </span>
                 <span id="ligne6" class="ligne">
-
-                    <!-- <div class="cell" id="cell26"></div>
-                <div class="cell" id="cell27"></div>
-                <div class="cell" id="cell28"></div>
-                <div class="cell" id="cell29"></div>
-                <div class="cell" id="cell30"></div> -->
                 </span>
             </div>
             <div class="keyboard" id="keyboard">
