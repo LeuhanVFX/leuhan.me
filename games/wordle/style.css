@@ -86,7 +86,7 @@ header {
     background-color: var(--secondary);
     border-radius: 10px;
     text-align: center;
-    z-index: 100;
+    z-index: 20;
 }
 
 .menu {
@@ -97,7 +97,7 @@ header {
     padding: 0;
     border-radius: 0 0 10px 10px;
     background-color: var(--secondary);
-    z-index: 100;
+    z-index: 20;
 }
 
 .menu .game_logo {
@@ -414,14 +414,14 @@ header {
     background-color: var(--secondary);
     color: antiquewhite;
     color: var(--text-color);
-    border-radius: 5px;
+    border-radius: 20px;
     width: 90%;
     max-width: 600px;
     margin: auto;
     padding: 15px;
     height: fit-content;
     text-align: justify;
-    z-index: 11;
+    z-index: 10;
     border-color: antiquewhite;
     border-width: 5px;
     border-style: solid;
@@ -429,6 +429,23 @@ header {
     font-size: 1vw;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     transition: 0.5s;
+}
+
+.blurbox {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    filter: blur(5px);
+    z-index: 5;
+}
+
+.chart h1 {
+    text-align: center;
+    transition: 0.5s
 }
 
 .chart h2 {
@@ -480,7 +497,7 @@ header {
     width: 80%;
     border-radius: 50px;
     background-color: antiquewhite;
-    margin: auto;
+    margin: 20px auto 20px auto;
 }
 
 .chart a {
@@ -488,7 +505,7 @@ header {
     text-decoration: none;
 }
 
-.chart a:hover{
+.chart a:hover {
     filter: brightness(0.8);
 }
 
@@ -533,15 +550,47 @@ select {
 }
 
 input[type="checkbox"] {
-    display : none
+    display: none
 }
 
-#rules_button:checked+ #rules_chart {
+#rules_button:checked+#rules_chart {
     display: block;
 }
 
-#settings_button:checked + #settings_chart {
+#settings_button:checked+#settings_chart {
     display: block;
+}
+
+.chart section {
+    text-align: center;
+    align-items: center;
+    justify-content: center;
+    height: fit-content;
+}
+
+.downloadButton {
+    display: flex;
+    width: fit-content;
+    margin: auto;
+    padding: 7px;
+    border-radius: 10px;
+    background-color: var(--button-color);
+    border: solid 2px var(--text-color);
+    filter: none;
+    cursor: pointer;
+    transform: scale(1);
+    transition: 0.2s;
+}
+
+.downloadButton:hover {
+    filter: brightness(1.1);
+    transform: scale(1.1);
+    transition: 0.2s;
+}
+
+.downloadButton:active {
+    filter: brightness(0.9);
+    transform: scale(0.9);
 }
 
 .switch {
@@ -923,6 +972,7 @@ p {
 }
 
 @media screen and (max-width: 1024px) {
+
     .menu .menuButton:hover {
         transform: scale(1);
         filter: brightness(1);
@@ -931,14 +981,20 @@ p {
     }
 
     .menu .menuButton:active {
-    transform: scale(0.9);
-    filter: brightness(0.9);
-    transform-origin: center;
-    transition: 0.1s;
-}
+        transform: scale(0.9);
+        filter: brightness(0.9);
+        transform-origin: center;
+        transition: 0.1s;
+    }
 
     .chart {
         font-size: 3.5vw;
+    }
+
+    .downloadButton:hover {
+        filter: brightness(1);
+        transform: scale(1);
+        transition: 0.2s;
     }
 
     /* rules switch hover */
@@ -1009,4 +1065,8 @@ p {
 
 *::selection {
     pointer-events: none;
+}
+
+* {
+    -webkit-tap-highlight-color: transparent;
 }

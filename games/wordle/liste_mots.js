@@ -319014,7 +319014,7 @@ const motsFrequents = [
   "lampe", "lampion", "lance", "lanceur", "lancier", "landau", "langage", "lange",
   "langue", "languette", "lanterne", "lapin", "lapsus", "laque", "lardon", "large",
   "largesse", "largeur", "larme", "larron", "larve", "lasagne", "laser", "lassitude",
-  "lastic", "latence", "lateral", "latin", "latitude", "latte", "laureat", "laurier",
+  "latence", "lateral", "latin", "latitude", "latte", "laureat", "laurier",
   "lavabo", "lavage", "lavande", "lavement", "laveur", "lavoir", "laxatif", "leader",
   "leche", "lecon", "lecteur", "lecture", "legalite", "legat", "legation", "legende",
   "leger", "legerete", "legion", "legume", "lethargie", "lettre", "levain", "levant",

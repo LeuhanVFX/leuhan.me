@@ -1,4 +1,7 @@
+/////////////////////
 ///// Functions /////
+/////////////////////
+
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -346,8 +349,7 @@ async function verification() {
     keyboard = true
 };
 
-async function verifRapide() {
-    console.log('verif  ')
+async function verifRapide(ligne) {
     let ligne_complete = true
     let juste = 0
     let dico_mot = {}
@@ -359,28 +361,28 @@ async function verifRapide() {
             dico_mot[lettre.toLowerCase()] += 1
         }
     }
-    for (let j = 0; j < ligne_active.length; j++) { // Test si la ligne est complète
-        let cell = ligne_active[j]
+    for (let j = 0; j < ligne.length; j++) { // Test si la ligne est complète
+        let cell = ligne[j]
         if (!(cell.hasAttribute('used'))) {
             ligne_complete = false
             break
         }
     } if (ligne_complete == true) {
-        for (let k = 0; k < ligne_active.length; k++) { // Test si les lettres sont bien placées
-            let cell = ligne_active[k]
+        for (let k = 0; k < ligne.length; k++) { // Test si les lettres sont bien placées
+            let cell = ligne[k]
             if (cell.innerHTML.toLowerCase() == mot[k].toLowerCase()) {
                 cell.setAttribute('state', 'correct')
                 dico_mot[cell.innerHTML.toLowerCase()] -= 1
                 juste++
             }
-        } ligne_active.forEach((cell) => { // Test si les lettres sont présentes dans le mot
+        } ligne.forEach((cell) => { // Test si les lettres sont présentes dans le mot
             if (mot.toLowerCase().includes(cell.innerHTML.toLowerCase()) && dico_mot[cell.innerHTML.toLowerCase()] > 0 && !(cell.hasAttribute('state'))) {
                 cell.setAttribute('state', 'present')
                 dico_mot[cell.innerHTML.toLowerCase()] -= 1
             }
         });
-        for (let n = 0; n < ligne_active.length; n++) { // Test si les lettres ne sont pas dans le mot
-            let cell = ligne_active[n]
+        for (let n = 0; n < ligne.length; n++) { // Test si les lettres ne sont pas dans le mot
+            let cell = ligne[n]
             if ((dico_mot[cell.innerHTML.toLowerCase()] == 0 && !(cell.hasAttribute('state'))) || !(mot.toLowerCase().includes(cell.innerHTML.toLowerCase()))) {
                 cell.setAttribute('state', 'absent')
             }
@@ -390,8 +392,8 @@ async function verifRapide() {
             present: 'rgba(221, 133, 0, 1)',
             absent: 'rgba(80, 80, 80, 1)'
         }
-        for (let m = 0; m < ligne_active.length; m++) { // Changement de couleur des cases
-            let cell = ligne_active[m]
+        for (let m = 0; m < ligne.length; m++) { // Changement de couleur des cases
+            let cell = ligne[m]
             if (cell.getAttribute('state') == 'correct') {
                 cell.classList.add('correct')
                 keys.forEach((key) => {
@@ -435,9 +437,8 @@ function toggleTheme() {
 }
 
 function initKeyboard(disposition) {
-    let keyboard = document.getElementById('keyboard')
-    keyboard.innerHTML = null
-    let keys = []
+    let kb = document.getElementById('keyboard')
+    kb.innerHTML = null
     disposition.forEach((keyid) => {
     let key = document.createElement('div')
     key.classList.add('key')
@@ -448,16 +449,69 @@ function initKeyboard(disposition) {
     } else {
         key.innerHTML = keyid
     }
-    keyboard.appendChild(key)
+    kb.appendChild(key)
     keys.push(key)
 })
-lignes.forEach((ligne) => {
-    if (ligne !== []) {
-        verifRapide()
+
+
+///// Clavier Virutel /////
+keys.forEach((key) => { // Clic sur une touche
+    if (key.id == 'Enter') {
+        key.addEventListener("click", (event) => {
+            if (keyboard == true) {
+                verification()
+            }
+        });
+    } else if (key.id == 'Delete') {
+        key.addEventListener("click", (event) => {
+            if (keyboard == true) {
+                for (let i = ligne_active.length - 1; i >= 0; i--) {
+                    let cell = ligne_active[i]
+                    if (cell.hasAttribute('used')) {
+                        cell.innerHTML = ''
+                        cell.removeAttribute('used')
+                        active_cell.style.borderColor = 'var(--text-color)'
+                        active_cell.style.boxShadow = 'none'
+                        active_cell = ligne_active[i]
+                        active_cell.style.borderColor = 'rgb(249, 176, 252)'
+                        active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
+                        break
+                    }
+                }
+            }
+        });
+    } else {
+
+        key.addEventListener("click", () => {
+            if (keyboard == true) {
+                for (let i = 0; i < ligne_active.length; i++) {
+                    let cell = ligne_active[i]
+                    if (!(cell.hasAttribute('used'))) {
+                        cell.innerHTML = key.innerHTML
+                        cell.setAttribute('used', 'true')
+                        active_cell.style.borderColor = 'var(--text-color)'
+                        active_cell.style.boxShadow = 'none'
+                        if (i < ligne_active.length - 1) {
+                            active_cell = ligne_active[i + 1]
+                            active_cell.style.borderColor = 'rgb(249, 176, 252)'
+                            active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
+                        }
+                        break
+                    }
+                }
+            }
+        });
     }
+});
+lignes.forEach((ligne) => {
+    verifRapide(ligne)
 })
 };
-/// Gestion du theme
+
+////////////////////////////
+///// Gestion du theme /////
+////////////////////////////
+
 let themeToggle = document.querySelector('.theme-toggle input');
 
 themeToggle.addEventListener('change', () => {
@@ -472,7 +526,10 @@ if (getFromStorage('theme') === 'light') {
     themeToggle.checked = true;
 }
 
+////////////////////////////////
 ///// Gestion des couleurs /////
+////////////////////////////////
+
 const colorshemes = [
     {
         correct: 'rgba(15, 129, 0, 1)',
@@ -510,6 +567,7 @@ if (localStorage.getItem('colorsheme') !== null) {
     root.style.setProperty('--absent', colorsheme['absent']);
 } else {
     selector.value = 0
+    localStorage.setItem('colorscheme', selector.value)
     colorsheme = colorshemes[0]
     let root = document.documentElement;
     root.style.setProperty('--correct', colorsheme['correct']);
@@ -517,9 +575,14 @@ if (localStorage.getItem('colorsheme') !== null) {
     root.style.setProperty('--absent', colorsheme['absent']);
 }
 
+////////////////////////////
 ///// Rules & Settings /////
+////////////////////////////
+
 const rules_button = document.getElementById('rules_button')
 const settings_button = document.getElementById('settings_button')
+const r_blur = document.getElementById('rules_blur')
+const s_blur = document.getElementById('settings_blur')
 
 rules_button.checked = false
 settings_button.checked = false
@@ -528,15 +591,28 @@ rules_button.addEventListener(("change"), () => {
     if (settings_button.checked) {
         settings_button.checked = false
     }
+    if (rules_button.checked) {
+        r_blur.style.display = 'block'
+    } else {
+        r_blur.style.display = 'none'
+    }
 })
 
 settings_button.addEventListener(('change'), () => {
     if (rules_button.checked) {
         rules_button.checked = false
     }
+    if (settings_button.checked) {
+        s_blur.style.display = 'block'
+    } else {
+        s_blur.style.display = 'none'
+    }
 })
 
+//////////////////////
 ///// Difficulty /////
+//////////////////////
+
 let liste_mots = []
 let dif_button = document.getElementById('difficulty')
 
@@ -569,7 +645,10 @@ dif_button.addEventListener("click", (event) => {
     }
 })
 
+///////////////
 ///// Mot /////
+///////////////
+
 let motsProposables = listeMots
 
 let mot = ''
@@ -582,7 +661,10 @@ if (getFromStorage('mot') == null) {
 
 let mot_l = Array.from(mot.toLowerCase())
 
+///////////////
 ///// Jeu /////
+///////////////
+
 const blurbox = document.createElement('div')
 document.body.appendChild(blurbox)
 blurbox.style.width = '100vw'
@@ -607,7 +689,7 @@ let lignes = []
 initGrid()
 
 let car_possibles = ['A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z']
-let keys = Array.from(document.getElementsByClassName('key'))
+let keys = []
 keyboard = true
 
 let ligne_active = lignes[0] // ligne active
@@ -618,41 +700,10 @@ if (localStorage.getItem('mots_utilises') !== null) {
     mots_utilises = getFromStorage('mots_utilises').split(',')
 }
 
-// Restoration des lignes
-
-for (let i = 1; i < 7; i++) {
-    if (getFromStorage('ligne' + i) !== null) {
-        let ligne = lignes[i - 1]
-        let cookie_ligne = getFromStorage(`ligne${i}`)
-        ligne.forEach((cell, j) => {
-            cell.innerHTML = cookie_ligne[j].toUpperCase()
-            cell.setAttribute('used', 'true')
-        })
-        verifRapide()
-        if (i < 6) {
-            ligne_active = lignes[i]
-        } else {
-            ligne_active = null
-        }
-    }
-};
-if (getFromStorage("trouve") !== null) {
-    trouve = true
-}
-if (trouve) {
-    ligne_active = null
-}
-
-active_cell = null
-
-if (ligne_active) {
-    let active_cell = ligne_active[1] // Cellule active
-    active_cell.style.borderColor = 'rgb(249, 176, 252)'
-    active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
-    afficherPremereLettre(mot)
-}
-
+///////////////////////
 ///// Disposition /////
+///////////////////////
+
 const dispoSelector = document.getElementById('dispo_selector')
 const dispositions = {
     "Default" : ["A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P",
@@ -683,7 +734,47 @@ dispoSelector.addEventListener(("change"), () => {
 
 initKeyboard(disposition)
 
-// Événements
+//////////////////////////////////
+///// Restoration des lignes /////
+//////////////////////////////////
+
+for (let i = 0; i < 6; i++) {
+    if (localStorage.getItem('ligne' + (i + 1))) {
+        let ligne = lignes[i]
+        let cookie_ligne = getFromStorage('ligne' + (i + 1))
+        ligne.forEach((cell, j) => {
+            cell.innerHTML = cookie_ligne[j].toUpperCase()
+            cell.setAttribute('used', 'true')
+        })
+        verifRapide(ligne_active)
+        if (i < 6) {
+            ligne_active = lignes[i+1]
+        } else {
+            ligne_active = null
+        }
+    }
+};
+if (localStorage.getItem('trouve') !== null) {
+    trouve = true
+}
+if (trouve) {
+    ligne_active = null
+}
+
+active_cell = null
+
+if (ligne_active) {
+    let active_cell = ligne_active[1] // Cellule active
+    active_cell.style.borderColor = 'rgb(249, 176, 252)'
+    active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
+    afficherPremereLettre(mot)
+}
+
+//////////////////////
+///// Événements /////
+//////////////////////
+
+///// Clavier Réel /////
 document.addEventListener("keydown", (event) => {
     if (keyboard == true) {
         if (car_possibles.includes(event.key.toUpperCase())) {
@@ -728,63 +819,15 @@ document.addEventListener("keydown", (event) => {
 
 );
 
-
-keys.forEach((key) => { // Clic sur une touche
-    if (key.id == 'Enter') {
-        key.addEventListener("click", (event) => {
-            if (keyboard == true) {
-                verification()
-            }
-        });
-    } else if (key.id == 'Delete') {
-        key.addEventListener("click", (event) => {
-            if (keyboard == true) {
-                for (let i = ligne_active.length - 1; i >= 0; i--) {
-                    let cell = ligne_active[i]
-                    if (cell.hasAttribute('used')) {
-                        cell.innerHTML = ''
-                        cell.removeAttribute('used')
-                        active_cell.style.borderColor = 'var(--text-color)'
-                        active_cell.style.boxShadow = 'none'
-                        active_cell = ligne_active[i]
-                        active_cell.style.borderColor = 'rgb(249, 176, 252)'
-                        active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
-                        break
-                    }
-                }
-            }
-        });
-    } else {
-
-        key.addEventListener("click", (event) => {
-            if (keyboard == true) {
-                for (let i = 0; i < ligne_active.length; i++) {
-                    let cell = ligne_active[i]
-                    if (!(cell.hasAttribute('used'))) {
-                        cell.innerHTML = key.innerHTML
-                        cell.setAttribute('used', 'true')
-                        active_cell.style.borderColor = 'var(--text-color)'
-                        active_cell.style.boxShadow = 'none'
-                        if (i < ligne_active.length - 1) {
-                            active_cell = ligne_active[i + 1]
-                            active_cell.style.borderColor = 'rgb(249, 176, 252)'
-                            active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
-                        }
-                        break
-                    }
-                }
-            }
-        });
-    }
-});
-
 const reset_button = document.getElementById('resButton')
 reset_button.addEventListener("click", (event) => {
     reset()
 })
 
-// DEBUG //
+/////////////////
+///// DEBUG /////
+/////////////////
 
 // document.addEventListener('dblclick', (event) => {
-//     console.log(settings_chart.style.display)
+//     console.log(keyboard)
 // })

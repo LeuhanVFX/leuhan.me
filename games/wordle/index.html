@@ -7,7 +7,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
     <script src="liste_mots.js"></script>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width">
     <meta charset="UTF-8">
     <link rel="icon" type="image/png" href="icon.png">
     <link rel="manifest" href="manifest.json">
@@ -46,6 +46,7 @@
         </nav>
 
         <div class="center">
+            <label for="rules_button" class="blurbox" id="rules_blur"></label>
             <input type="checkbox" id="rules_button">
             <div id="rules_chart" class="chart">
                 <h2>
@@ -69,6 +70,12 @@
                     </li>
                 </ul>
                 <div class="separator"></div>
+                <section id="download">
+                    <h2>Téléchargement</h2>
+                    <p>Téléchargez l'application maintenant pour y jouer hors ligne !</p>
+                    <a href="Leuhan Wordle.apk" class="downloadButton"><b>Télécharger</b></a>
+                </section>
+                <div class="separator"></div>
                 <h2>Crédits</h2>
                 <p>
                     Site créé par <a href="https://ko-fi.com/leuhan" target="_blank"><b>Leuhan</b></a>
@@ -76,13 +83,14 @@
                 <p>
                     Inspiré de <a href="https://wordle.louan.me" target="_blank"><b>Le Mot</b></a> par Louan
                 </p>
-                <p>
+                <!-- <p>
                     Hébergé par <a href="https://lws.fr" target="_blank"><b>LWS</b></a> - 10 RUE PENTHIEVRE 75008 PARIS
-                </p>
+                </p> -->
                 <label for="rules_button" id="rules_close_button" class='simple_button'>
                     <img src="close.png" alt="close">
                 </label>
             </div>
+            <label for="settings_button" class="blurbox" id="settings_blur"></label>
             <input type="checkbox" id="settings_button">
             <div class="chart" id="settings_chart">
                 <h2>Difficulté</h2>
@@ -147,34 +155,6 @@
                 </span>
             </div>
             <div class="keyboard" id="keyboard">
-                <!-- <div class="key" id="A">A</div>
-                <div class="key" id="Z">Z</div>
-                <div class="key" id="E">E</div>
-                <div class="key" id="R">R</div>
-                <div class="key" id="T">T</div>
-                <div class="key" id="Y">Y</div>
-                <div class="key" id="U">U</div>
-                <div class="key" id="I">I</div>
-                <div class="key" id="O">O</div>
-                <div class="key" id="P">P</div>
-                <div class="key" id="Q">Q</div>
-                <div class="key" id="S">S</div>
-                <div class="key" id="D">D</div>
-                <div class="key" id="F">F</div>
-                <div class="key" id="G">G</div>
-                <div class="key" id="H">H</div>
-                <div class="key" id="J">J</div>
-                <div class="key" id="K">K</div>
-                <div class="key" id="L">L</div>
-                <div class="key" id="M">M</div>
-                <div class="key wide_key" id="Enter"><img src="enter.svg" alt="Enter"></div>
-                <div class="key" id="W">W</div>
-                <div class="key" id="X">X</div>
-                <div class="key" id="C">C</div>
-                <div class="key" id="V">V</div>
-                <div class="key" id="B">B</div>
-                <div class="key" id="N">N</div>
-                <div class="key wide_key" id="Delete"><img src="delete.svg" alt="Back"></div> -->
             </div>
             <div class="banner" id="win_banner">
                 <div class="banner_text"><b></b></div>
