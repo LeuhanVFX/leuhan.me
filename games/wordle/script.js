@@ -3,18 +3,12 @@ function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-function getCookie(name) {
-    const cookies = document.cookie.split(';')
-    for (let cookie of cookies) {
-        const [key, value] = cookie.split('=')
-        if (key.trim() === name) {
-            return value
-        }
-    }
+function getFromStorage(name) {
+    return localStorage.getItem(name)
 }
 
-function deleteCookie(name) {
-    document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;';
+function deleteFromStorage(name) {
+    localStorage.removeItem(name)
 }
 
 function afficherPremereLettre(mot) {
@@ -51,7 +45,7 @@ async function reset() {
     }
 
     mot = liste_mots[Math.floor(Math.random() * liste_mots.length)]
-    document.cookie = 'mot=' + mot + '; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT'
+    localStorage.setItem('mot', mot)
     mot_l = Array.from(mot.toLowerCase())
     initGrid()
     ligne_active = lignes[0]
@@ -63,7 +57,7 @@ async function reset() {
     active_cell.style.borderColor = 'rgb(249, 176, 252)'
     active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
     mots_utilises = []
-    deleteCookie('mots_utilises')
+    deleteFromStorage('mots_utilises')
     keys.forEach((key) => {
         key.classList.remove('correct')
         key.classList.remove('present')
@@ -71,25 +65,12 @@ async function reset() {
         key.removeAttribute('state')
     })
     afficherPremereLettre(mot)
-    if (document.cookie.includes('ligne1')) {
-        deleteCookie('ligne1')
+    for (let i = 1; i < 7; i++) {
+        if (localStorage.getItem(`ligne${i}`) !== null) {
+            deleteFromStorage(`ligne${i}`)
+        }
     }
-    if (document.cookie.includes('ligne2')) {
-        deleteCookie('ligne2')
-    }
-    if (document.cookie.includes('ligne3')) {
-        deleteCookie('ligne3')
-    }
-    if (document.cookie.includes('ligne4')) {
-        deleteCookie('ligne4')
-    }
-    if (document.cookie.includes('ligne5')) {
-        deleteCookie('ligne5')
-    }
-    if (document.cookie.includes('ligne6')) {
-        deleteCookie('ligne6')
-    }
-    deleteCookie('trouve')
+    deleteFromStorage('trouve')
 
 };
 
@@ -296,17 +277,17 @@ async function verification() {
                     }
                     await sleep(100);
                 }
-                document.cookie = "ligne" + (lignes.indexOf(ligne_active) + 1) + "=" + guess + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/"; // stockage de la ligne
+                localStorage.setItem(`ligne${lignes.indexOf(ligne_active) + 1}`, guess)
                 if (juste == mot.length) {
                     await sleep(500)
                     summonBanner('win_banner', `<b>Vous avez trouvé le mot !</b>`);
                     ligne_active = null
                     trouve = true
-                    document.cookie = "trouve=true; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/"
+                    localStorage.setItem('trouve', true)
                 } else {
                     if (lignes.indexOf(ligne_active) < 5) {
                         mots_utilises.push(guess.toUpperCase())
-                        document.cookie = "mots_utilises=" + mots_utilises.toString() + "; expires=Fri, 31 Dec 9999 23:59:59 GMT; path=/"; // stockage des mots utilisés
+                        localStorage.setItem('mots_utilises', mots_utilises.toString())
                         ligne_active = lignes[lignes.indexOf(ligne_active) + 1]
                         afficherPremereLettre(mot)
                         active_cell.style.borderColor = 'var(--text-color)'
@@ -366,6 +347,7 @@ async function verification() {
 };
 
 async function verifRapide() {
+    console.log('verif  ')
     let ligne_complete = true
     let juste = 0
     let dico_mot = {}
@@ -445,13 +427,36 @@ async function verifRapide() {
 function toggleTheme() {
     if (themeToggle.checked) {
         document.documentElement.classList.add('dark-mode');
-        document.cookie = "theme=dark; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+        localStorage.setItem('theme', 'dark')
     } else {
         document.documentElement.classList.remove('dark-mode');
-        document.cookie = "theme=light; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT";
+        localStorage.setItem('theme', 'light')
     }
 }
 
+function initKeyboard(disposition) {
+    let keyboard = document.getElementById('keyboard')
+    keyboard.innerHTML = null
+    let keys = []
+    disposition.forEach((keyid) => {
+    let key = document.createElement('div')
+    key.classList.add('key')
+    key.id = keyid
+    if ((keyid === "Enter") || (keyid === "Delete")) {
+        key.classList.add('wide_key')
+        key.innerHTML = `<img src="${keyid}.svg" alt="${keyid}">`
+    } else {
+        key.innerHTML = keyid
+    }
+    keyboard.appendChild(key)
+    keys.push(key)
+})
+lignes.forEach((ligne) => {
+    if (ligne !== []) {
+        verifRapide()
+    }
+})
+};
 /// Gestion du theme
 let themeToggle = document.querySelector('.theme-toggle input');
 
@@ -459,7 +464,7 @@ themeToggle.addEventListener('change', () => {
     toggleTheme();
 });
 
-if (getCookie('theme') === 'light') {
+if (getFromStorage('theme') === 'light') {
     document.documentElement.classList.remove('dark-mode');
     themeToggle.checked = false;
 } else {
@@ -469,35 +474,35 @@ if (getCookie('theme') === 'light') {
 
 ///// Gestion des couleurs /////
 const colorshemes = [
-        {
-            correct: 'rgba(15, 129, 0, 1)',
-            present: 'rgba(221, 133, 0, 1)',
-            absent: 'rgba(80, 80, 80, 1)'
-        },
-        {
-            correct: 'rgb(255, 0, 0)',
-            present: '#FFBD00',
-            absent: 'rgba(80, 80, 80, 1)'
-        },
-        {
-            correct: 'rgb(255, 151, 246)',
-            present: 'rgb(76, 219, 255)',
-            absent: 'rgba(80, 80, 80, 1)'
-        }
-    ]
+    {
+        correct: 'rgba(15, 129, 0, 1)',
+        present: 'rgba(221, 133, 0, 1)',
+        absent: 'rgba(80, 80, 80, 1)'
+    },
+    {
+        correct: 'rgb(255, 0, 0)',
+        present: '#FFBD00',
+        absent: 'rgba(80, 80, 80, 1)'
+    },
+    {
+        correct: 'rgb(255, 151, 246)',
+        present: 'rgb(76, 219, 255)',
+        absent: 'rgba(80, 80, 80, 1)'
+    }
+]
 const selector = document.getElementById('scheme_selector');
 
 selector.addEventListener('change', (event) => {
     colorsheme = colorshemes[selector.value]
-    document.cookie = 'colorsheme=' + selector.value + '; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT'
+    localStorage.setItem('colorsheme', selector.value)
     let root = document.documentElement;
     root.style.setProperty('--correct', colorsheme['correct']);
     root.style.setProperty('--present', colorsheme['present']);
     root.style.setProperty('--absent', colorsheme['absent']);
 })
 
-if (document.cookie.includes('colorsheme')) {
-    selector.value = getCookie('colorsheme')
+if (localStorage.getItem('colorsheme') !== null) {
+    selector.value = getFromStorage('colorsheme')
     colorsheme = colorshemes[selector.value]
     let root = document.documentElement;
     root.style.setProperty('--correct', colorsheme['correct']);
@@ -535,11 +540,11 @@ settings_button.addEventListener(('change'), () => {
 let liste_mots = []
 let dif_button = document.getElementById('difficulty')
 
-if (!document.cookie.includes('difficulty=')) {
-    document.cookie = 'difficulty=hard; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT'
+if (!getFromStorage('difficulty') !== null) {
+    localStorage.setItem('difficulty', 'hard')
     dif = 'hard'
 } else {
-    dif = getCookie('difficulty')
+    dif = getFromStorage('difficulty')
 }
 if (dif == 'easy') {
     dif_button.checked = false
@@ -553,30 +558,26 @@ dif_button.addEventListener("click", (event) => {
         dif = 'hard'
         dif_button.checked = true
         liste_mots = motsFrequents.filter((mot) => 7 <= mot.length && mot.length <= 9)
-        document.cookie = 'difficulty=hard; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT'
+        localStorage.setItem('difficulty', 'hard')
         reset()
     } else {
         dif = 'easy'
         dif_button.checked = false
         liste_mots = motsFrequents.filter((mot) => 5 <= mot.length && mot.length <= 6)
-        document.cookie = 'difficulty=easy; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT'
+        localStorage.setItem('difficulty', 'easy')
         reset()
     }
 })
-
-///// Date /////
-let date = new Date(Date.now())
-date = date.toUTCString()
 
 ///// Mot /////
 let motsProposables = listeMots
 
 let mot = ''
-if (!document.cookie.includes('mot')) {
+if (getFromStorage('mot') == null) {
     mot = liste_mots[Math.floor(Math.random() * liste_mots.length)]
-    document.cookie = 'mot=' + mot + '; path=/; expires=Fri, 31 Dec 9999 23:59:59 GMT'
+    localStorage.setItem('mot', mot)
 } else {
-    mot = getCookie('mot')
+    mot = getFromStorage('mot')
 }
 
 let mot_l = Array.from(mot.toLowerCase())
@@ -613,29 +614,29 @@ let ligne_active = lignes[0] // ligne active
 
 let mots_utilises = [] // Mots déjà testés
 
-if (document.cookie.includes('mots_utilises')) {
-    mots_utilises = getCookie('mots_utilises').split(',')
+if (localStorage.getItem('mots_utilises') !== null) {
+    mots_utilises = getFromStorage('mots_utilises').split(',')
 }
 
 // Restoration des lignes
 
-for (let i = 0; i < 7; i++) {
-    if (document.cookie.includes('ligne' + (i + 1))) {
-        let ligne = lignes[i]
-        let cookie_ligne = getCookie('ligne' + (i + 1))
+for (let i = 1; i < 7; i++) {
+    if (getFromStorage('ligne' + i) !== null) {
+        let ligne = lignes[i - 1]
+        let cookie_ligne = getFromStorage(`ligne${i}`)
         ligne.forEach((cell, j) => {
             cell.innerHTML = cookie_ligne[j].toUpperCase()
             cell.setAttribute('used', 'true')
         })
         verifRapide()
         if (i < 6) {
-            ligne_active = lignes[i + 1]
+            ligne_active = lignes[i]
         } else {
             ligne_active = null
         }
     }
 };
-if (document.cookie.includes("trouve")) {
+if (getFromStorage("trouve") !== null) {
     trouve = true
 }
 if (trouve) {
@@ -650,6 +651,38 @@ if (ligne_active) {
     active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
     afficherPremereLettre(mot)
 }
+
+///// Disposition /////
+const dispoSelector = document.getElementById('dispo_selector')
+const dispositions = {
+    "Default" : ["A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P",
+                "Q", "S", "D", "F", "G", "H", "J", "K", "L", "M",
+                "Enter", "W", "X", "C", "V", "B", "N", "Delete"],
+    "Inverse" : ["A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P",
+                "Q", "S", "D", "F", "G", "H", "J", "K", "L", "M",
+                "Delete", "W", "X", "C", "V", "B", "N", "Enter"],
+    "Droite" : ["A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P",
+                "Q", "S", "D", "F", "G", "H", "J", "K", "L", "M",
+                "W", "X", "C", "V", "B", "N", "Delete", "Enter"]
+}
+let disposition = dispositions["Default"] 
+
+if (getFromStorage('disposition') !== null) {
+    dispoSelector.value = getFromStorage('disposition')
+    disposition = dispositions[dispoSelector.value]
+} else {
+    dispoSelector.value = "Default"
+    disposition = dispositions["Default"]
+}
+
+dispoSelector.addEventListener(("change"), () => {
+    disposition = dispositions[dispoSelector.value]
+    localStorage.setItem('disposition', dispoSelector.value)
+    initKeyboard(disposition)
+})
+
+initKeyboard(disposition)
+
 // Événements
 document.addEventListener("keydown", (event) => {
     if (keyboard == true) {
@@ -703,7 +736,7 @@ keys.forEach((key) => { // Clic sur une touche
                 verification()
             }
         });
-    } else if (key.id == 'Backspace') {
+    } else if (key.id == 'Delete') {
         key.addEventListener("click", (event) => {
             if (keyboard == true) {
                 for (let i = ligne_active.length - 1; i >= 0; i--) {
