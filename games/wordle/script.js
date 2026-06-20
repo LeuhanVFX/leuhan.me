@@ -821,6 +821,9 @@ document.addEventListener("keydown", (event) => {
 
 const reset_button = document.getElementById('resButton')
 reset_button.addEventListener("click", (event) => {
+    if (!trouve) {
+        summonSimpleBanner(`Le mot était : ${mot.toUpperCase()}`, 2000)
+    }
     reset()
 })
 
