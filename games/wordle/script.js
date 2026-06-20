@@ -445,7 +445,7 @@ function initKeyboard(disposition) {
     key.id = keyid
     if ((keyid === "Enter") || (keyid === "Delete")) {
         key.classList.add('wide_key')
-        key.innerHTML = `<img src="${keyid}.svg" alt="${keyid}">`
+        key.innerHTML = `<img src="${keyid.toLowerCase()}.svg" alt="${keyid}">`
     } else {
         key.innerHTML = keyid
     }
