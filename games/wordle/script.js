@@ -616,7 +616,7 @@ settings_button.addEventListener(('change'), () => {
 let liste_mots = []
 let dif_button = document.getElementById('difficulty')
 
-if (!getFromStorage('difficulty') !== null) {
+if (getFromStorage('difficulty') == null) {
     localStorage.setItem('difficulty', 'hard')
     dif = 'hard'
 } else {
