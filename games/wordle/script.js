@@ -436,7 +436,7 @@ function toggleTheme() {
     }
 }
 
-function initKeyboard(disposition) {
+async function initKeyboard(disposition) {
     let kb = document.getElementById('keyboard')
     kb.innerHTML = null
     disposition.forEach((keyid) => {
@@ -452,7 +452,18 @@ function initKeyboard(disposition) {
     kb.appendChild(key)
     keys.push(key)
 })
-
+keys.forEach((key) => {
+    key.style.scale = 0
+})
+for (let k = 0; k < keys.length; k++) {
+    keys[k].animate([
+        { scale: 0 },
+        { scale: 1.15},
+        { scale: 1 }
+    ], 200)
+    keys[k].style.scale = 1
+    await sleep(8)
+}
 
 ///// Clavier Virutel /////
 keys.forEach((key) => { // Clic sur une touche
