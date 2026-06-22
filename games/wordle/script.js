@@ -440,83 +440,75 @@ async function initKeyboard(disposition) {
     let kb = document.getElementById('keyboard')
     kb.innerHTML = null
     disposition.forEach((keyid) => {
-    let key = document.createElement('div')
-    key.classList.add('key')
-    key.id = keyid
-    if ((keyid === "Enter") || (keyid === "Delete")) {
-        key.classList.add('wide_key')
-        key.innerHTML = `<img src="${keyid.toLowerCase()}.svg" alt="${keyid}">`
-    } else {
-        key.innerHTML = keyid
-    }
-    kb.appendChild(key)
-    keys.push(key)
-})
-keys.forEach((key) => {
-    key.style.scale = 0
-})
-for (let k = 0; k < keys.length; k++) {
-    keys[k].animate([
-        { scale: 0 },
-        { scale: 1.15},
-        { scale: 1 }
-    ], 200)
-    keys[k].style.scale = 1
-    await sleep(8)
-}
+        let key = document.createElement('div')
+        key.classList.add('key')
+        key.id = keyid
+        if ((keyid === "Enter") || (keyid === "Delete")) {
+            key.classList.add('wide_key')
+            key.innerHTML = `<img src="${keyid.toLowerCase()}.svg" alt="${keyid}">`
+        } else {
+            key.innerHTML = keyid
+        }
+        kb.appendChild(key)
+        keys.push(key)
+    })
 
-///// Clavier Virutel /////
-keys.forEach((key) => { // Clic sur une touche
-    if (key.id == 'Enter') {
-        key.addEventListener("click", (event) => {
-            if (keyboard == true) {
-                verification()
-            }
-        });
-    } else if (key.id == 'Delete') {
-        key.addEventListener("click", (event) => {
-            if (keyboard == true) {
-                for (let i = ligne_active.length - 1; i >= 0; i--) {
-                    let cell = ligne_active[i]
-                    if (cell.hasAttribute('used')) {
-                        cell.innerHTML = ''
-                        cell.removeAttribute('used')
-                        active_cell.style.borderColor = 'var(--text-color)'
-                        active_cell.style.boxShadow = 'none'
-                        active_cell = ligne_active[i]
-                        active_cell.style.borderColor = 'rgb(249, 176, 252)'
-                        active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
-                        break
-                    }
+    ///// Clavier Virutel /////
+    keys.forEach((key) => { // Clic sur une touche
+        if (key.id == 'Enter') {
+            key.addEventListener("click", (event) => {
+                if (keyboard == true) {
+                    verification()
                 }
-            }
-        });
-    } else {
-
-        key.addEventListener("click", () => {
-            if (keyboard == true) {
-                for (let i = 0; i < ligne_active.length; i++) {
-                    let cell = ligne_active[i]
-                    if (!(cell.hasAttribute('used'))) {
-                        cell.innerHTML = key.innerHTML
-                        cell.setAttribute('used', 'true')
-                        active_cell.style.borderColor = 'var(--text-color)'
-                        active_cell.style.boxShadow = 'none'
-                        if (i < ligne_active.length - 1) {
-                            active_cell = ligne_active[i + 1]
+            });
+        } else if (key.id == 'Delete') {
+            key.addEventListener("click", (event) => {
+                if (keyboard == true) {
+                    for (let i = ligne_active.length - 1; i >= 0; i--) {
+                        let cell = ligne_active[i]
+                        if (cell.hasAttribute('used')) {
+                            cell.innerHTML = ''
+                            cell.removeAttribute('used')
+                            active_cell.style.borderColor = 'var(--text-color)'
+                            active_cell.style.boxShadow = 'none'
+                            active_cell = ligne_active[i]
                             active_cell.style.borderColor = 'rgb(249, 176, 252)'
                             active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
+                            break
                         }
-                        break
                     }
                 }
-            }
-        });
+            });
+        } else {
+
+            key.addEventListener("click", () => {
+                if (keyboard == true) {
+                    for (let i = 0; i < ligne_active.length; i++) {
+                        let cell = ligne_active[i]
+                        if (!(cell.hasAttribute('used'))) {
+                            cell.innerHTML = key.innerHTML
+                            cell.setAttribute('used', 'true')
+                            active_cell.style.borderColor = 'var(--text-color)'
+                            active_cell.style.boxShadow = 'none'
+                            if (i < ligne_active.length - 1) {
+                                active_cell = ligne_active[i + 1]
+                                active_cell.style.borderColor = 'rgb(249, 176, 252)'
+                                active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
+                            }
+                            break
+                        }
+                    }
+                }
+            });
+        }
+    });
+
+    for (let i = 0; i < 6; i++) {
+        if (getFromStorage('ligne' + (i + 1)) !== null) {
+            let ligne = lignes[i]
+            verifRapide(ligne)
+        }
     }
-});
-lignes.forEach((ligne) => {
-    verifRapide(ligne)
-})
 };
 
 ////////////////////////////
@@ -717,17 +709,17 @@ if (localStorage.getItem('mots_utilises') !== null) {
 
 const dispoSelector = document.getElementById('dispo_selector')
 const dispositions = {
-    "Default" : ["A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P",
-                "Q", "S", "D", "F", "G", "H", "J", "K", "L", "M",
-                "Enter", "W", "X", "C", "V", "B", "N", "Delete"],
-    "Inverse" : ["A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P",
-                "Q", "S", "D", "F", "G", "H", "J", "K", "L", "M",
-                "Delete", "W", "X", "C", "V", "B", "N", "Enter"],
-    "Droite" : ["A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P",
-                "Q", "S", "D", "F", "G", "H", "J", "K", "L", "M",
-                "W", "X", "C", "V", "B", "N", "Delete", "Enter"]
+    "Default": ["A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P",
+        "Q", "S", "D", "F", "G", "H", "J", "K", "L", "M",
+        "Enter", "W", "X", "C", "V", "B", "N", "Delete"],
+    "Inverse": ["A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P",
+        "Q", "S", "D", "F", "G", "H", "J", "K", "L", "M",
+        "Delete", "W", "X", "C", "V", "B", "N", "Enter"],
+    "Droite": ["A", "Z", "E", "R", "T", "Y", "U", "I", "O", "P",
+        "Q", "S", "D", "F", "G", "H", "J", "K", "L", "M",
+        "W", "X", "C", "V", "B", "N", "Delete", "Enter"]
 }
-let disposition = dispositions["Default"] 
+let disposition = dispositions["Default"]
 
 if (getFromStorage('disposition') !== null) {
     dispoSelector.value = getFromStorage('disposition')
@@ -759,7 +751,7 @@ for (let i = 0; i < 6; i++) {
         })
         verifRapide(ligne_active)
         if (i < 6) {
-            ligne_active = lignes[i+1]
+            ligne_active = lignes[i + 1]
         } else {
             ligne_active = null
         }
