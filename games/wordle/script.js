@@ -73,7 +73,13 @@ async function reset() {
             deleteFromStorage(`ligne${i}`)
         }
     }
-    deleteFromStorage('trouve')
+    localStorage.setItem('trouve', 'false')
+    lettres_trouvees = []
+    mot_l.forEach((lettre) => {
+        lettres_trouvees.push(' ')
+    })
+
+    lettres_trouvees[0] = mot_l[0].toUpperCase()
 
 };
 
@@ -215,6 +221,7 @@ async function verification() {
                         cell.setAttribute('state', 'correct')
                         dico_mot[cell.innerHTML.toLowerCase()] -= 1
                         juste++
+                        lettres_trouvees[k] = cell.innerHTML.toUpperCase()
                     }
                 } ligne_active.forEach((cell) => { // Test si les lettres sont présentes dans le mot
                     if (mot.toLowerCase().includes(cell.innerHTML.toLowerCase()) && dico_mot[cell.innerHTML.toLowerCase()] > 0 && !(cell.hasAttribute('state'))) {
@@ -285,8 +292,7 @@ async function verification() {
                     await sleep(500)
                     summonBanner('win_banner', `<b>Vous avez trouvé le mot !</b>`);
                     ligne_active = null
-                    trouve = true
-                    localStorage.setItem('trouve', true)
+                    localStorage.setItem('trouve', 'true')
                 } else {
                     if (lignes.indexOf(ligne_active) < 5) {
                         mots_utilises.push(guess.toUpperCase())
@@ -304,6 +310,7 @@ async function verification() {
                         ligne_active = null
                     }
                 }
+                overlay(ligne_active)
             } else {
                 summonSimpleBanner('Mot déjà essayé', 1000)
                 let ligne = document.getElementById('ligne' + (lignes.indexOf(ligne_active) + 1))
@@ -374,6 +381,7 @@ async function verifRapide(ligne) {
                 cell.setAttribute('state', 'correct')
                 dico_mot[cell.innerHTML.toLowerCase()] -= 1
                 juste++
+                lettres_trouvees[k] = cell.innerHTML.toUpperCase()
             }
         } ligne.forEach((cell) => { // Test si les lettres sont présentes dans le mot
             if (mot.toLowerCase().includes(cell.innerHTML.toLowerCase()) && dico_mot[cell.innerHTML.toLowerCase()] > 0 && !(cell.hasAttribute('state'))) {
@@ -467,6 +475,9 @@ async function initKeyboard(disposition) {
                     for (let i = ligne_active.length - 1; i >= 0; i--) {
                         let cell = ligne_active[i]
                         if (cell.hasAttribute('used')) {
+                            if (lettres_trouvees[ligne_active.indexOf(cell)] !== ' ') {
+                                cell.style.setProperty('--overlay', `"${lettres_trouvees[ligne_active.indexOf(cell)]}"`)
+                            }
                             cell.innerHTML = ''
                             cell.removeAttribute('used')
                             active_cell.style.borderColor = 'var(--text-color)'
@@ -486,6 +497,7 @@ async function initKeyboard(disposition) {
                     for (let i = 0; i < ligne_active.length; i++) {
                         let cell = ligne_active[i]
                         if (!(cell.hasAttribute('used'))) {
+                            cell.style.setProperty('--overlay', '""')
                             cell.innerHTML = key.innerHTML
                             cell.setAttribute('used', 'true')
                             active_cell.style.borderColor = 'var(--text-color)'
@@ -510,6 +522,14 @@ async function initKeyboard(disposition) {
         }
     }
 };
+
+function overlay(ligne) {
+    ligne_overlay = []
+    ligne.forEach((cell) => {
+        cell.style.setProperty('--overlay', `"${lettres_trouvees[ligne.indexOf(cell)]}"`)
+        console.log(cell.style.getPropertyValue('--overlay'))
+    })
+}
 
 ////////////////////////////
 ///// Gestion du theme /////
@@ -663,6 +683,12 @@ if (getFromStorage('mot') == null) {
 }
 
 let mot_l = Array.from(mot.toLowerCase())
+let lettres_trouvees = []
+mot_l.forEach((lettre) => {
+    lettres_trouvees.push(' ')
+})
+
+lettres_trouvees[0] = mot_l[0].toUpperCase()
 
 ///////////////
 ///// Jeu /////
@@ -680,7 +706,6 @@ blurbox.style.backgroundColor = 'rgba(0, 0, 0, 0.4)'
 blurbox.style.backdropFilter = 'blur(10px)'
 blurbox.style.display = 'none'
 
-let trouve = false
 let ligne1 = []
 let ligne2 = []
 let ligne3 = []
@@ -757,11 +782,11 @@ for (let i = 0; i < 6; i++) {
         }
     }
 };
-if (localStorage.getItem('trouve') !== null) {
-    trouve = true
-}
-if (trouve) {
+
+if (localStorage.getItem('trouve') == 'true') {
     ligne_active = null
+} else {
+    overlay(ligne_active)
 }
 
 active_cell = null
@@ -784,6 +809,7 @@ document.addEventListener("keydown", (event) => {
             for (let i = 0; i < ligne_active.length; i++) {
                 let cell = ligne_active[i]
                 if (!(cell.hasAttribute('used'))) {
+                    cell.style.setProperty('--overlay', '""')
                     cell.innerHTML = event.key.toUpperCase()
                     cell.setAttribute('used', 'true')
                     active_cell.style.borderColor = 'var(--text-color)'
@@ -801,6 +827,9 @@ document.addEventListener("keydown", (event) => {
                 for (let i = ligne_active.length - 1; i >= 0; i--) {
                     let cell = ligne_active[i]
                     if (cell.hasAttribute('used')) {
+                        if (lettres_trouvees[ligne_active.indexOf(cell)] !== ' ') {
+                            cell.style.setProperty('--overlay', `"${lettres_trouvees[ligne_active.indexOf(cell)]}"`)
+                        }
                         cell.innerHTML = ''
                         cell.removeAttribute('used')
                         active_cell.style.borderColor = 'var(--text-color)'
@@ -824,7 +853,7 @@ document.addEventListener("keydown", (event) => {
 
 const reset_button = document.getElementById('resButton')
 reset_button.addEventListener("click", (event) => {
-    if (!trouve) {
+    if (localStorage.getItem('trouve') == 'false') {
         summonSimpleBanner(`Le mot était : ${mot.toUpperCase()}`, 2000)
     }
     reset()
@@ -835,5 +864,5 @@ reset_button.addEventListener("click", (event) => {
 /////////////////
 
 // document.addEventListener('dblclick', (event) => {
-//     console.log(keyboard)
+//     console.log(lettres_trouvees)
 // })

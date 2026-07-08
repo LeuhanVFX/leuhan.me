@@ -774,6 +774,7 @@ input[type="checkbox"] {
 }
 
 .grid .cell {
+    --overlay: "";
     display: flex;
     background-color: var(--secondary);
     border-radius: 8%;
@@ -786,6 +787,12 @@ input[type="checkbox"] {
     border-style: solid;
     border-color: var(--text-color);
     border-width: 2px;
+}
+
+.grid .cell::after {
+    position: absolute;
+    content: var(--overlay);
+    opacity: 0.7;
 }
 
 .banner {
