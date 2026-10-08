@@ -301,6 +301,8 @@ header {
 }
 
 .theme-toggle {
+    align-items: center;
+    justify-content: center;
     transform: scale(1);
     transition: 0.2s ease-out;
 }
@@ -491,7 +493,7 @@ header {
     transition: 0.2s;
 }
 
-.chart .separator {
+.separator {
     display: block;
     height: 2px;
     width: 80%;
@@ -795,30 +797,6 @@ input[type="checkbox"] {
     opacity: 0.7;
 }
 
-.banner {
-    display: None;
-    position: fixed;
-    width: 80%;
-    max-width: 450px;
-    height: fit-content;
-    margin: auto;
-    align-self: center;
-    background-color: rgba(51, 51, 51, 0.5);
-    color: antiquewhite;
-    border-radius: 15px;
-    text-align: center;
-    z-index: 2;
-    border-color: antiquewhite;
-    border-width: 5px;
-    border-style: solid;
-    backdrop-filter: blur(15px);
-    font-size: 1.5vw;
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    padding: 25px;
-    gap: 25px;
-    transition: 0.5s;
-}
-
 p {
     text-align: center;
 }
@@ -976,6 +954,74 @@ p {
     z-index: 50;
     opacity: 0;
     transition: all 0.3s;
+}
+
+.RecapBanner {
+    display: flex;
+    flex-direction: column;
+    gap: 50px;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translatex(-50%) translateY(-50%);
+    background-color: rgba(109, 109, 109, 0.336);
+    background-color: var(--secondary);
+    color: antiquewhite;
+    color: var(--text-color);
+    border-radius: 20px;
+    width: 90%;
+    max-width: 600px;
+    margin: auto;
+    padding: 15px;
+    height: fit-content;
+    text-align: center;
+    justify-content: center;
+    align-items: center;
+    z-index: 10;
+    border-color: antiquewhite;
+    border-width: 5px;
+    border-style: solid;
+    box-shadow: 0px 0px 15px antiquewhite;
+    font-size: 1vw;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    transition: 0.5s;
+}
+
+.RecapBanner button {
+    display: flex;
+    margin: auto;
+    background-color: var(--button-color);
+    border: solid 2px var(--text-color);
+    width: 40px;
+    aspect-ratio: 1/1;
+    border-radius: 5px;
+    transform: scaleY(1);
+    transform-origin: top;
+    transition: ease-out 0.2s;
+    align-content: center;
+    cursor: pointer;
+    z-index: 1;
+}
+
+.RecapBanner button img {
+    width: 50%;
+    margin: auto;
+    padding: 0px;
+    transition: 0.2s;
+}
+
+.RecapBanner button:hover {
+    transform: scale(1.1);
+    filter: brightness(1.05);
+    transform-origin: center;
+    transition: 0.1s;
+}
+
+.RecapBanner button:active {
+    transform: scale(0.9);
+    filter: brightness(0.9);
+    transform-origin: center;
+    transition: 0.1s;
 }
 
 @media screen and (max-width: 1024px) {

@@ -147,6 +147,34 @@ function summonBanner(bannerid, text) {
 
 }
 
+function summonRecapBanner(mot, trouve){
+    recap_banner = document.createElement("div")
+    recap_banner.classList.add("RecapBanner")
+    document.body.appendChild(recap_banner)
+    vic_section = document.createElement("section")
+    recap_banner.appendChild(vic_section)
+    recap_section = document.createElement("section")
+    recap_banner.appendChild(recap_section)
+    buttons_section = document.createElement("section")
+    recap_banner.appendChild(buttons_section)
+    recap_blur = document.createElement("div")
+    recap_blur.classList.add("blurbox")
+    document.body.appendChild(recap_blur)
+    recap_blur.style.display = "block"
+    recap_blur.addEventListener("click", () => {
+        document.body.removeChild(recap_blur)
+        document.body.removeChild(recap_banner)
+    })
+    vic_section.innerHTML = `<h3>${trouve}</h3>`
+    recap_section.innerHTML = `Le mot était <br>
+                                <b>${mot}</b>`
+    buttons_section.innerHTML = `<button id="def_button"><img src="dictionary.png" alt="dictionaire"></button>`
+    def_button = document.getElementById("def_button")
+    def_button.addEventListener("click", () => {
+        window.open(`https://www.larousse.fr/dictionnaires/francais/${mot}`)
+    })  
+}
+
 async function summonSimpleBanner(text, duration) {
     let banner = document.createElement('div')
     banner.setAttribute('class', 'simple_banner')
@@ -175,7 +203,11 @@ async function summonSimpleBanner(text, duration) {
 async function verification() {
 
     if (!ligne_active) {
-        summonSimpleBanner(`Le mot était : ${mot.toUpperCase()}`, 2000)
+        if (getFromStorage('trouve') == 'true'){
+            summonRecapBanner(mot, 'Victoire !')
+        } else {
+            summonRecapBanner(mot, 'Perdu !')
+        }
         return
     }
 
@@ -281,7 +313,7 @@ async function verification() {
                 localStorage.setItem(`ligne${lignes.indexOf(ligne_active) + 1}`, guess)
                 if (juste == mot.length) {
                     await sleep(500)
-                    summonBanner('win_banner', `<b>Vous avez trouvé le mot !</b>`);
+                    summonRecapBanner(mot, "Victoire !")
                     ligne_active = null
                     localStorage.setItem('trouve', 'true')
                 } else {
@@ -297,7 +329,7 @@ async function verification() {
                         active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
 
                     } else {
-                        summonBanner('lose_banner', `<b>Perdu ! Le mot était : <br>${mot.toUpperCase()}</b>`);
+                        summonRecapBanner(mot, "Perdu !")
                         ligne_active = null
                     }
                 }
@@ -555,17 +587,12 @@ const colorshemes = [
         correct: 'rgb(255, 0, 0)',
         present: '#FFBD00',
         absent: 'rgba(80, 80, 80, 1)'
-    },
-    {
-        correct: 'rgb(255, 151, 246)',
-        present: 'rgb(76, 219, 255)',
-        absent: 'rgba(80, 80, 80, 1)'
     }
 ]
 const selector = document.getElementById('scheme_selector');
 
 selector.addEventListener('change', (event) => {
-    colorsheme = colorshemes[selector.value]
+    let colorsheme = colorshemes[selector.value]
     localStorage.setItem('colorsheme', selector.value)
     let root = document.documentElement;
     root.style.setProperty('--correct', colorsheme['correct']);
@@ -605,6 +632,7 @@ settings_button.checked = false
 rules_button.addEventListener(("change"), () => {
     if (settings_button.checked) {
         settings_button.checked = false
+        s_blur.style.display = 'none'
     }
     if (rules_button.checked) {
         r_blur.style.display = 'block'
@@ -616,6 +644,7 @@ rules_button.addEventListener(("change"), () => {
 settings_button.addEventListener(('change'), () => {
     if (rules_button.checked) {
         rules_button.checked = false
+        r_blur.style.display = 'none'
     }
     if (settings_button.checked) {
         s_blur.style.display = 'block'
@@ -624,41 +653,7 @@ settings_button.addEventListener(('change'), () => {
     }
 })
 
-//////////////////////
-///// Difficulty /////
-//////////////////////
-
-let liste_mots = []
-let dif_button = document.getElementById('difficulty')
-
-if (getFromStorage('difficulty') == null) {
-    localStorage.setItem('difficulty', 'hard')
-    dif = 'hard'
-} else {
-    dif = getFromStorage('difficulty')
-}
-if (dif == 'easy') {
-    dif_button.checked = false
-    liste_mots = motsFrequents.filter((mot) => 5 <= mot.length && mot.length <= 6)
-} else {
-    dif_button.checked = true
-    liste_mots = motsFrequents.filter((mot) => 7 <= mot.length && mot.length <= 9)
-}
-dif_button.addEventListener("click", (event) => {
-    if (dif == 'easy') {
-        dif = 'hard'
-        dif_button.checked = true
-        liste_mots = motsFrequents.filter((mot) => 7 <= mot.length && mot.length <= 9)
-        localStorage.setItem('difficulty', 'hard')
-        reset()
-    } else {
-        dif = 'easy'
-        dif_button.checked = false
-        liste_mots = motsFrequents.filter((mot) => 5 <= mot.length && mot.length <= 6)
-        localStorage.setItem('difficulty', 'easy')
-        reset()
-    }
-})
+let liste_mots = motsFrequents
 
 ///////////////
 ///// Mot /////
@@ -669,7 +664,11 @@ let motsProposables = listeMots
 
 let mot = ''
 
-mot = getFromStorage("mot")
+if (getFromStorage("mot")!= null){
+    mot = getFromStorage("mot")
+} else {
+    mot = "emmetrope"
+}
 
 let mot_l = Array.from(mot.toLowerCase())
 let lettres_trouvees = []
@@ -771,11 +770,16 @@ for (let i = 0; i < 6; i++) {
     }
 };
 
-if (localStorage.getItem('trouve') == 'true') {
-    ligne_active = null
-} else {
+if (ligne_active){
     overlay(ligne_active)
 }
+
+console.log(getFromStorage('trouve'))
+// if (getFromStorage('trouve') == 'true') {
+//     ligne_active = null
+// } else {
+//     overlay(ligne_active)
+// }
 
 let active_cell = null
 
@@ -796,7 +800,7 @@ let liste_annee = []
 let annee = date.getFullYear()
 
 for (let i = 0 ; i < 366 ; i++){
-    let ecart = Math.floor(annee**3)
+    let ecart = Math.floor((-annee)**4)
     j = (ecart + ecart*i)%liste_mots.length
     liste_annee.push(liste_mots[j])
 }
@@ -868,5 +872,4 @@ document.addEventListener("keydown", (event) => {
 
 document.addEventListener('dblclick', (event) => {
     reset()
-    console.log(" Reset Debug")
 })
