@@ -148,6 +148,10 @@ function summonBanner(bannerid, text) {
 }
 
 function summonRecapBanner(mot, trouve){
+    recap_blur = document.createElement("div")
+    recap_blur.classList.add("blurbox")
+    document.body.appendChild(recap_blur)
+    recap_blur.style.display = "block"
     recap_banner = document.createElement("div")
     recap_banner.classList.add("RecapBanner")
     document.body.appendChild(recap_banner)
@@ -157,10 +161,6 @@ function summonRecapBanner(mot, trouve){
     recap_banner.appendChild(recap_section)
     buttons_section = document.createElement("section")
     recap_banner.appendChild(buttons_section)
-    recap_blur = document.createElement("div")
-    recap_blur.classList.add("blurbox")
-    document.body.appendChild(recap_blur)
-    recap_blur.style.display = "block"
     recap_blur.addEventListener("click", () => {
         document.body.removeChild(recap_blur)
         document.body.removeChild(recap_banner)
@@ -714,6 +714,7 @@ let mots_utilises = [] // Mots déjà testés
 if (localStorage.getItem('mots_utilises') !== null) {
     mots_utilises = getFromStorage('mots_utilises').split(',')
 }
+console.log(mots_utilises)
 
 ///////////////////////
 ///// Disposition /////
@@ -768,7 +769,11 @@ for (let i = 0; i < 6; i++) {
             ligne_active = null
         }
     }
-};
+}
+
+if(getFromStorage('trouve')=='true'){
+    ligne_active = null
+}
 
 if (ligne_active){
     overlay(ligne_active)
