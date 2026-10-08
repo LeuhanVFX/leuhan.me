@@ -134,20 +134,8 @@ function unblur() {
     keyboard = true
 }
 
-function summonBanner(bannerid, text) {
-    let banner = document.getElementById(bannerid)
-    let close_button = banner.getElementsByClassName('close_button')[0]
-    close_button.addEventListener("click", (event) => {
-        banner.style.display = 'none';
-        unblur()
-    });
-    banner.getElementsByClassName('banner_text')[0].innerHTML = text
-    banner.style.display = 'block';
-    blurexcept(bannerid)
-
-}
-
-function summonRecapBanner(mot, trouve){
+function summonRecapBanner(mot, trouve, n_trouves, moyenne, taux){
+    recap = [n_trouves, moyenne, taux]
     recap_blur = document.createElement("div")
     recap_blur.classList.add("blurbox")
     document.body.appendChild(recap_blur)
@@ -165,14 +153,27 @@ function summonRecapBanner(mot, trouve){
         document.body.removeChild(recap_blur)
         document.body.removeChild(recap_banner)
     })
+    recap_row = document.createElement("div")
+    recap_row.classList.add("recap_row")
+    //-----------------------------------------
     vic_section.innerHTML = `<h3>${trouve}</h3>`
-    recap_section.innerHTML = `Le mot était <br>
-                                <b>${mot}</b>`
-    buttons_section.innerHTML = `<button id="def_button"><img src="dictionary.png" alt="dictionaire"></button>`
+    recap.forEach((stat) => {
+        cadre = document.createElement('div')
+        cadre.classList.add("statframe")
+        cadre.style.setProperty("--stat_title", `"${stat[0]}"`)
+        cadre.style.setProperty("--stat", `"${stat[1]}"`)
+        recap_row.appendChild(cadre)
+
+    })
+    recap_section.appendChild(recap_row)
+    let word_reveal = document.createElement("p")
+    word_reveal.innerHTML = `Le mot était <br><b>${mot.toUpperCase()}</b>`
+    recap_section.appendChild(word_reveal)
+    buttons_section.innerHTML = `<button id="def_button"><img src="book.svg" alt="dictionnaire"><b>Définition</b></button>`
     def_button = document.getElementById("def_button")
     def_button.addEventListener("click", () => {
         window.open(`https://www.larousse.fr/dictionnaires/francais/${mot}`)
-    })  
+    })
 }
 
 async function summonSimpleBanner(text, duration) {
@@ -204,9 +205,9 @@ async function verification() {
 
     if (!ligne_active) {
         if (getFromStorage('trouve') == 'true'){
-            summonRecapBanner(mot, 'Victoire !')
+            summonRecapBanner(mot, 'Victoire !', n_trouves, moyenne, taux)
         } else {
-            summonRecapBanner(mot, 'Perdu !')
+            summonRecapBanner(mot, 'Perdu !', n_trouves, moyenne, taux)
         }
         return
     }
@@ -313,7 +314,7 @@ async function verification() {
                 localStorage.setItem(`ligne${lignes.indexOf(ligne_active) + 1}`, guess)
                 if (juste == mot.length) {
                     await sleep(500)
-                    summonRecapBanner(mot, "Victoire !")
+                    summonRecapBanner(mot, "Victoire !", n_trouves, moyenne, taux)
                     ligne_active = null
                     localStorage.setItem('trouve', 'true')
                 } else {
@@ -329,7 +330,7 @@ async function verification() {
                         active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
 
                     } else {
-                        summonRecapBanner(mot, "Perdu !")
+                        summonRecapBanner(mot, "Perdu !", n_trouves, moyenne, taux)
                         ligne_active = null
                     }
                 }
@@ -714,7 +715,6 @@ let mots_utilises = [] // Mots déjà testés
 if (localStorage.getItem('mots_utilises') !== null) {
     mots_utilises = getFromStorage('mots_utilises').split(',')
 }
-console.log(mots_utilises)
 
 ///////////////////////
 ///// Disposition /////
@@ -778,8 +778,6 @@ if(getFromStorage('trouve')=='true'){
 if (ligne_active){
     overlay(ligne_active)
 }
-
-console.log(getFromStorage('trouve'))
 // if (getFromStorage('trouve') == 'true') {
 //     ligne_active = null
 // } else {
@@ -875,6 +873,31 @@ document.addEventListener("keydown", (event) => {
 ///// DEBUG /////
 /////////////////
 
-document.addEventListener('dblclick', (event) => {
-    reset()
-})
+// document.addEventListener('dblclick', (event) => {
+//     reset()
+// })
+
+let n_trouves = ["Trouvés", 2]
+let moyenne = ["Moyenne", 1]
+let taux = ["Taux", 100]
+
+if (getFromStorage('n_trouves')!=null){
+    n_trouves = ["Trouvés", getFromStorage('n_trouves')]
+} else {
+    n_trouves = ["Trouvés", 0]
+    localStorage.setItem('n_trouves', n_trouves[1])
+}
+
+if (getFromStorage('moyenne')!=null){
+    moyenne = ["Moyenne", getFromStorage('moyenne')]
+} else {
+    n_trouves = ["Moyenne", 0]
+    localStorage.setItem('moyenne', n_trouves[1])
+}
+
+if (getFromStorage('taux')!=null){
+    taux = ["Taux", getFromStorage('taux')]
+} else {
+    taux = ["Taux", 0]
+    localStorage.setItem('taux', taux[1])
+}

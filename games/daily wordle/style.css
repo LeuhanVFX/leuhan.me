@@ -959,7 +959,7 @@ p {
 .RecapBanner {
     display: flex;
     flex-direction: column;
-    gap: 50px;
+    gap: 25px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -982,29 +982,84 @@ p {
     border-width: 5px;
     border-style: solid;
     box-shadow: 0px 0px 15px antiquewhite;
-    font-size: 1vw;
+    font-size: 100%;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     transition: 0.5s;
 }
 
 .RecapBanner button {
     display: flex;
+    flex-direction: row;
+    gap: 15px;
     margin: auto;
     background-color: var(--button-color);
     border: solid 2px var(--text-color);
-    width: 40px;
-    aspect-ratio: 1/1;
-    border-radius: 5px;
+    height: 50px;
+    padding: 10px;
+    border-radius: 10px;
+    text-align: center;
+    text-justify: center;
+    color: var(--text-color);
     transform: scaleY(1);
     transform-origin: top;
     transition: ease-out 0.2s;
-    align-content: center;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     z-index: 1;
 }
 
+.RecapBanner .recap_row {
+    display: flex;
+    margin: auto;
+    flex-direction: row;
+    gap: 10px;
+    width: 90%;
+    justify-content: center;
+    align-items: center;
+}
+
+.RecapBanner .statframe {
+    --stat_title : "Test";
+    --stat : "0";
+    display: flex;
+    flex-direction: column;
+    border: var(--text-color) solid 3px;
+    background-color: var(--secondary);
+    align-items: center;
+    justify-content: center;
+    width: 100px;
+    aspect-ratio: 1/1;
+    border-radius: 10px;
+    overflow: hidden;
+}
+
+.RecapBanner .statframe:before {
+    content: var(--stat_title);
+    background-color: rgba(0, 0, 0, 0.25);
+    display: flex;
+    font-weight: 1000;
+    height: 30%;
+    width: 100%;
+    padding: 10px;
+    align-items: center;
+    justify-content: center;
+}
+
+.RecapBanner .statframe::after {
+    content: var(--stat);
+    display: flex;
+    height: 70%;
+    width: 100%;
+    font-weight: 1000;
+    font-size: 1.5rem;
+    align-items: center;
+    justify-content: center;
+
+}
+
 .RecapBanner button img {
-    width: 50%;
+    height: 75%;
     margin: auto;
     padding: 0px;
     transition: 0.2s;
