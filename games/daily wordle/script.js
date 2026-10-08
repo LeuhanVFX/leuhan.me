@@ -97,7 +97,7 @@ async function initGrid() {
             cell.style.scale = "0"
         }
     })
-    grid.style.width = `min(${col * 60}px, 90vw)`
+    grid.style.width = `min(${col * 80}px, 90vw)`
     cells_list = Array.from(document.querySelectorAll('.cell'))
     ligne1 = cells_list.slice(0 * mot.length, 1 * mot.length);
     ligne2 = cells_list.slice(1 * mot.length, 2 * mot.length);
@@ -134,8 +134,7 @@ function unblur() {
     keyboard = true
 }
 
-function summonRecapBanner(mot, trouve, n_trouves, moyenne, taux){
-    recap = [n_trouves, moyenne, taux]
+function summonRecapBanner(mot, trouve, stats) {
     recap_blur = document.createElement("div")
     recap_blur.classList.add("blurbox")
     document.body.appendChild(recap_blur)
@@ -152,12 +151,15 @@ function summonRecapBanner(mot, trouve, n_trouves, moyenne, taux){
     recap_blur.addEventListener("click", () => {
         document.body.removeChild(recap_blur)
         document.body.removeChild(recap_banner)
+        clearInterval(time_update)
     })
     recap_row = document.createElement("div")
     recap_row.classList.add("recap_row")
+    timer = document.createElement('div')
+    timer.classList.add("timer")
     //-----------------------------------------
-    vic_section.innerHTML = `<h3>${trouve}</h3>`
-    recap.forEach((stat) => {
+    vic_section.innerHTML = `<h2>${trouve}</h2>`
+    stats.forEach((stat) => {
         cadre = document.createElement('div')
         cadre.classList.add("statframe")
         cadre.style.setProperty("--stat_title", `"${stat[0]}"`)
@@ -174,6 +176,25 @@ function summonRecapBanner(mot, trouve, n_trouves, moyenne, taux){
     def_button.addEventListener("click", () => {
         window.open(`https://www.larousse.fr/dictionnaires/francais/${mot}`)
     })
+    recap_banner.appendChild(timer)
+    update_time()
+    const time_update = setInterval(update_time, 1000)
+}
+
+function update_time() {
+    let time = 0
+    let now = new Date()
+    let tommorow = new Date(now.getFullYear(), now.getMonth(), now.getDate() + 1)
+
+    let time_left = tommorow.getTime() - now.getTime()
+    const totalSeconds = Math.floor(time_left / 1000);
+    const hours = Math.floor(totalSeconds / 3600);
+    const minutes = Math.floor((totalSeconds % 3600) / 60);
+    const seconds = totalSeconds % 60;
+    time = String(hours).padStart(2, '0') + ':' +
+      String(minutes).padStart(2, '0') + ':' +
+      String(seconds).padStart(2, '0');
+    timer.innerHTML = time
 }
 
 async function summonSimpleBanner(text, duration) {
@@ -204,10 +225,10 @@ async function summonSimpleBanner(text, duration) {
 async function verification() {
 
     if (!ligne_active) {
-        if (getFromStorage('trouve') == 'true'){
-            summonRecapBanner(mot, 'Victoire !', n_trouves, moyenne, taux)
+        if (getFromStorage('trouve') == 'true') {
+            summonRecapBanner(mot, "Victoire !", [["Trouvés", n_trouves], ["Taux", `${Math.floor((n_trouves / cherches) * 100)}%`], ["Moyenne", Number(((essais / (6 * cherches)) * 6).toFixed(2))]])
         } else {
-            summonRecapBanner(mot, 'Perdu !', n_trouves, moyenne, taux)
+            summonRecapBanner(mot, "Perdu !", [["Trouvés", n_trouves], ["Taux", `${Math.floor((n_trouves / cherches) * 100)}%`], ["Moyenne", Number(((essais / (6 * cherches)) * 6).toFixed(2))]])
         }
         return
     }
@@ -237,8 +258,9 @@ async function verification() {
         })
 
         if (motsProposables.includes(guess)) { // Test si le mot est dans le dictionnaire
-            if (!(mots_utilises.includes(guess.toUpperCase()))) {
-                // Test si le mot a déjà été utilisé
+            if (!(mots_utilises.includes(guess.toUpperCase()))) { // Test si le mot a déjà été utilisé
+                essais += 1
+                localStorage.setItem('essais', essais)
                 for (let k = 0; k < ligne_active.length; k++) { // Test si les lettres sont bien placées
                     let cell = ligne_active[k]
                     if (cell.innerHTML.toLowerCase() == mot[k].toLowerCase()) {
@@ -314,7 +336,11 @@ async function verification() {
                 localStorage.setItem(`ligne${lignes.indexOf(ligne_active) + 1}`, guess)
                 if (juste == mot.length) {
                     await sleep(500)
-                    summonRecapBanner(mot, "Victoire !", n_trouves, moyenne, taux)
+                    n_trouves += 1
+                    cherches += 1
+                    localStorage.setItem('cherches', cherches)
+                    localStorage.setItem('n_trouves', n_trouves)
+                    summonRecapBanner(mot, "Victoire !", [["Trouvés", n_trouves], ["Taux", `${Math.floor((n_trouves / cherches) * 100)}%`], ["Moyenne", Number(((essais / (6 * cherches)) * 6).toFixed(2))]])
                     ligne_active = null
                     localStorage.setItem('trouve', 'true')
                 } else {
@@ -330,11 +356,13 @@ async function verification() {
                         active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
 
                     } else {
-                        summonRecapBanner(mot, "Perdu !", n_trouves, moyenne, taux)
+                        cherches += 1
+                        localStorage.setItem('cherches', cherches)
+                        summonRecapBanner(mot, "Perdu !", [["Trouvés", n_trouves], ["Taux", `${Math.floor((n_trouves / cherches) * 100)}%`], ["Moyenne", Number(((essais / (6 * cherches)) * 6).toFixed(2))]])
                         ligne_active = null
                     }
                 }
-                if (getFromStorage("trouve")=="false") {
+                if (getFromStorage("trouve") == "false" && ligne_active) {
                     overlay(ligne_active)
                 }
             } else {
@@ -665,7 +693,7 @@ let motsProposables = listeMots
 
 let mot = ''
 
-if (getFromStorage("mot")!= null){
+if (getFromStorage("mot") != null) {
     mot = getFromStorage("mot")
 } else {
     mot = "emmetrope"
@@ -771,11 +799,11 @@ for (let i = 0; i < 6; i++) {
     }
 }
 
-if(getFromStorage('trouve')=='true'){
+if (getFromStorage('trouve') == 'true') {
     ligne_active = null
 }
 
-if (ligne_active){
+if (ligne_active) {
     overlay(ligne_active)
 }
 // if (getFromStorage('trouve') == 'true') {
@@ -802,9 +830,9 @@ let numero_mot = date.getDate() + date.getMonth() * 31
 let liste_annee = []
 let annee = date.getFullYear()
 
-for (let i = 0 ; i < 366 ; i++){
-    let ecart = Math.floor((-annee)**4)
-    j = (ecart + ecart*i)%liste_mots.length
+for (let i = 0; i < 403; i++) {
+    let ecart = Math.floor((-annee) ** 4)
+    j = (ecart + ecart * i) % liste_mots.length
     liste_annee.push(liste_mots[j])
 }
 
@@ -874,30 +902,52 @@ document.addEventListener("keydown", (event) => {
 /////////////////
 
 // document.addEventListener('dblclick', (event) => {
-//     reset()
+//     reset_stats()
 // })
 
-let n_trouves = ["Trouvés", 2]
-let moyenne = ["Moyenne", 1]
-let taux = ["Taux", 100]
+let time = "00:00:00"
 
-if (getFromStorage('n_trouves')!=null){
-    n_trouves = ["Trouvés", getFromStorage('n_trouves')]
+let n_trouves = 0
+let cherches = 0
+let taux = 0
+let essais = 0
+
+if (getFromStorage('n_trouves') != null) {
+    n_trouves = Number(getFromStorage('n_trouves'))
 } else {
-    n_trouves = ["Trouvés", 0]
-    localStorage.setItem('n_trouves', n_trouves[1])
+    n_trouves = 0
+    localStorage.setItem('n_trouves', 0)
 }
 
-if (getFromStorage('moyenne')!=null){
-    moyenne = ["Moyenne", getFromStorage('moyenne')]
+if (getFromStorage("cherches") != null) {
+    cherches = Number(getFromStorage('cherches'))
 } else {
-    n_trouves = ["Moyenne", 0]
-    localStorage.setItem('moyenne', n_trouves[1])
+    cherches = 0
+    localStorage.setItem("cherchess", cherches)
 }
 
-if (getFromStorage('taux')!=null){
-    taux = ["Taux", getFromStorage('taux')]
+if (getFromStorage('taux') != null) {
+    taux = Number(getFromStorage("taux"))
 } else {
-    taux = ["Taux", 0]
-    localStorage.setItem('taux', taux[1])
+    taux = 0
+    localStorage.setItem('taux', taux)
+}
+
+if (getFromStorage('essais') != null) {
+    essais = Number(getFromStorage('essais'))
+} else {
+    essais = 0
+    localStorage.setItem('essaiss', essais)
+}
+
+function reset_stats() {
+    n_trouves = 0
+    localStorage.setItem('n_trouves', n_trouves)
+    cherches = 0
+    localStorage.setItem('cherches', cherches)
+    taux = 0
+    localStorage.setItem('taux', taux)
+    essais = 0
+    localStorage.setItem('essais', essais)
+    console.log(n_trouves, cherches, taux, essais)
 }

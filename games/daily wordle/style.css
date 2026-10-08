@@ -760,7 +760,7 @@ input[type="checkbox"] {
     padding: 5px;
     margin: auto;
     width: 98%;
-    max-width: 500px;
+    max-width: 700px;
     min-width: 300px;
     height: fit-content;
     color: rgb(255, 255, 255);
@@ -807,7 +807,7 @@ p {
     gap: 5px;
     margin: auto;
     width: 98%;
-    max-width: 500px;
+    max-width: 800px;
     min-width: 300px;
     aspect-ratio: 5/2;
     z-index: 1;
@@ -982,7 +982,7 @@ p {
     border-width: 5px;
     border-style: solid;
     box-shadow: 0px 0px 15px antiquewhite;
-    font-size: 100%;
+    font-size: 1.25em;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     transition: 0.5s;
 }
@@ -1039,6 +1039,7 @@ p {
     background-color: rgba(0, 0, 0, 0.25);
     display: flex;
     font-weight: 1000;
+    font-size: 0.75em;
     height: 30%;
     width: 100%;
     padding: 10px;
@@ -1052,7 +1053,7 @@ p {
     height: 70%;
     width: 100%;
     font-weight: 1000;
-    font-size: 1.5rem;
+    font-size: 1.25em;
     align-items: center;
     justify-content: center;
 
@@ -1077,6 +1078,19 @@ p {
     filter: brightness(0.9);
     transform-origin: center;
     transition: 0.1s;
+}
+
+.RecapBanner .timer {
+    display: flex;
+    flex-direction: column;
+    font-weight: 1000;
+    font-size: 1.5em;
+}
+
+.RecapBanner .timer:before {
+    content: "Prochain mot dans :";
+    font-size: 0.65em;
+    font-weight: normal;
 }
 
 @media screen and (max-width: 1024px) {
@@ -1164,7 +1178,16 @@ p {
     }
 }
 
-@media only screen and (max-width: 400px) {
+@media only screen and (max-width: 600px) {
+
+    .grid .cell {
+        font-size: 24px;
+    }
+
+    .keyboard .key {
+        font-size: 20px;
+    }
+
     .banner {
         width: 70%;
         font-size: 3vw;
