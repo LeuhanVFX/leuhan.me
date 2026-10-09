@@ -35,6 +35,7 @@ html {
     --correct: rgba(15, 129, 0, 1);
     --present: rgba(221, 133, 0, 1);
     --absent: rgba(80, 80, 80, 1);
+    overflow: hidden;
 }
 
 main {
@@ -43,6 +44,8 @@ main {
     align-items: center;
     justify-content: space-between;
     gap: 50px;
+    height: 90vh;
+    overflow: hidden;
 }
 
 body {
@@ -50,8 +53,6 @@ body {
     margin: 0;
     padding: 0px;
     width: 100%;
-    height: 95vh;
-    max-height: 800px;
     font-family: 'Nevanta';
     text-align: justify;
     background-color: var(--primary);
@@ -66,14 +67,13 @@ body {
 
 .game {
     display: flex;
+    position: relative;
     flex-direction: column;
     align-content: center;
     justify-content: space-between;
     width: 100%;
-    max-width: 550px;
+    height: 100%;
     max-width: 600px;
-    height: 95vh;
-    max-height: 775Px;
     margin: auto;
     padding: 0px;
 }
