@@ -97,7 +97,7 @@ async function initGrid() {
             cell.style.scale = "0"
         }
     })
-    grid.style.width = `min(${col * 80}px, 90vw)`
+    grid.style.width = `min(${col * 70}px, 90vw)`
     cells_list = Array.from(document.querySelectorAll('.cell'))
     ligne1 = cells_list.slice(0 * mot.length, 1 * mot.length);
     ligne2 = cells_list.slice(1 * mot.length, 2 * mot.length);
