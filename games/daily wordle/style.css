@@ -32,6 +32,7 @@ html {
     transition: 0.5s;
     cursor: default;
     scrollbar-color: transparent transparent;
+    scrollbar-width: 0;
     --correct: rgba(15, 129, 0, 1);
     --present: rgba(221, 133, 0, 1);
     --absent: rgba(80, 80, 80, 1);
@@ -44,7 +45,7 @@ main {
     align-items: center;
     justify-content: space-between;
     gap: 50px;
-    height: 90vh;
+    height: 100vh;
     overflow: hidden;
 }
 
@@ -81,12 +82,11 @@ body {
 header {
     position: sticky;
     width: 100%;
-    min-width: 400px;
-    max-height: 75px;
-    top: 0px;
+    min-width: 250px;
+    top: 0;
     padding: 0;
     background-color: var(--secondary);
-    border-radius: 10px;
+    border-radius: 0  0 10px 10px;
     text-align: center;
     z-index: 5;
 }
@@ -94,12 +94,14 @@ header {
 .menu {
     display: grid;
     width: 100%;
+    max-width: 750px;
+    margin: auto;
     grid-template-columns: 25% 50% 25%;
     align-items: center;
     padding: 0;
     border-radius: 0 0 10px 10px;
     background-color: var(--secondary);
-    z-index: 20;
+    z-index: 100;
 }
 
 .menu .game_logo {
@@ -109,6 +111,16 @@ header {
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+
+.menu .game_logo:hover{
+    transform: scale(1.1);
+}
+
+.menu .game_logo:active{
+    transform: scale(0.95);
 }
 
 .theme-toggle {
@@ -116,6 +128,7 @@ header {
     margin: auto;
     scale: 0.8;
     align-items: center;
+    justify-content: center;
     background-color: transparent;
 }
 
@@ -444,7 +457,7 @@ header {
     height: 100vh;
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(3px);
-    z-index: 5;
+    z-index: 10;
 }
 
 .chart h1 {
@@ -463,7 +476,7 @@ header {
 }
 
 .chart .simple_button {
-    display: flex;
+    display: none;
     position: absolute;
     width: fit-content;
     height: fit-content;

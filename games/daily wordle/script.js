@@ -135,6 +135,7 @@ function unblur() {
 }
 
 function summonRecapBanner(mot, trouve, stats) {
+    keyboard = false
     recap_blur = document.createElement("div")
     recap_blur.classList.add("blurbox")
     document.body.appendChild(recap_blur)
@@ -152,6 +153,7 @@ function summonRecapBanner(mot, trouve, stats) {
         document.body.removeChild(recap_blur)
         document.body.removeChild(recap_banner)
         clearInterval(time_update)
+        keyboard = true
     })
     recap_row = document.createElement("div")
     recap_row.classList.add("recap_row")
@@ -168,14 +170,17 @@ function summonRecapBanner(mot, trouve, stats) {
 
     })
     recap_section.appendChild(recap_row)
-    let word_reveal = document.createElement("p")
-    word_reveal.innerHTML = `Le mot était <br><b>${mot.toUpperCase()}</b>`
-    recap_section.appendChild(word_reveal)
-    buttons_section.innerHTML = `<button id="def_button"><img src="book.svg" alt="dictionnaire"><b>Définition</b></button>`
-    def_button = document.getElementById("def_button")
-    def_button.addEventListener("click", () => {
-        window.open(`https://www.larousse.fr/dictionnaires/francais/${mot}`)
-    })
+    if (getFromStorage('trouve') == 'true' || getFromStorage('ligne6') != null) {
+        let word_reveal = document.createElement("p")
+        word_reveal.innerHTML = `Le mot était <br><b>${mot.toUpperCase()}</b>`
+        recap_section.appendChild(word_reveal)
+        buttons_section.innerHTML = `<button id="def_button"><img src="book.svg" alt="dictionnaire"><b>Définition</b></button>`
+        def_button = document.getElementById("def_button")
+        def_button.addEventListener("click", () => {
+            window.open(`https://www.larousse.fr/dictionnaires/francais/${mot}`)
+        })
+    }
+
     recap_banner.appendChild(timer)
     update_time()
     const time_update = setInterval(update_time, 1000)
@@ -192,8 +197,8 @@ function update_time() {
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = totalSeconds % 60;
     time = String(hours).padStart(2, '0') + ':' +
-      String(minutes).padStart(2, '0') + ':' +
-      String(seconds).padStart(2, '0');
+        String(minutes).padStart(2, '0') + ':' +
+        String(seconds).padStart(2, '0');
     timer.innerHTML = time
 }
 
@@ -226,9 +231,9 @@ async function verification() {
 
     if (!ligne_active) {
         if (getFromStorage('trouve') == 'true') {
-            summonRecapBanner(mot, "Victoire !", [["Trouvés", n_trouves], ["Taux", `${Math.floor((n_trouves / cherches) * 100)}%`], ["Moyenne", Number(((essais / (6 * cherches)) * 6).toFixed(2))]])
+            summonRecapBanner(mot, "Victoire !", [["Parties", cherches], ["Victoires", n_trouves], ["Taux", `${Math.floor((n_trouves / Math.max(cherches, 1)) * 100)}%`], ["Moyenne", Number((essais / Math.max(1, ((6 * cherches))) * 6).toFixed(2))]])
         } else {
-            summonRecapBanner(mot, "Perdu !", [["Trouvés", n_trouves], ["Taux", `${Math.floor((n_trouves / cherches) * 100)}%`], ["Moyenne", Number(((essais / (6 * cherches)) * 6).toFixed(2))]])
+            summonRecapBanner(mot, "Perdu !", [["Parties", cherches], ["Victoires", n_trouves], ["Taux", `${Math.floor((n_trouves / Math.max(cherches, 1)) * 100)}%`], ["Moyenne", Number((essais / Math.max(1, ((6 * cherches))) * 6).toFixed(2))]])
         }
         return
     }
@@ -336,13 +341,14 @@ async function verification() {
                 localStorage.setItem(`ligne${lignes.indexOf(ligne_active) + 1}`, guess)
                 if (juste == mot.length) {
                     await sleep(500)
+                    localStorage.setItem('trouve', 'true')
                     n_trouves += 1
                     cherches += 1
                     localStorage.setItem('cherches', cherches)
                     localStorage.setItem('n_trouves', n_trouves)
-                    summonRecapBanner(mot, "Victoire !", [["Trouvés", n_trouves], ["Taux", `${Math.floor((n_trouves / cherches) * 100)}%`], ["Moyenne", Number(((essais / (6 * cherches)) * 6).toFixed(2))]])
+                    summonRecapBanner(mot, "Victoire !", [["Parties", cherches], ["Victoires", n_trouves], ["Taux", `${Math.floor((n_trouves / Math.max(cherches, 1)) * 100)}%`], ["Moyenne", Number((essais / Math.max(1, ((6 * cherches))) * 6).toFixed(2))]])
                     ligne_active = null
-                    localStorage.setItem('trouve', 'true')
+                    
                 } else {
                     if (lignes.indexOf(ligne_active) < 5) {
                         mots_utilises.push(guess.toUpperCase())
@@ -358,7 +364,7 @@ async function verification() {
                     } else {
                         cherches += 1
                         localStorage.setItem('cherches', cherches)
-                        summonRecapBanner(mot, "Perdu !", [["Trouvés", n_trouves], ["Taux", `${Math.floor((n_trouves / cherches) * 100)}%`], ["Moyenne", Number(((essais / (6 * cherches)) * 6).toFixed(2))]])
+                        summonRecapBanner(mot, "Perdu !", [["Parties", cherches], ["Victoires", n_trouves], ["Taux", `${Math.floor((n_trouves / Math.max(cherches, 1)) * 100)}%`], ["Moyenne", Number((essais / Math.max(1, ((6 * cherches))) * 6).toFixed(2))]])
                         ligne_active = null
                     }
                 }
@@ -516,30 +522,32 @@ async function initKeyboard(disposition) {
     })
 
     ///// Clavier Virutel /////
-    keys.forEach((key) => { // Clic sur une touche
+    keys.forEach((key) => {
         if (key.id == 'Enter') {
-            key.addEventListener("click", (event) => {
+            key.addEventListener("click", () => {
                 if (keyboard == true) {
                     verification()
                 }
             });
         } else if (key.id == 'Delete') {
-            key.addEventListener("click", (event) => {
+            key.addEventListener("click", () => {
                 if (keyboard == true) {
-                    for (let i = ligne_active.length - 1; i >= 0; i--) {
-                        let cell = ligne_active[i]
-                        if (cell.hasAttribute('used')) {
-                            if (lettres_trouvees[ligne_active.indexOf(cell)] !== ' ') {
-                                cell.style.setProperty('--overlay', `"${lettres_trouvees[ligne_active.indexOf(cell)]}"`)
+                    if (ligne_active) {
+                        for (let i = ligne_active.length - 1; i >= 0; i--) {
+                            let cell = ligne_active[i]
+                            if (cell.hasAttribute('used')) {
+                                if (lettres_trouvees[ligne_active.indexOf(cell)] !== ' ') {
+                                    cell.style.setProperty('--overlay', `"${lettres_trouvees[ligne_active.indexOf(cell)]}"`)
+                                }
+                                cell.innerHTML = ''
+                                cell.removeAttribute('used')
+                                active_cell.style.borderColor = 'var(--text-color)'
+                                active_cell.style.boxShadow = 'none'
+                                active_cell = ligne_active[i]
+                                active_cell.style.borderColor = 'rgb(249, 176, 252)'
+                                active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
+                                break
                             }
-                            cell.innerHTML = ''
-                            cell.removeAttribute('used')
-                            active_cell.style.borderColor = 'var(--text-color)'
-                            active_cell.style.boxShadow = 'none'
-                            active_cell = ligne_active[i]
-                            active_cell.style.borderColor = 'rgb(249, 176, 252)'
-                            active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
-                            break
                         }
                     }
                 }
@@ -548,20 +556,22 @@ async function initKeyboard(disposition) {
 
             key.addEventListener("click", () => {
                 if (keyboard == true) {
-                    for (let i = 0; i < ligne_active.length; i++) {
-                        let cell = ligne_active[i]
-                        if (!(cell.hasAttribute('used'))) {
-                            cell.style.setProperty('--overlay', '""')
-                            cell.innerHTML = key.innerHTML
-                            cell.setAttribute('used', 'true')
-                            active_cell.style.borderColor = 'var(--text-color)'
-                            active_cell.style.boxShadow = 'none'
-                            if (i < ligne_active.length - 1) {
-                                active_cell = ligne_active[i + 1]
-                                active_cell.style.borderColor = 'rgb(249, 176, 252)'
-                                active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
+                    if (ligne_active) {
+                        for (let i = 0; i < ligne_active.length; i++) {
+                            let cell = ligne_active[i]
+                            if (!(cell.hasAttribute('used'))) {
+                                cell.style.setProperty('--overlay', '""')
+                                cell.innerHTML = key.innerHTML
+                                cell.setAttribute('used', 'true')
+                                active_cell.style.borderColor = 'var(--text-color)'
+                                active_cell.style.boxShadow = 'none'
+                                if (i < ligne_active.length - 1) {
+                                    active_cell = ligne_active[i + 1]
+                                    active_cell.style.borderColor = 'rgb(249, 176, 252)'
+                                    active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
+                                }
+                                break
                             }
-                            break
                         }
                     }
                 }
@@ -665,8 +675,10 @@ rules_button.addEventListener(("change"), () => {
     }
     if (rules_button.checked) {
         r_blur.style.display = 'block'
+        keyboard = false
     } else {
         r_blur.style.display = 'none'
+        keyboard = true
     }
 })
 
@@ -677,20 +689,25 @@ settings_button.addEventListener(('change'), () => {
     }
     if (settings_button.checked) {
         s_blur.style.display = 'block'
+        keyboard = false
     } else {
         s_blur.style.display = 'none'
+        keyboard = true
     }
 })
 
-let liste_mots = motsFrequents
+const stat_button = document.getElementById('game_title')
+stat_button.addEventListener('click', () => {
+    summonRecapBanner(mot, "Statistiques", [["Parties", cherches], ["Victoires", n_trouves], ["Taux", `${Math.floor((n_trouves / Math.max(cherches, 1)) * 100)}%`], ["Moyenne", Number((essais / Math.max(1, ((6 * cherches))) * 6).toFixed(2))]])
+})
 
 ///////////////
 ///// Mot /////
 ///////////////
+
+let liste_mots = motsFrequents
 let cells_list = []
-
 let motsProposables = listeMots
-
 let mot = ''
 
 if (getFromStorage("mot") != null) {
@@ -718,7 +735,7 @@ blurbox.style.height = '100vh'
 blurbox.style.position = 'fixed'
 blurbox.style.top = '0'
 blurbox.style.left = '0'
-blurbox.style.zIndex = '10'
+blurbox.style.zIndex = '3'
 blurbox.style.backgroundColor = 'rgba(0, 0, 0, 0.4)'
 blurbox.style.backdropFilter = 'blur(10px)'
 blurbox.style.display = 'none'
@@ -852,38 +869,42 @@ if (getFromStorage('mot') !== nouveau_mot) {
 document.addEventListener("keydown", (event) => {
     if (keyboard == true) {
         if (car_possibles.includes(event.key.toUpperCase())) {
-            for (let i = 0; i < ligne_active.length; i++) {
-                let cell = ligne_active[i]
-                if (!(cell.hasAttribute('used'))) {
-                    cell.style.setProperty('--overlay', '""')
-                    cell.innerHTML = event.key.toUpperCase()
-                    cell.setAttribute('used', 'true')
-                    active_cell.style.borderColor = 'var(--text-color)'
-                    active_cell.style.boxShadow = 'none'
-                    if (i < ligne_active.length - 1) {
-                        active_cell = ligne_active[i + 1]
-                        active_cell.style.borderColor = 'rgb(249, 176, 252)'
-                        active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
+            if (ligne_active) {
+                for (let i = 0; i < ligne_active.length; i++) {
+                    let cell = ligne_active[i]
+                    if (!(cell.hasAttribute('used'))) {
+                        cell.style.setProperty('--overlay', '""')
+                        cell.innerHTML = event.key.toUpperCase()
+                        cell.setAttribute('used', 'true')
+                        active_cell.style.borderColor = 'var(--text-color)'
+                        active_cell.style.boxShadow = 'none'
+                        if (i < ligne_active.length - 1) {
+                            active_cell = ligne_active[i + 1]
+                            active_cell.style.borderColor = 'rgb(249, 176, 252)'
+                            active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
+                        }
+                        break
                     }
-                    break
                 }
             }
         } else {
             if (event.key == 'Backspace') {
-                for (let i = ligne_active.length - 1; i >= 0; i--) {
-                    let cell = ligne_active[i]
-                    if (cell.hasAttribute('used')) {
-                        if (lettres_trouvees[ligne_active.indexOf(cell)] !== ' ') {
-                            cell.style.setProperty('--overlay', `"${lettres_trouvees[ligne_active.indexOf(cell)]}"`)
+                if (ligne_active) {
+                    for (let i = ligne_active.length - 1; i >= 0; i--) {
+                        let cell = ligne_active[i]
+                        if (cell.hasAttribute('used')) {
+                            if (lettres_trouvees[ligne_active.indexOf(cell)] !== ' ') {
+                                cell.style.setProperty('--overlay', `"${lettres_trouvees[ligne_active.indexOf(cell)]}"`)
+                            }
+                            cell.innerHTML = ''
+                            cell.removeAttribute('used')
+                            active_cell.style.borderColor = 'var(--text-color)'
+                            active_cell.style.boxShadow = 'none'
+                            active_cell = ligne_active[i]
+                            active_cell.style.borderColor = 'rgb(249, 176, 252)'
+                            active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
+                            break
                         }
-                        cell.innerHTML = ''
-                        cell.removeAttribute('used')
-                        active_cell.style.borderColor = 'var(--text-color)'
-                        active_cell.style.boxShadow = 'none'
-                        active_cell = ligne_active[i]
-                        active_cell.style.borderColor = 'rgb(249, 176, 252)'
-                        active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
-                        break
                     }
                 }
             } else {
