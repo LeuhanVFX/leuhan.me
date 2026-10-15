@@ -37,7 +37,6 @@ html {
     --present: rgba(221, 133, 0, 1);
     --absent: rgba(80, 80, 80, 1);
     height: 100vh;
-    overflow: hidden;
 }
 
 main {

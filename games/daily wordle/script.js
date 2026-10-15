@@ -247,7 +247,7 @@ function summonRecapBanner(mot, texte, stats) {
                 recap += "\n"
             }
         })
-            navigator.clipboard.writeText(`Leuhan's Wordle | ${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} | ${langue}\n\n${recap}\nhttps://wordle.leuhan.dev`)
+            navigator.clipboard.writeText(`Leuhan's Wordle | ${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}\n\n${recap}\nhttps://wordle.leuhan.dev`)// | ${langue}
             summonSimpleBanner('Copié !', 1000)
         })
     }
