@@ -37,6 +37,7 @@ html {
     --present: rgba(221, 133, 0, 1);
     --absent: rgba(80, 80, 80, 1);
     height: 100vh;
+    overflow: hidden;
 }
 
 main {
@@ -112,16 +113,7 @@ header {
     background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    cursor: pointer;
     transition: all 0.2s;
-}
-
-.menu .game_logo:hover{
-    transform: scale(1.1);
-}
-
-.menu .game_logo:active{
-    transform: scale(0.95);
 }
 
 .theme-toggle {
@@ -425,7 +417,6 @@ header {
 .chart {
     display: None;
     position: absolute;
-    top: 150%;
     left: 50%;
     transform: translatex(-50%);
     background-color: rgba(109, 109, 109, 0.336);
@@ -435,6 +426,8 @@ header {
     border-radius: 20px;
     width: 90%;
     max-width: 600px;
+    max-height: 80vh;
+    overflow: scroll;
     margin: auto;
     padding: 15px;
     height: fit-content;
@@ -987,9 +980,10 @@ p {
     border-radius: 20px;
     width: 90%;
     max-width: 600px;
+    max-height: 90vh;
+    overflow: scroll;
     margin: auto;
     padding: 15px;
-    height: fit-content;
     text-align: center;
     justify-content: center;
     align-items: center;
@@ -1075,6 +1069,46 @@ p {
     justify-content: center;
 
 }
+/* Statistiques Graphiques
+.RecapBanner .stat_graph {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+}
+
+.RecapBanner stat_row {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+.RecapBanner stat_bar {
+    --stat_value: 0;
+    display: flex;
+    position: relative;
+    border-radius: 10px;
+    height: 25px;
+    width: 200px;
+}
+
+.RecapBanner stat_bar:after {
+    content: "1";
+    font-size: 0.75em;
+    font-weight: 1000;
+    text-align: center;
+    justify-content: end;
+    align-items: center;
+    display: flex;
+    position: absolute;
+    border-radius: 5px;
+    width: var(--stat_value);
+    height: 25px;
+    padding: 2px 10px 2px 10px;
+    background-color: var(--correct);
+    
+} */
 
 .RecapBanner .buttons_section button img {
     height: 75%;

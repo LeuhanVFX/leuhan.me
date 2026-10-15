@@ -1,3 +1,5 @@
+// FR
+
 const listeMots = [
   "a",
   "abaissa",
@@ -319143,3 +319145,5 @@ const motsFrequents = [
   "western", "whisky", "xenon", "xenophobe", "xeres", "xylophone", "yacht", "yaourt",
   "zebre", "zenith", "zeste", "zizanie", "zodiaque", "zoologie", "zouave"
 ];
+
+// EN
