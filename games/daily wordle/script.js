@@ -134,7 +134,7 @@ function unblur() {
     keyboard = true
 }
 
-function summonRecapBanner(mot, trouve, stats) {
+function summonRecapBanner(mot, texte, stats) {
     keyboard = false
     recap_blur = document.createElement("div")
     recap_blur.classList.add("blurbox")
@@ -148,6 +148,7 @@ function summonRecapBanner(mot, trouve, stats) {
     recap_section = document.createElement("section")
     recap_banner.appendChild(recap_section)
     buttons_section = document.createElement("section")
+    buttons_section.classList.add("buttons_section")
     recap_banner.appendChild(buttons_section)
     recap_blur.addEventListener("click", () => {
         document.body.removeChild(recap_blur)
@@ -160,7 +161,7 @@ function summonRecapBanner(mot, trouve, stats) {
     timer = document.createElement('div')
     timer.classList.add("timer")
     //-----------------------------------------
-    vic_section.innerHTML = `<h2>${trouve}</h2>`
+    vic_section.innerHTML = `<h3>${texte}</h3>`
     stats.forEach((stat) => {
         cadre = document.createElement('div')
         cadre.classList.add("statframe")
@@ -171,13 +172,59 @@ function summonRecapBanner(mot, trouve, stats) {
     })
     recap_section.appendChild(recap_row)
     if (getFromStorage('trouve') == 'true' || getFromStorage('ligne6') != null) {
+        recap = ""
+        lignes.forEach(ligne => {
+            if (ligne[0].getAttribute('state') != null) {
+                ligne.forEach(cell => {
+                    if (cell.getAttribute('state') == 'correct') {
+                        recap += '🟩'
+                    } else if (cell.getAttribute('state') == 'present') {
+                        recap += '🟨'
+                    } else if (cell.getAttribute('state') == 'absent') {
+                        recap += '⬛'
+                    }
+                })
+                recap += "<br>"
+            }
+        })
+        let game_recap = document.createElement('p')
+        game_recap.innerHTML = recap
+        game_recap.style.fontSize = '1.5em'
+        recap_section.appendChild(game_recap)
         let word_reveal = document.createElement("p")
         word_reveal.innerHTML = `Le mot était <br><b>${mot.toUpperCase()}</b>`
         recap_section.appendChild(word_reveal)
-        buttons_section.innerHTML = `<button id="def_button"><img src="book.svg" alt="dictionnaire"><b>Définition</b></button>`
-        def_button = document.getElementById("def_button")
+
+        def_button = document.createElement('button')
+        def_button.innerHTML = `<img src="book.svg" alt="dictionnaire"><b>Définition</b>`
+        buttons_section.appendChild(def_button)
         def_button.addEventListener("click", () => {
             window.open(`https://www.larousse.fr/dictionnaires/francais/${mot}`)
+        })
+
+        copy_button = document.createElement('button')
+        copy_button.innerHTML = `<img src="clipboard.png" alt="clipboard"><b>Partager</b>`
+        copy_button.id = 'copy_button'
+        buttons_section.appendChild(copy_button)
+        copy_button.addEventListener('click', () => {
+            let date = new Date()
+            recap = ""
+        lignes.forEach(ligne => {
+            if (ligne[0].getAttribute('state') != null) {
+                ligne.forEach(cell => {
+                    if (cell.getAttribute('state') == 'correct') {
+                        recap += '🟩'
+                    } else if (cell.getAttribute('state') == 'present') {
+                        recap += '🟨'
+                    } else if (cell.getAttribute('state') == 'absent') {
+                        recap += '⬛'
+                    }
+                })
+                recap += "\n"
+            }
+        })
+            navigator.clipboard.writeText(`Leuhan's Wordle | ${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}\n\n${recap}\nhttps://wordle.leuhan.dev`)
+            summonSimpleBanner('Copié !', 1000)
         })
     }
 
@@ -231,9 +278,9 @@ async function verification() {
 
     if (!ligne_active) {
         if (getFromStorage('trouve') == 'true') {
-            summonRecapBanner(mot, "Victoire !", [["Parties", cherches], ["Victoires", n_trouves], ["Taux", `${Math.floor((n_trouves / Math.max(cherches, 1)) * 100)}%`], ["Moyenne", Number((essais / Math.max(1, ((6 * cherches))) * 6).toFixed(2))]])
+            summonRecapBanner(mot, "Victoire !", [["Parties", cherches], ["Victoires", n_trouves], ["Taux", `${Math.floor((n_trouves / Math.max(cherches, 1)) * 100)}%`]])
         } else {
-            summonRecapBanner(mot, "Perdu !", [["Parties", cherches], ["Victoires", n_trouves], ["Taux", `${Math.floor((n_trouves / Math.max(cherches, 1)) * 100)}%`], ["Moyenne", Number((essais / Math.max(1, ((6 * cherches))) * 6).toFixed(2))]])
+            summonRecapBanner(mot, "Perdu !", [["Parties", cherches], ["Victoires", n_trouves], ["Taux", `${Math.floor((n_trouves / Math.max(cherches, 1)) * 100)}%`]])
         }
         return
     }
@@ -264,8 +311,6 @@ async function verification() {
 
         if (motsProposables.includes(guess)) { // Test si le mot est dans le dictionnaire
             if (!(mots_utilises.includes(guess.toUpperCase()))) { // Test si le mot a déjà été utilisé
-                essais += 1
-                localStorage.setItem('essais', essais)
                 for (let k = 0; k < ligne_active.length; k++) { // Test si les lettres sont bien placées
                     let cell = ligne_active[k]
                     if (cell.innerHTML.toLowerCase() == mot[k].toLowerCase()) {
@@ -285,11 +330,6 @@ async function verification() {
                     if ((dico_mot[cell.innerHTML.toLowerCase()] == 0 && !(cell.hasAttribute('state'))) || !(mot.toLowerCase().includes(cell.innerHTML.toLowerCase()))) {
                         cell.setAttribute('state', 'absent')
                     }
-                }
-                let colorsheme = {
-                    correct: 'rgba(15, 129, 0, 1)',
-                    present: 'rgba(221, 133, 0, 1)',
-                    absent: 'rgba(80, 80, 80, 1)'
                 }
                 for (let m = 0; m < ligne_active.length; m++) { // Changement de couleur des cases
                     let cell = ligne_active[m]
@@ -343,12 +383,11 @@ async function verification() {
                     await sleep(500)
                     localStorage.setItem('trouve', 'true')
                     n_trouves += 1
-                    cherches += 1
                     localStorage.setItem('cherches', cherches)
                     localStorage.setItem('n_trouves', n_trouves)
-                    summonRecapBanner(mot, "Victoire !", [["Parties", cherches], ["Victoires", n_trouves], ["Taux", `${Math.floor((n_trouves / Math.max(cherches, 1)) * 100)}%`], ["Moyenne", Number((essais / Math.max(1, ((6 * cherches))) * 6).toFixed(2))]])
+                    summonRecapBanner(mot, "Victoire !", [["Parties", cherches], ["Victoires", n_trouves], ["Taux", `${Math.floor((n_trouves / Math.max(cherches, 1)) * 100)}%`]])
                     ligne_active = null
-                    
+
                 } else {
                     if (lignes.indexOf(ligne_active) < 5) {
                         mots_utilises.push(guess.toUpperCase())
@@ -362,9 +401,8 @@ async function verification() {
                         active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
 
                     } else {
-                        cherches += 1
                         localStorage.setItem('cherches', cherches)
-                        summonRecapBanner(mot, "Perdu !", [["Parties", cherches], ["Victoires", n_trouves], ["Taux", `${Math.floor((n_trouves / Math.max(cherches, 1)) * 100)}%`], ["Moyenne", Number((essais / Math.max(1, ((6 * cherches))) * 6).toFixed(2))]])
+                        summonRecapBanner(mot, "Perdu !", [["Parties", cherches], ["Victoires", n_trouves], ["Taux", `${Math.floor((n_trouves / Math.max(cherches, 1)) * 100)}%`]])
                         ligne_active = null
                     }
                 }
@@ -698,7 +736,7 @@ settings_button.addEventListener(('change'), () => {
 
 const stat_button = document.getElementById('game_title')
 stat_button.addEventListener('click', () => {
-    summonRecapBanner(mot, "Statistiques", [["Parties", cherches], ["Victoires", n_trouves], ["Taux", `${Math.floor((n_trouves / Math.max(cherches, 1)) * 100)}%`], ["Moyenne", Number((essais / Math.max(1, ((6 * cherches))) * 6).toFixed(2))]])
+    summonRecapBanner(mot, "Statistiques", [["Parties", cherches], ["Victoires", n_trouves], ["Taux", `${Math.floor((n_trouves / Math.max(cherches, 1)) * 100)}%`]])
 })
 
 ///////////////
@@ -838,29 +876,6 @@ if (ligne_active) {
     afficherPremereLettre(mot)
 }
 
-//////////////////////////////
-///// Changement de Date /////
-//////////////////////////////
-
-let date = new Date()
-let numero_mot = date.getDate() + date.getMonth() * 31
-let liste_annee = []
-let annee = date.getFullYear()
-
-for (let i = 0; i < 403; i++) {
-    let ecart = Math.floor((-annee) ** 4)
-    j = (ecart + ecart * i) % liste_mots.length
-    liste_annee.push(liste_mots[j])
-}
-
-let nouveau_mot = liste_annee[numero_mot]
-
-if (getFromStorage('mot') !== nouveau_mot) {
-    mot = nouveau_mot
-    localStorage.setItem('mot', mot)
-    reset()
-}
-
 //////////////////////
 ///// Événements /////
 //////////////////////
@@ -918,20 +933,11 @@ document.addEventListener("keydown", (event) => {
 
 );
 
-/////////////////
-///// DEBUG /////
-/////////////////
-
-// document.addEventListener('dblclick', (event) => {
-//     reset_stats()
-// })
-
 let time = "00:00:00"
 
 let n_trouves = 0
 let cherches = 0
 let taux = 0
-let essais = 0
 
 if (getFromStorage('n_trouves') != null) {
     n_trouves = Number(getFromStorage('n_trouves'))
@@ -954,13 +960,6 @@ if (getFromStorage('taux') != null) {
     localStorage.setItem('taux', taux)
 }
 
-if (getFromStorage('essais') != null) {
-    essais = Number(getFromStorage('essais'))
-} else {
-    essais = 0
-    localStorage.setItem('essaiss', essais)
-}
-
 function reset_stats() {
     n_trouves = 0
     localStorage.setItem('n_trouves', n_trouves)
@@ -968,7 +967,39 @@ function reset_stats() {
     localStorage.setItem('cherches', cherches)
     taux = 0
     localStorage.setItem('taux', taux)
-    essais = 0
-    localStorage.setItem('essais', essais)
     console.log(n_trouves, cherches, taux, essais)
 }
+
+//////////////////////////////
+///// Changement de Date /////
+//////////////////////////////
+
+let date = new Date()
+let numero_mot = date.getDate() + date.getMonth() * 31
+let liste_annee = []
+let annee = date.getFullYear()
+
+for (let i = 0; i < 403; i++) {
+    let ecart = Math.floor((-annee) ** 4)
+    j = (ecart + ecart * i) % liste_mots.length
+    liste_annee.push(liste_mots[j])
+}
+
+let nouveau_mot = liste_annee[numero_mot]
+
+if (getFromStorage('mot') !== nouveau_mot) {
+    mot = nouveau_mot
+    localStorage.setItem('mot', mot)
+    reset()
+    cherches += 1
+}
+
+
+
+/////////////////
+///// DEBUG /////
+/////////////////
+
+// document.addEventListener('dblclick', (event) => {
+//     reset()
+// })

@@ -36,7 +36,7 @@ html {
     --correct: rgba(15, 129, 0, 1);
     --present: rgba(221, 133, 0, 1);
     --absent: rgba(80, 80, 80, 1);
-    overflow: hidden;
+    height: 100vh;
 }
 
 main {
@@ -44,7 +44,6 @@ main {
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    gap: 50px;
     height: 100vh;
     overflow: hidden;
 }
@@ -52,7 +51,7 @@ main {
 body {
     display: block;
     margin: 0;
-    padding: 0px;
+    padding: 0;
     width: 100%;
     font-family: 'Nevanta';
     text-align: justify;
@@ -94,10 +93,12 @@ header {
 .menu {
     display: grid;
     width: 100%;
+    height: 100%;
     max-width: 750px;
     margin: auto;
     grid-template-columns: 25% 50% 25%;
     align-items: center;
+    justify-content: center;
     padding: 0;
     border-radius: 0 0 10px 10px;
     background-color: var(--secondary);
@@ -974,7 +975,7 @@ p {
 .RecapBanner {
     display: flex;
     flex-direction: column;
-    gap: 25px;
+    gap: 10px;
     position: absolute;
     top: 50%;
     left: 50%;
@@ -1002,7 +1003,7 @@ p {
     transition: 0.5s;
 }
 
-.RecapBanner button {
+.RecapBanner .buttons_section button {
     display: flex;
     flex-direction: row;
     gap: 15px;
@@ -1015,21 +1016,22 @@ p {
     text-align: center;
     text-justify: center;
     color: var(--text-color);
-    transform: scaleY(1);
+    transform: scale(1);
     transform-origin: top;
-    transition: ease-out 0.2s;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     z-index: 1;
+    transition: 0.2s ease-in-out;
 }
 
 .RecapBanner .recap_row {
     display: flex;
     margin: auto;
     flex-direction: row;
+    flex-wrap: wrap;
     gap: 10px;
-    width: 90%;
+    width: 100%;
     justify-content: center;
     align-items: center;
 }
@@ -1074,25 +1076,23 @@ p {
 
 }
 
-.RecapBanner button img {
+.RecapBanner .buttons_section button img {
     height: 75%;
     margin: auto;
     padding: 0px;
     transition: 0.2s;
 }
 
-.RecapBanner button:hover {
-    transform: scale(1.1);
+.RecapBanner .buttons_section button:hover {
+    transform: scale(1.025);
     filter: brightness(1.05);
     transform-origin: center;
-    transition: 0.1s;
 }
 
-.RecapBanner button:active {
-    transform: scale(0.9);
+.RecapBanner .buttons_section button:active {
+    transform: scale(0.975);
     filter: brightness(0.9);
     transform-origin: center;
-    transition: 0.1s;
 }
 
 .RecapBanner .timer {
@@ -1106,6 +1106,18 @@ p {
     content: "Prochain mot dans :";
     font-size: 0.65em;
     font-weight: normal;
+}
+
+.RecapBanner .buttons_section {
+    display: flex;
+    flex-direction: row;
+    gap: 10px;
+    flex-wrap: wrap;
+    max-width: 90%;
+}
+
+.RecapBanner .buttons_section #copy_button img {
+    filter: invert(1);
 }
 
 @media screen and (max-width: 1024px) {
@@ -1206,6 +1218,10 @@ p {
     .banner {
         width: 70%;
         font-size: 3vw;
+    }
+
+    .RecapBanner .buttons_section {
+        flex-direction: column;
     }
 }
 
