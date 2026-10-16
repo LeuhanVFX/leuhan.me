@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Wordle EN| Leuhan</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="script.js" defer></script>
+    <script src="liste_mots.js"></script>
+    <meta name="viewport" content="width=device-width">
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="icon2.png">
+    <link rel="manifest" href="manifest.json">
+</head>
+<main>
+    <header>
+        <nav class="menu">
+            <div class="about menu_section">
+                <label for="rules_button" class="menuButton">
+                    <img src="livre-alt.svg" alt="rules_icon">
+                </label>
+                <button class="menuButton" id="stat_button">
+                    <img src="statistics.png" alt="statistics">
+                </button>
+            </div>
+            <h1 class="game_logo" id="game_title">WORDLE</h1>
+            <div class="settings menu_section">
+                <button class="menuButton" id="lang_button" style="font-size: 1.25em;">
+                    🇬🇧
+                </button>
+                <span class="language_selection" id="language_selection">
+                    <form action="get">
+                        <a href="../">🇫🇷 Français</a>
+                        <a href="" class="selected">🇬🇧 English</a>
+                    </form>
+                </span>
+                <label for="settings_button" class="menuButton">
+                    <img src="settings.png" alt="settings_icon">
+                </label>
+            </div>
+        </nav>
+
+        <div class="center">
+            <label for="rules_button" class="blurbox" id="rules_blur"></label>
+            <input type="checkbox" id="rules_button">
+            <div id="rules_chart" class="chart">
+                <h2>
+                    How to play ?
+                </h2>
+                <p>
+                    You have 6 tries to find a secret word that changes every day.
+                    <br>
+                    <br>
+                    With each try, the letters will change color :
+                </p>
+                <ul>
+                    <li>
+                        <b><span class="exemple" id="correctex">A</span> If the letter is at the right place</b>
+                    </li>
+                    <li>
+                        <b><span class="exemple" id="presentex">A</span> If the letter is in the word but not at the
+                            right place</b>
+                    </li>
+                    <li>
+                        <b><span class="exemple" id="absentex">A</span> If the letter is not in the word</b>
+                    </li>
+                </ul>
+                <!-- Application
+                <div class="separator"></div>
+                <section id="download">
+                    <h2>Téléchargement</h2>
+                    <p>Téléchargez l'application maintenant pour y jouer hors ligne !</p>
+                    <a href="Leuhan Wordle.apk" class="downloadButton"><b>Télécharger</b></a>
+                </section> -->
+                <div class="separator"></div>
+                <h2>Credits</h2>
+                <p>
+                    Website made by <a href="https://ko-fi.com/leuhan" target="_blank"><b>Leuhan</b></a>
+                </p>
+                <p>
+                    Interface inspired of <a href="https://wordle.louan.me" target="_blank"><b>Le Mot</b></a> by Louan
+                </p>
+                <label for="rules_button" id="rules_close_button" class='simple_button'>
+                    <img src="close.png" alt="close">
+                </label>
+            </div>
+            <label for="settings_button" class="blurbox" id="settings_blur"></label>
+            <input type="checkbox" id="settings_button">
+            <div class="chart" id="settings_chart">
+                <div class="theme-toggle">
+                    <div class="toggleWrapper">
+                        <input class="input" id="dn" type="checkbox" checked />
+                        <label class="toggle" for="dn">
+                            <span class="toggle__handler">
+                                <span class="crater crater--1"></span>
+                                <span class="crater crater--2"></span>
+                                <span class="crater crater--3"></span>
+                            </span>
+                            <span class="star star--1"></span>
+                            <span class="star star--2"></span>
+                            <span class="star star--3"></span>
+                            <span class="star star--4"></span>
+                            <span class="star star--5"></span>
+                            <span class="star star--6"></span>
+                        </label>
+                    </div>
+                </div>
+                <div class="separator"></div>
+                <h2>Theme</h2>
+                <div class="row" style="width: 80%;">
+                    <p>
+                        <b>
+                            <span class="exemple" id="correctex">A</span>
+                            <span class="exemple" id="presentex">A</span>
+                            <span class="exemple" id="absentex">A</span>
+                        </b>
+                    </p>
+                    <select name="theme" id="scheme_selector">
+                        <option value="0">🟩🟨</option>
+                        <option value="1">🟥🟨</option>
+                    </select>
+                </div>
+                <div class="separator"></div>
+                <h2>Arrangement</h2>
+                <div class="row" style="width: 80%;">
+                    <h3>Keyboard</h3>
+                    <select name="dispo_selector" id="dispo_selector">
+                        <option value="Default">Default</option>
+                        <option value="Inverse">Reversed</option>
+                        <option value="Droite">Actions to the right</option>
+                    </select>
+                </div>
+
+                <label for="settings_button" id="settings_close_button" class='simple_button'>
+                    <img src="close.png" alt="close">
+                </label>
+            </div>
+        </div>
+    </header>
+
+    <body>
+        <div class="game">
+            <div class="grid" id="grid">
+
+                <span id="ligne1" class="ligne">
+                </span>
+                <span id="ligne2" class="ligne">
+                </span>
+                <span id="ligne3" class="ligne">
+                </span>
+                <span id="ligne4" class="ligne">
+                </span>
+                <span id="ligne5" class="ligne">
+                </span>
+                <span id="ligne6" class="ligne">
+                </span>
+            </div>
+            <div class="keyboard" id="keyboard">
+            </div>
+        </div>
+    </body>
+</main>
+
+</html>
+</body>
+</main>
+
+</html>

@@ -8,6 +8,11 @@
     src: url('NevantaExtraBold-9MdV5.otf');
 }
 
+@font-face {
+  font-family: 'Twemoji Country Flags';
+  src: url('TwemojiCountryFlags.woff2') format('woff2');
+}
+
 *,
 *::before,
 *::after {
@@ -37,6 +42,7 @@ html {
     --present: rgba(221, 133, 0, 1);
     --absent: rgba(80, 80, 80, 1);
     height: 100vh;
+    user-select: none;
 }
 
 main {
@@ -53,10 +59,9 @@ body {
     margin: 0;
     padding: 0;
     width: 100%;
-    font-family: 'Nevanta';
+    font-family: 'Twemoji Country Flags', 'Nevanta', sans-serif;
     text-align: justify;
     background-color: var(--primary);
-    overflow: scroll;
     color: white;
     align-items: center;
     justify-content: space-between;
@@ -366,7 +371,7 @@ header {
 
 }
 
-.menu .about {
+.menu .menu_section {
     display: flex;
     width: fit-content;
     margin: auto;
@@ -381,15 +386,54 @@ header {
     margin: auto;
     background-color: var(--button-color);
     border: solid 2px var(--text-color);
+    font-family: 'Twemoji Country Flags', 'Nevanta', sans-serif;
     width: 40px;
     aspect-ratio: 1/1;
     border-radius: 5px;
     transform: scaleY(1);
     transform-origin: top;
     transition: ease-out 0.2s;
-    align-content: center;
+    align-items: center;
+    justify-content: center;
     cursor: pointer;
     z-index: 1;
+}
+
+.language_selection {
+    display: none;
+    position: absolute;
+    top: 75px;
+    transform: translateX(-25%);
+    padding: 5px;
+    border-radius: 10px;
+    background-color: var(--secondary);
+    border: solid var(--text-color) 2px;
+    transition: 0.2s ease-in-out;
+}
+
+.language_selection form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    width: max-content;
+}
+
+.language_selection a {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    padding: 5px;
+    border-radius: 5px;
+    color: white;
+    text-decoration: none;
+}
+
+.language_selection a.selected {
+    background-color: rgba(255, 255, 255, 0.3);
+}
+
+.language_selection a:hover {
+    background-color: rgba(255, 255, 255, 0.15);
 }
 
 .menu .menuButton img {
@@ -400,15 +444,14 @@ header {
 }
 
 .menu .menuButton:hover {
-    transform: scale(1.1);
-    filter: brightness(1.05);
+    transform: scale(1);
+    filter: brightness(0.9);
     transform-origin: center;
     transition: 0.1s;
 }
 
 .menu .menuButton:active {
-    transform: scale(0.9);
-    filter: brightness(0.9);
+    transform: scale(0.95);
     transform-origin: center;
     transition: 0.1s;
 }
@@ -1049,10 +1092,9 @@ p {
     background-color: rgba(0, 0, 0, 0.25);
     display: flex;
     font-weight: 1000;
-    font-size: 0.75em;
+    font-size: 0.7em;
     height: 30%;
     width: 100%;
-    padding: 10px;
     align-items: center;
     justify-content: center;
 }
@@ -1151,6 +1193,15 @@ p {
 
 .RecapBanner .buttons_section #copy_button img {
     filter: invert(1);
+}
+
+box {
+    display: block;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
 }
 
 @media screen and (max-width: 1024px) {

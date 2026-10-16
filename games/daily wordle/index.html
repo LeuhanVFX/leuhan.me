@@ -3,7 +3,7 @@
 <html>
 
 <head>
-    <title>Wordle Français | Leuhan</title>
+    <title>Wordle FR | Leuhan</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js" defer></script>
     <script src="liste_mots.js"></script>
@@ -15,7 +15,7 @@
 <main>
     <header>
         <nav class="menu">
-            <div class="about">
+            <div class="about menu_section">
                 <label for="rules_button" class="menuButton">
                     <img src="livre-alt.svg" alt="rules_icon">
                 </label>
@@ -24,7 +24,16 @@
                 </button>
             </div>
             <h1 class="game_logo" id="game_title">WORDLE</h1>
-            <div class="settings">
+            <div class="settings menu_section">
+                <button class="menuButton" id="lang_button" style="font-size: 1.25em;">
+                    🇫🇷
+                </button>
+                <span class="language_selection" id="language_selection">
+                    <form action="get">
+                        <a href="" class="selected">🇫🇷 Français</a>
+                        <a href="/en">🇬🇧 English</a>
+                    </form>
+                </span>
                 <label for="settings_button" class="menuButton">
                     <img src="settings.png" alt="settings_icon">
                 </label>
@@ -42,17 +51,17 @@
                     Vous avez jusqu'à 6 tentatives pour trouver un mot caché qui change chaque jour.
                     <br>
                     <br>
-                    À chaque tentative, les lettres changeront de couleur.
+                    À chaque tentative, les lettres changeront de couleur :
                 </p>
                 <ul>
                     <li>
-                        <b><span class="exemple" id="correctex">A</span> La lettre est bien placée</b>
+                        <b><span class="exemple" id="correctex">A</span> Si la lettre est bien placée</b>
                     </li>
                     <li>
-                        <b><span class="exemple" id="presentex">A</span> La lettre est présente mais mal placée</b>
+                        <b><span class="exemple" id="presentex">A</span> Si la lettre est dans le mot mais pas à la bonne place</b>
                     </li>
                     <li>
-                        <b><span class="exemple" id="absentex">A</span> La lettre n'est pas dans le mot</b>
+                        <b><span class="exemple" id="absentex">A</span> Si la lettre n'est pas dans le mot</b>
                     </li>
                 </ul>
                 <!-- Application

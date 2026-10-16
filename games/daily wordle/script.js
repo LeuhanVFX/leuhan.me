@@ -56,8 +56,8 @@ async function reset() {
     active_cell = ligne_active[0]
     active_cell.style.borderColor = 'rgb(249, 176, 252)'
     active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
-    mots_utilises = []
-    deleteFromStorage('mots_utilises')
+    fr_mots_utilises = []
+    deleteFromStorage('fr_mots_utilises')
     keys.forEach((key) => {
         key.classList.remove('correct')
         key.classList.remove('present')
@@ -66,13 +66,13 @@ async function reset() {
     })
     afficherPremereLettre(mot)
     for (let i = 1; i < 7; i++) {
-        if (localStorage.getItem(`ligne${i}`) !== null) {
-            deleteFromStorage(`ligne${i}`)
+        if (localStorage.getItem(`fr_ligne${i}`) !== null) {
+            deleteFromStorage(`fr_ligne${i}`)
         }
     }
-    localStorage.setItem('trouve', 'false')
+    localStorage.setItem('fr_trouve', 'false')
     lettres_trouvees = []
-    mot_l.forEach((lettre) => {
+    mot_l.forEach(() => {
         lettres_trouvees.push(' ')
     })
 
@@ -171,7 +171,7 @@ function summonRecapBanner(mot, texte, stats) {
 
     })
     recap_section.appendChild(recap_row)
-    if (getFromStorage('trouve') == 'true' || getFromStorage('ligne6') != null) {
+    if (getFromStorage('fr_trouve') == 'true' || getFromStorage('fr_ligne6') != null) {
         recap = ""
         lignes.forEach(ligne => {
             if (ligne[0].getAttribute('state') != null) {
@@ -195,7 +195,7 @@ function summonRecapBanner(mot, texte, stats) {
         // let recap_graph = document.createElement('div')
         // recap_graph.classList.add('stat_graph')
         // recap_section.appendChild(recap_graph)
-        // const graph_stats = [l1, l2, l3, l4, l5, l6, defaites]
+        // const graph_stats = [l1, l2, l3, l4, l5, l6, fr_defaites]
         // stat_max = Math.max(...graph_stats)
         // console.log(graph_stats, stat_max)
         // for (let s = 0 ; s < graph_stats.length ; s++) {
@@ -247,7 +247,7 @@ function summonRecapBanner(mot, texte, stats) {
                 recap += "\n"
             }
         })
-            navigator.clipboard.writeText(`Leuhan's Wordle | ${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()}\n\n${recap}\nhttps://wordle.leuhan.dev`)// | ${langue}
+            navigator.clipboard.writeText(`Leuhan's Wordle | ${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} | FR\n\n${recap}\nhttps://wordle.leuhan.dev`)// | ${langue}
             summonSimpleBanner('Copié !', 1000)
         })
     }
@@ -301,10 +301,10 @@ async function summonSimpleBanner(text, duration) {
 async function verification() {
 
     if (!ligne_active) {
-        if (getFromStorage('trouve') == 'true') {
-            summonRecapBanner(mot, "Victoire !", [["Parties", cherches], ["Victoires", n_trouves], ["Taux", `${Math.floor((n_trouves / Math.max(cherches, 1)) * 100)}%`]])
+        if (getFromStorage('fr_trouve') == 'true') {
+            summonRecapBanner(mot, "Victoire !", [["Parties", fr_cherches], ["Victoires", fr_n_trouves], ["Victoires (%)", `${Math.floor((fr_n_trouves / Math.max(fr_cherches, 1)) * 100)}`]])
         } else {
-            summonRecapBanner(mot, "Perdu !", [["Parties", cherches], ["Victoires", n_trouves], ["Taux", `${Math.floor((n_trouves / Math.max(cherches, 1)) * 100)}%`]])
+            summonRecapBanner(mot, "Perdu !", [["Parties", fr_cherches], ["Victoires", fr_n_trouves], ["Victoires (%)", `${Math.floor((fr_n_trouves / Math.max(fr_cherches, 1)) * 100)}`]])
         }
         return
     }
@@ -334,7 +334,7 @@ async function verification() {
         })
 
         if (motsProposables.includes(guess)) { // Test si le mot est dans le dictionnaire
-            if (!(mots_utilises.includes(guess.toUpperCase()))) { // Test si le mot a déjà été utilisé
+            if (!(fr_mots_utilises.includes(guess.toUpperCase()))) { // Test si le mot a déjà été utilisé
                 for (let k = 0; k < ligne_active.length; k++) { // Test si les lettres sont bien placées
                     let cell = ligne_active[k]
                     if (cell.innerHTML.toLowerCase() == mot[k].toLowerCase()) {
@@ -402,22 +402,23 @@ async function verification() {
                     }
                     await sleep(100);
                 }
-                localStorage.setItem(`ligne${lignes.indexOf(ligne_active) + 1}`, guess)
+                localStorage.setItem(`fr_ligne${lignes.indexOf(ligne_active) + 1}`, guess)
                 if (juste == mot.length) {
                     await sleep(500)
-                    localStorage.setItem('trouve', 'true')
-                    n_trouves += 1
-                    localStorage.setItem('cherches', cherches)
-                    localStorage.setItem('n_trouves', n_trouves)
-                    n_l =  lignes.indexOf(ligne_active)+1
-                    localStorage.setItem(`l${n_l}`, Number(getFromStorage(`l${n_l}`)+1))
-                    summonRecapBanner(mot, "Victoire !", [["Parties", cherches], ["Victoires", n_trouves], ["Taux", `${Math.floor((n_trouves / Math.max(cherches, 1)) * 100)}%`]])
+                    localStorage.setItem('fr_trouve', 'true')
+                    fr_n_trouves += 1
+                    localStorage.setItem('fr_cherches', fr_cherches)
+                    localStorage.setItem('fr_n_trouves', fr_n_trouves)
+                    // Graphique Statistiques
+                    // n_l =  lignes.indexOf(ligne_active)+1
+                    // localStorage.setItem(`l${n_l}`, Number(getFromStorage(`l${n_l}`)+1))
+                    summonRecapBanner(mot, "Victoire !", [["Parties", fr_cherches], ["Victoires", fr_n_trouves], ["Victoires (%)", `${Math.floor((fr_n_trouves / Math.max(fr_cherches, 1)) * 100)}`]])
                     ligne_active = null
 
                 } else {
                     if (lignes.indexOf(ligne_active) < 5) {
-                        mots_utilises.push(guess.toUpperCase())
-                        localStorage.setItem('mots_utilises', mots_utilises.toString())
+                        fr_mots_utilises.push(guess.toUpperCase())
+                        localStorage.setItem('fr_mots_utilises', fr_mots_utilises.toString())
                         ligne_active = lignes[lignes.indexOf(ligne_active) + 1]
                         afficherPremereLettre(mot)
                         active_cell.style.borderColor = 'var(--text-color)'
@@ -427,19 +428,19 @@ async function verification() {
                         active_cell.style.boxShadow = '0px 0px 10px 1px rgb(252, 158, 255)'
 
                     } else {
-                        localStorage.setItem('cherches', cherches)
-                        summonRecapBanner(mot, "Perdu !", [["Parties", cherches], ["Victoires", n_trouves], ["Taux", `${Math.floor((n_trouves / Math.max(cherches, 1)) * 100)}%`]])
+                        localStorage.setItem('fr_cherches', fr_cherches)
+                        summonRecapBanner(mot, "Perdu !", [["Parties", fr_cherches], ["Victoires", fr_n_trouves], ["Victoires (%)", `${Math.floor((fr_n_trouves / Math.max(fr_cherches, 1)) * 100)}`]])
                         ligne_active = null
-                        defaites++
-                        localStorage.setItem('defaites', defaites)
+                        fr_defaites++
+                        localStorage.setItem('fr_defaites', fr_defaites)
                     }
                 }
-                if (getFromStorage("trouve") == "false" && ligne_active) {
+                if (getFromStorage('fr_trouve') == "false" && ligne_active) {
                     overlay(ligne_active)
                 }
             } else {
                 summonSimpleBanner('Mot déjà essayé', 1000)
-                let ligne = document.getElementById('ligne' + (lignes.indexOf(ligne_active) + 1))
+                let ligne = document.getElementById('fr_ligne' + (lignes.indexOf(ligne_active) + 1))
 
                 ligne.animate([
                     { transform: 'translateX(0px)' },
@@ -453,7 +454,7 @@ async function verification() {
             }
         } else {
             summonSimpleBanner("Le mot n'est pas dans le dictionnaire", 1000)
-            let ligne = document.getElementById('ligne' + (lignes.indexOf(ligne_active) + 1))
+            let ligne = document.getElementById('fr_ligne' + (lignes.indexOf(ligne_active) + 1))
 
             ligne.animate([
                 { transform: 'translateX(0px)' },
@@ -467,7 +468,7 @@ async function verification() {
         }
     } else {
         summonSimpleBanner(`Veuillez rentrer un mot de ${mot.length} lettres`, 1000)
-        let ligne = document.getElementById('ligne' + (lignes.indexOf(ligne_active) + 1))
+        let ligne = document.getElementById('fr_ligne' + (lignes.indexOf(ligne_active) + 1))
 
         ligne.animate([
             { transform: 'translateX(0px)', scale: 1 },
@@ -646,7 +647,7 @@ async function initKeyboard(disposition) {
     });
 
     for (let i = 0; i < 6; i++) {
-        if (getFromStorage('ligne' + (i + 1)) !== null) {
+        if (getFromStorage('fr_ligne' + (i + 1)) !== null) {
             let ligne = lignes[i]
             verifRapide(ligne)
         }
@@ -764,8 +765,27 @@ settings_button.addEventListener(('change'), () => {
 
 const stat_button = document.getElementById('stat_button')
 stat_button.addEventListener('click', () => {
-    summonRecapBanner(mot, "Statistiques", [["Parties", cherches], ["Victoires", n_trouves], ["Taux", `${Math.floor((n_trouves / Math.max(cherches, 1)) * 100)}%`]])
+    summonRecapBanner(mot, "Statistiques", [["Parties", fr_cherches], ["Victoires", fr_n_trouves], ["Victoires (%)", `${Math.floor((fr_n_trouves / Math.max(fr_cherches, 1)) * 100)}`]])
 })
+
+const lang_button = document.getElementById('lang_button')
+const lang_sel = document.getElementById('language_selection')
+lang_button.addEventListener('mouseup', async () => {
+    lang_sel.style.display = 'flex'
+    // let temp_box = document.createElement('box')
+    // temp_box.style.zIndex = 4
+    // temp_box.addEventListener('click', () => {
+    //     lang_sel.style.display = 'none'
+    //     document.body.removeChild(temp_box)
+    // })
+    // lang_sel.style.zIndex = 100
+    // document.body.appendChild(temp_box)
+    await sleep(10)
+    document.addEventListener('click', () => {
+        lang_sel.style.display = 'none'
+    }, { once : true })
+})
+
 
 ///////////////
 ///// Mot /////
@@ -776,8 +796,8 @@ let cells_list = []
 let motsProposables = listeMots
 let mot = ''
 
-if (getFromStorage("mot") != null) {
-    mot = getFromStorage("mot")
+if (getFromStorage("fr_mot") != null) {
+    mot = getFromStorage("fr_mot")
 } else {
     mot = "emmetrope"
 }
@@ -793,8 +813,6 @@ lettres_trouvees[0] = mot_l[0].toUpperCase()
 ///////////////
 ///// Jeu /////
 ///////////////
-
-let langue = 'FR'
 
 const blurbox = document.createElement('div')
 document.body.appendChild(blurbox)
@@ -823,10 +841,10 @@ keyboard = true
 
 let ligne_active = lignes[0] // ligne active
 
-let mots_utilises = [] // Mots déjà testés
+let fr_mots_utilises = [] // Mots déjà testés
 
-if (localStorage.getItem('mots_utilises') !== null) {
-    mots_utilises = getFromStorage('mots_utilises').split(',')
+if (localStorage.getItem('fr_mots_utilises') !== null) {
+    fr_mots_utilises = getFromStorage('fr_mots_utilises').split(',')
 }
 
 ///////////////////////
@@ -868,9 +886,9 @@ initKeyboard(disposition)
 //////////////////////////////////
 
 for (let i = 0; i < 6; i++) {
-    if (localStorage.getItem('ligne' + (i + 1))) {
+    if (localStorage.getItem('fr_ligne' + (i + 1))) {
         let ligne = lignes[i]
-        let cookie_ligne = getFromStorage('ligne' + (i + 1))
+        let cookie_ligne = getFromStorage('fr_ligne' + (i + 1))
         ligne.forEach((cell, j) => {
             cell.innerHTML = cookie_ligne[j].toUpperCase()
             cell.setAttribute('used', 'true')
@@ -884,18 +902,13 @@ for (let i = 0; i < 6; i++) {
     }
 }
 
-if (getFromStorage('trouve') == 'true') {
+if (getFromStorage('fr_trouve') == 'true') {
     ligne_active = null
 }
 
 if (ligne_active) {
     overlay(ligne_active)
 }
-// if (getFromStorage('trouve') == 'true') {
-//     ligne_active = null
-// } else {
-//     overlay(ligne_active)
-// }
 
 let active_cell = null
 
@@ -965,9 +978,9 @@ document.addEventListener("keydown", (event) => {
 
 let time = "00:00:00"
 
-let n_trouves = 0
-let cherches = 0
-let taux = 0
+let fr_n_trouves = 0
+let fr_cherches = 0
+let fr_taux = 0
 
 // Statistiques Graphiques
 // let l1 = 0
@@ -976,81 +989,81 @@ let taux = 0
 // let l4 = 0
 // let l5 = 0
 // let l6 = 0
-// let defaites = 0
+// let fr_defaites = 0
 
-if (getFromStorage('n_trouves') != null) {
-    n_trouves = Number(getFromStorage('n_trouves'))
+if (getFromStorage('fr_n_trouves') != null) {
+    fr_n_trouves = Number(getFromStorage('fr_n_trouves'))
 } else {
-    n_trouves = 0
-    localStorage.setItem('n_trouves', 0)
+    fr_n_trouves = 0
+    localStorage.setItem('fr_n_trouves', 0)
 }
 
-if (getFromStorage("cherches") != null) {
-    cherches = Number(getFromStorage('cherches'))
+if (getFromStorage("fr_cherches") != null) {
+    fr_cherches = Number(getFromStorage('fr_cherches'))
 } else {
-    cherches = 0
-    localStorage.setItem("cherchess", cherches)
+    fr_cherches = 0
+    localStorage.setItem("fr_cherchess", fr_cherches)
 }
 
-if (getFromStorage('taux') != null) {
-    taux = Number(getFromStorage("taux"))
+if (getFromStorage('fr_taux') != null) {
+    fr_taux = Number(getFromStorage("fr_taux"))
 } else {
-    taux = 0
-    localStorage.setItem('taux', taux)
+    fr_taux = 0
+    localStorage.setItem('fr_taux', fr_taux)
 }
 
 // Statistiques Graphiques
-// if (getFromStorage('l1') != null) {
-//     l1 = getFromStorage('l1')
+// if (getFromStorage('fr_l1') != null) {
+//     fr_l1 = getFromStorage('fr_l1')
 // } else {
-//     l1 = 0
-//     localStorage.setItem('l1', 0)
+//     fr_l1 = 0
+//     localStorage.setItem('fr_l1', 0)
 // }
-// if (getFromStorage('l2') != null) {
-//     l2 = getFromStorage('l2')
+// if (getFromStorage('fr_l2') != null) {
+//     fr_l2 = getFromStorage('fr_l2')
 // } else {
-//     l2 = 0
-//     localStorage.setItem('l2', 0)
+//     fr_l2 = 0
+//     localStorage.setItem('fr_l2', 0)
 // }
-// if (getFromStorage('l3') != null) {
-//     l3 = getFromStorage('l3')
+// if (getFromStorage('fr_l3') != null) {
+//     fr_l3 = getFromStorage('fr_l3')
 // } else {
-//     l3 = 0
-//     localStorage.setItem('l3', 0)
+//     fr_l3 = 0
+//     localStorage.setItem('fr_l3', 0)
 // }
-// if (getFromStorage('l4') != null) {
-//     l4 = getFromStorage('l4')
+// if (getFromStorage('fr_l4') != null) {
+//     fr_l4 = getFromStorage('fr_l4')
 // } else {
-//     l4 = 0
-//     localStorage.setItem('l4', 0)
+//     fr_l4 = 0
+//     localStorage.setItem('fr_l4', 0)
 // }
-// if (getFromStorage('l5') != null) {
-//     l5 = getFromStorage('l5')
+// if (getFromStorage('fr_l5') != null) {
+//     fr_l5 = getFromStorage('l5')
 // } else {
-//     l5 = 0
-//     localStorage.setItem('l5', 0)
+//     fr_l5 = 0
+//     localStorage.setItem('fr_l5', 0)
 // }
-// if (getFromStorage('l6') != null) {
-//     l6 = getFromStorage('l6')
+// if (getFromStorage('fr_l6') != null) {
+//     fr_l6 = getFromStorage('fr_l6')
 // } else {
-//     l6 = 0
-//     localStorage.setItem('l6', 0)
+//     fr_l6 = 0
+//     localStorage.setItem('fr_l6', 0)
 // }
-// if (getFromStorage('defaites') != null) {
-//     defaites = getFromStorage('defaites')
+// if (getFromStorage('fr_defaites') != null) {
+//     fr_defaites = getFromStorage('fr_defaites')
 // } else {
-//     defaites = 0
-//     localStorage.setItem('defaites', 0)
+//     fr_defaites = 0
+//     localStorage.setItem('fr_defaites', 0)
 // }
 
 function reset_stats() {
-    n_trouves = 0
-    localStorage.setItem('n_trouves', n_trouves)
-    cherches = 0
-    localStorage.setItem('cherches', cherches)
-    taux = 0
-    localStorage.setItem('taux', taux)
-    console.log(n_trouves, cherches, taux, essais)
+    fr_n_trouves = 0
+    localStorage.setItem('fr_n_trouves', fr_n_trouves)
+    fr_cherches = 0
+    localStorage.setItem('fr_cherches', fr_cherches)
+    fr_taux = 0
+    localStorage.setItem('fr_taux', fr_taux)
+    console.log(fr_n_trouves, fr_cherches, fr_taux, essais)
 }
 
 //////////////////////////////
@@ -1070,11 +1083,12 @@ for (let i = 0; i < 403; i++) {
 
 let nouveau_mot = liste_annee[numero_mot]
 
-if (getFromStorage('mot') !== nouveau_mot) {
+if (getFromStorage('fr_mot') !== nouveau_mot) {
     mot = nouveau_mot
-    localStorage.setItem('mot', mot)
+    localStorage.setItem('fr_mot', mot)
     reset()
-    cherches += 1
+    fr_cherches += 1
+    localStorage.setItem('fr_cherches', fr_cherches)
 }
 
 
