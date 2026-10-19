@@ -12,7 +12,8 @@
     <link rel="icon" type="image/png" href="icon2.png">
     <link rel="manifest" href="manifest.json">
 </head>
-<main>
+
+<body>
     <header>
         <nav class="menu">
             <div class="about menu_section">
@@ -30,7 +31,7 @@
                 </button>
                 <span class="language_selection" id="language_selection">
                     <form action="get">
-                        <a href="" class="selected">🇫🇷 Français</a>
+                        <a class="selected">🇫🇷 Français</a>
                         <a href="/en">🇬🇧 English</a>
                     </form>
                 </span>
@@ -58,7 +59,8 @@
                         <b><span class="exemple" id="correctex">A</span> Si la lettre est bien placée</b>
                     </li>
                     <li>
-                        <b><span class="exemple" id="presentex">A</span> Si la lettre est dans le mot mais pas à la bonne place</b>
+                        <b><span class="exemple" id="presentex">A</span> Si la lettre est dans le mot mais pas à la
+                            bonne place</b>
                     </li>
                     <li>
                         <b><span class="exemple" id="absentex">A</span> Si la lettre n'est pas dans le mot</b>
@@ -77,7 +79,7 @@
                     Site créé par <a href="https://ko-fi.com/leuhan" target="_blank"><b>Leuhan</b></a>
                 </p>
                 <p>
-                    Interface inspirée de <a href="https://wordle.louan.me" target="_blank"><b>Le Mot</b></a> par Louan
+                    Site hébergé sur <a href="https://lws.fr" target="_blank"><b>LWS</b></a>
                 </p>
                 <label for="rules_button" id="rules_close_button" class='simple_button'>
                     <img src="close.png" alt="close">
@@ -86,6 +88,7 @@
             <label for="settings_button" class="blurbox" id="settings_blur"></label>
             <input type="checkbox" id="settings_button">
             <div class="chart" id="settings_chart">
+                <!-- Theme Toggle
                 <div class="theme-toggle">
                     <div class="toggleWrapper">
                         <input class="input" id="dn" type="checkbox" checked />
@@ -104,7 +107,7 @@
                         </label>
                     </div>
                 </div>
-                <div class="separator"></div>
+                <div class="separator"></div> -->
                 <h2>Thème</h2>
                 <div class="row" style="width: 80%;">
                     <p>
@@ -137,7 +140,7 @@
         </div>
     </header>
 
-    <body>
+    <main>
         <div class="game">
             <div class="grid" id="grid">
 
@@ -157,11 +160,7 @@
             <div class="keyboard" id="keyboard">
             </div>
         </div>
-    </body>
-</main>
-
-</html>
+    </main>
 </body>
-</main>
 
 </html>

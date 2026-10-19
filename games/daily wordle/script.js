@@ -97,7 +97,7 @@ async function initGrid() {
             cell.style.scale = "0"
         }
     })
-    grid.style.width = `min(${col * 70}px, 90vw)`
+    grid.style.width = `min(${col * 70}px, 90dvw)`
     cells_list = Array.from(document.querySelectorAll('.cell'))
     ligne1 = cells_list.slice(0 * mot.length, 1 * mot.length);
     ligne2 = cells_list.slice(1 * mot.length, 2 * mot.length);
@@ -247,7 +247,7 @@ function summonRecapBanner(mot, texte, stats) {
                 recap += "\n"
             }
         })
-            navigator.clipboard.writeText(`Leuhan's Wordle | ${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} | FR\n\n${recap}\nhttps://wordle.leuhan.dev`)// | ${langue}
+            navigator.clipboard.writeText(`Leuhan's Wordle | ${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} | FR\n\n${recap}\nhttps://wordle.leuhan.dev`)
             summonSimpleBanner('Copié !', 1000)
         })
     }
@@ -440,7 +440,7 @@ async function verification() {
                 }
             } else {
                 summonSimpleBanner('Mot déjà essayé', 1000)
-                let ligne = document.getElementById('fr_ligne' + (lignes.indexOf(ligne_active) + 1))
+                let ligne = document.getElementById('ligne' + (lignes.indexOf(ligne_active) + 1))
 
                 ligne.animate([
                     { transform: 'translateX(0px)' },
@@ -454,7 +454,7 @@ async function verification() {
             }
         } else {
             summonSimpleBanner("Le mot n'est pas dans le dictionnaire", 1000)
-            let ligne = document.getElementById('fr_ligne' + (lignes.indexOf(ligne_active) + 1))
+            let ligne = document.getElementById('ligne' + (lignes.indexOf(ligne_active) + 1))
 
             ligne.animate([
                 { transform: 'translateX(0px)' },
@@ -468,7 +468,7 @@ async function verification() {
         }
     } else {
         summonSimpleBanner(`Veuillez rentrer un mot de ${mot.length} lettres`, 1000)
-        let ligne = document.getElementById('fr_ligne' + (lignes.indexOf(ligne_active) + 1))
+        let ligne = document.getElementById('ligne' + (lignes.indexOf(ligne_active) + 1))
 
         ligne.animate([
             { transform: 'translateX(0px)', scale: 1 },
@@ -665,19 +665,19 @@ function overlay(ligne) {
 ///// Gestion du theme /////
 ////////////////////////////
 
-let themeToggle = document.querySelector('.theme-toggle input');
+// let themeToggle = document.querySelector('.theme-toggle input');
 
-themeToggle.addEventListener('change', () => {
-    toggleTheme();
-});
+// themeToggle.addEventListener('change', () => {
+//     toggleTheme();
+// });
 
-if (getFromStorage('theme') === 'light') {
-    document.documentElement.classList.remove('dark-mode');
-    themeToggle.checked = false;
-} else {
-    document.documentElement.classList.add('dark-mode');
-    themeToggle.checked = true;
-}
+// if (getFromStorage('theme') === 'light') {
+//     document.documentElement.classList.remove('dark-mode');
+//     themeToggle.checked = false;
+// } else {
+//     document.documentElement.classList.add('dark-mode');
+//     themeToggle.checked = true;
+// }
 
 ////////////////////////////////
 ///// Gestion des couleurs /////
@@ -771,19 +771,16 @@ stat_button.addEventListener('click', () => {
 const lang_button = document.getElementById('lang_button')
 const lang_sel = document.getElementById('language_selection')
 lang_button.addEventListener('mouseup', async () => {
-    lang_sel.style.display = 'flex'
-    // let temp_box = document.createElement('box')
-    // temp_box.style.zIndex = 4
-    // temp_box.addEventListener('click', () => {
-    //     lang_sel.style.display = 'none'
-    //     document.body.removeChild(temp_box)
-    // })
-    // lang_sel.style.zIndex = 100
-    // document.body.appendChild(temp_box)
-    await sleep(10)
+    if (lang_sel.style.display != 'flex') {
+        lang_sel.style.display = 'flex'
+        await sleep(10)
     document.addEventListener('click', () => {
         lang_sel.style.display = 'none'
     }, { once : true })
+    } else {
+        lang_sel.style.display = 'none'
+    }
+    
 })
 
 
@@ -816,8 +813,8 @@ lettres_trouvees[0] = mot_l[0].toUpperCase()
 
 const blurbox = document.createElement('div')
 document.body.appendChild(blurbox)
-blurbox.style.width = '100vw'
-blurbox.style.height = '100vh'
+blurbox.style.width = '100dvw'
+blurbox.style.height = '100dvh'
 blurbox.style.position = 'fixed'
 blurbox.style.top = '0'
 blurbox.style.left = '0'
@@ -1090,8 +1087,6 @@ if (getFromStorage('fr_mot') !== nouveau_mot) {
     fr_cherches += 1
     localStorage.setItem('fr_cherches', fr_cherches)
 }
-
-
 
 /////////////////
 ///// DEBUG /////

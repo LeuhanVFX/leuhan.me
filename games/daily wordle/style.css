@@ -25,6 +25,9 @@
     --text-color: #1b1813;
     --selection: #b55bff;
     --button-color: rgb(165, 154, 140);
+    --primary: #45362c;
+    --secondary: #80735e;
+    --text-color: antiquewhite;
 }
 
 .dark-mode {
@@ -41,31 +44,35 @@ html {
     --correct: rgba(15, 129, 0, 1);
     --present: rgba(221, 133, 0, 1);
     --absent: rgba(80, 80, 80, 1);
-    height: 100vh;
     user-select: none;
 }
 
-main {
+body {
     display: flex;
+    width: 100%;
+    height: 100dvh;
+    padding: 0;
+    margin: 0;
     flex-direction: column;
     align-items: center;
     justify-content: space-between;
-    height: 100vh;
-    overflow: hidden;
+    background-color: var(--primary);
+    font-family: 'Twemoji Country Flags', 'Nevanta', sans-serif;
+    color: white;
 }
 
-body {
-    display: block;
+main {
+    display: inline;
     margin: 0;
     padding: 0;
     width: 100%;
+    height: 100%;
     font-family: 'Twemoji Country Flags', 'Nevanta', sans-serif;
     text-align: justify;
     background-color: var(--primary);
     color: white;
     align-items: center;
     justify-content: space-between;
-    z-index: 2;
     filter: blur(0px);
     transition: 0.5s;
 }
@@ -84,15 +91,15 @@ body {
 }
 
 header {
-    position: sticky;
+    display: flex;
     width: 100%;
     min-width: 250px;
-    top: 0;
     padding: 0;
     background-color: var(--secondary);
     border-radius: 0  0 10px 10px;
     text-align: center;
-    z-index: 5;
+    align-items: center;
+    justify-content: center;
 }
 
 .menu {
@@ -106,8 +113,8 @@ header {
     justify-content: center;
     padding: 0;
     border-radius: 0 0 10px 10px;
-    background-color: var(--secondary);
-    z-index: 100;
+    font-family: 'Twemoji Country Flags', 'Nevanta', sans-serif;
+    z-index: 2;
 }
 
 .menu .game_logo {
@@ -386,7 +393,6 @@ header {
     margin: auto;
     background-color: var(--button-color);
     border: solid 2px var(--text-color);
-    font-family: 'Twemoji Country Flags', 'Nevanta', sans-serif;
     width: 40px;
     aspect-ratio: 1/1;
     border-radius: 5px;
@@ -397,6 +403,7 @@ header {
     justify-content: center;
     cursor: pointer;
     z-index: 1;
+    font-family: 'Twemoji Country Flags', 'Nevanta', sans-serif;
 }
 
 .language_selection {
@@ -406,6 +413,7 @@ header {
     transform: translateX(-25%);
     padding: 5px;
     border-radius: 10px;
+    font-family: 'Twemoji Country Flags', 'Nevanta', sans-serif;
     background-color: var(--secondary);
     border: solid var(--text-color) 2px;
     transition: 0.2s ease-in-out;
@@ -426,6 +434,7 @@ header {
     border-radius: 5px;
     color: white;
     text-decoration: none;
+    font-family: 'Twemoji Country Flags', 'Nevanta', sans-serif;
 }
 
 .language_selection a.selected {
@@ -457,10 +466,11 @@ header {
 }
 
 .chart {
-    display: None;
+    display: none;
     position: absolute;
     left: 50%;
-    transform: translatex(-50%);
+    top: 50%;
+    transform: translateX(-50%) translateY(-50%);
     background-color: rgba(109, 109, 109, 0.336);
     background-color: var(--secondary);
     color: antiquewhite;
@@ -489,8 +499,8 @@ header {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100dvw;
+    height: 100dvh;
     background-color: rgba(0, 0, 0, 0.5);
     backdrop-filter: blur(3px);
     z-index: 10;
@@ -856,7 +866,8 @@ p {
     display: grid;
     grid-template-columns: repeat(10, 1fr);
     gap: 5px;
-    margin: auto;
+    margin: 0 auto 50px auto;
+    padding: 0;
     width: 95%;
     max-width: 500px;
     min-width: 300px;
@@ -872,7 +883,7 @@ p {
     font-size: 24px;
     font-family: 'Nevanta';
     aspect-ratio: 2/3;
-    padding: auto;
+    padding: 0;
     align-items: center;
     justify-content: center;
     box-shadow: inset 0px -5px 0px rgb(0, 0, 0, 0.3);
@@ -1073,7 +1084,7 @@ p {
 }
 
 .RecapBanner .statframe {
-    --stat_title : "Test";
+    --stat_title : "";
     --stat : "0";
     display: flex;
     flex-direction: column;
@@ -1092,9 +1103,10 @@ p {
     background-color: rgba(0, 0, 0, 0.25);
     display: flex;
     font-weight: 1000;
-    font-size: 0.7em;
+    font-size: 0.66em;
     height: 30%;
     width: 100%;
+    padding: 5px;
     align-items: center;
     justify-content: center;
 }
@@ -1200,8 +1212,8 @@ box {
     position: absolute;
     top: 0;
     left: 0;
-    width: 100vw;
-    height: 100vh;
+    width: 100dvw;
+    height: 100dvh;
 }
 
 @media screen and (max-width: 1024px) {

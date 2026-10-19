@@ -3,19 +3,19 @@
   "name": "Wordle | Leuhan",
   "icons": [
     {
-      "src": "icon192.png",
+      "src": "icon2.png",
       "type": "image/png",
       "sizes": "192x192"
     },
     {
-      "src": "icon512.png",
+      "src": "icon2.png",
       "type": "image/png",
       "sizes": "512x512"
     }
   ],
   "start_url": "./index.html",
-  "background_color": "#ffffff",
-  "theme_color": "#007bff",
+  "background_color": "#80735e",
+  "theme_color": "#80735e",
   "display": "standalone",
   "orientation": "portrait"
 }
