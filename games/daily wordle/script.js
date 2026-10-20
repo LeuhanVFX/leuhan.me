@@ -189,33 +189,11 @@ function summonRecapBanner(mot, texte, stats) {
         })
         let game_recap = document.createElement('p')
         game_recap.innerHTML = recap
-        game_recap.style.fontSize = '1em'
+        game_recap.style.fontSize = '0.9em'
         recap_section.appendChild(game_recap)
-        // Statistiques graphiques
-        // let recap_graph = document.createElement('div')
-        // recap_graph.classList.add('stat_graph')
-        // recap_section.appendChild(recap_graph)
-        // const graph_stats = [l1, l2, l3, l4, l5, l6, fr_defaites]
-        // stat_max = Math.max(...graph_stats)
-        // console.log(graph_stats, stat_max)
-        // for (let s = 0 ; s < graph_stats.length ; s++) {
-        //     stat = graph_stats[s]
-        //     let stat_row = document.createElement('stat_row')
-        //     let stat_bar = document.createElement('stat_bar')
-        //     let num = document.createElement('p')
-        //     if (s+1 != 7) {
-        //     num.innerHTML = `<b>${s+1}</b>`
-        //     } else {
-        //         num.innerHTML = "💀"
-        //     }
-        //     stat_bar.style.setProperty('--stat_value', `${(stat/stat_max)*150+50}px`)
-        //     console.log(stat, (stat/stat_max)*200)
-        //     stat_row.appendChild(num)
-        //     stat_row.appendChild(stat_bar)
-        //     recap_graph.appendChild(stat_row)
-        // }
 
         let word_reveal = document.createElement("p")
+        word_reveal.style.fontSize = '0.9em'
         word_reveal.innerHTML = `Le mot était <br><b>${mot.toUpperCase()}</b>`
         recap_section.appendChild(word_reveal)
 
@@ -251,6 +229,28 @@ function summonRecapBanner(mot, texte, stats) {
             summonSimpleBanner('Copié !', 1000)
         })
     }
+
+    // Statistiques graphiques
+        let recap_graph = document.createElement('div')
+        recap_graph.classList.add('stat_graph')
+        recap_section.appendChild(recap_graph)
+        stat_max = Math.max(...graph_stats)
+        for (let s = 0 ; s < graph_stats.length ; s++) {
+            let stat = graph_stats[s]
+            let stat_row = document.createElement('stat_row')
+            let stat_bar = document.createElement('stat_bar')
+            let num = document.createElement('p')
+            if (s+1 != 7) {
+            num.innerHTML = `<b>${s+1}</b>`
+            } else {
+                num.innerHTML = "💀"
+            }
+            stat_bar.style.setProperty('--bar_length', `${(stat/stat_max)*100}px`)
+            stat_bar.style.setProperty('--stat_value', `"${stat}"`)
+            stat_row.appendChild(stat_bar)
+            stat_row.appendChild(num)
+            recap_graph.appendChild(stat_row)
+        }
 
     recap_banner.appendChild(timer)
     update_time()
@@ -410,8 +410,9 @@ async function verification() {
                     localStorage.setItem('fr_cherches', fr_cherches)
                     localStorage.setItem('fr_n_trouves', fr_n_trouves)
                     // Graphique Statistiques
-                    // n_l =  lignes.indexOf(ligne_active)+1
-                    // localStorage.setItem(`l${n_l}`, Number(getFromStorage(`l${n_l}`)+1))
+                    n_l =  lignes.indexOf(ligne_active)+1
+                    graph_stats[lignes.indexOf(ligne_active)]++
+                    localStorage.setItem(`fr_l${n_l}`, Number(getFromStorage(`fr_l${n_l}`))+1)
                     summonRecapBanner(mot, "Victoire !", [["Parties", fr_cherches], ["Victoires", fr_n_trouves], ["Victoires (%)", `${Math.floor((fr_n_trouves / Math.max(fr_cherches, 1)) * 100)}`]])
                     ligne_active = null
 
@@ -429,10 +430,10 @@ async function verification() {
 
                     } else {
                         localStorage.setItem('fr_cherches', fr_cherches)
+                        graph_stats[6]++
+                        localStorage.setItem('fr_defaites', Number(getFromStorage(`fr_defaites`))+1)
                         summonRecapBanner(mot, "Perdu !", [["Parties", fr_cherches], ["Victoires", fr_n_trouves], ["Victoires (%)", `${Math.floor((fr_n_trouves / Math.max(fr_cherches, 1)) * 100)}`]])
                         ligne_active = null
-                        fr_defaites++
-                        localStorage.setItem('fr_defaites', fr_defaites)
                     }
                 }
                 if (getFromStorage('fr_trouve') == "false" && ligne_active) {
@@ -980,13 +981,13 @@ let fr_cherches = 0
 let fr_taux = 0
 
 // Statistiques Graphiques
-// let l1 = 0
-// let l2 = 0
-// let l3 = 0
-// let l4 = 0
-// let l5 = 0
-// let l6 = 0
-// let fr_defaites = 0
+let fr_l1 = 0
+let fr_l2 = 0
+let fr_l3 = 0
+let fr_l4 = 0
+let fr_l5 = 0
+let fr_l6 = 0
+let fr_defaites = 0
 
 if (getFromStorage('fr_n_trouves') != null) {
     fr_n_trouves = Number(getFromStorage('fr_n_trouves'))
@@ -1010,48 +1011,50 @@ if (getFromStorage('fr_taux') != null) {
 }
 
 // Statistiques Graphiques
-// if (getFromStorage('fr_l1') != null) {
-//     fr_l1 = getFromStorage('fr_l1')
-// } else {
-//     fr_l1 = 0
-//     localStorage.setItem('fr_l1', 0)
-// }
-// if (getFromStorage('fr_l2') != null) {
-//     fr_l2 = getFromStorage('fr_l2')
-// } else {
-//     fr_l2 = 0
-//     localStorage.setItem('fr_l2', 0)
-// }
-// if (getFromStorage('fr_l3') != null) {
-//     fr_l3 = getFromStorage('fr_l3')
-// } else {
-//     fr_l3 = 0
-//     localStorage.setItem('fr_l3', 0)
-// }
-// if (getFromStorage('fr_l4') != null) {
-//     fr_l4 = getFromStorage('fr_l4')
-// } else {
-//     fr_l4 = 0
-//     localStorage.setItem('fr_l4', 0)
-// }
-// if (getFromStorage('fr_l5') != null) {
-//     fr_l5 = getFromStorage('l5')
-// } else {
-//     fr_l5 = 0
-//     localStorage.setItem('fr_l5', 0)
-// }
-// if (getFromStorage('fr_l6') != null) {
-//     fr_l6 = getFromStorage('fr_l6')
-// } else {
-//     fr_l6 = 0
-//     localStorage.setItem('fr_l6', 0)
-// }
-// if (getFromStorage('fr_defaites') != null) {
-//     fr_defaites = getFromStorage('fr_defaites')
-// } else {
-//     fr_defaites = 0
-//     localStorage.setItem('fr_defaites', 0)
-// }
+if (getFromStorage('fr_l1') != null) {
+    fr_l1 = getFromStorage('fr_l1')
+} else {
+    fr_l1 = 0
+    localStorage.setItem('fr_l1', 0)
+}
+if (getFromStorage('fr_l2') != null) {
+    fr_l2 = getFromStorage('fr_l2')
+} else {
+    fr_l2 = 0
+    localStorage.setItem('fr_l2', 0)
+}
+if (getFromStorage('fr_l3') != null) {
+    fr_l3 = getFromStorage('fr_l3')
+} else {
+    fr_l3 = 0
+    localStorage.setItem('fr_l3', 0)
+}
+if (getFromStorage('fr_l4') != null) {
+    fr_l4 = getFromStorage('fr_l4')
+} else {
+    fr_l4 = 0
+    localStorage.setItem('fr_l4', 0)
+}
+if (getFromStorage('fr_l5') != null) {
+    fr_l5 = getFromStorage('fr_l5')
+} else {
+    fr_l5 = 0
+    localStorage.setItem('fr_l5', 0)
+}
+if (getFromStorage('fr_l6') != null) {
+    fr_l6 = getFromStorage('fr_l6')
+} else {
+    fr_l6 = 0
+    localStorage.setItem('fr_l6', 0)
+}
+if (getFromStorage('fr_defaites') != null) {
+    fr_defaites = getFromStorage('fr_defaites')
+} else {
+    fr_defaites = 0
+    localStorage.setItem('fr_defaites', 0)
+}
+
+const graph_stats = [fr_l1, fr_l2, fr_l3, fr_l4, fr_l5, fr_l6, fr_defaites]
 
 function reset_stats() {
     fr_n_trouves = 0
