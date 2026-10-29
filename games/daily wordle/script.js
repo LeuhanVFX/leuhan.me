@@ -97,7 +97,6 @@ async function initGrid() {
             cell.style.scale = "0"
         }
     })
-    grid.style.width = `min(${col * 70}px, 90dvw)`
     cells_list = Array.from(document.querySelectorAll('.cell'))
     ligne1 = cells_list.slice(0 * mot.length, 1 * mot.length);
     ligne2 = cells_list.slice(1 * mot.length, 2 * mot.length);
@@ -161,17 +160,17 @@ function summonRecapBanner(mot, texte, stats) {
     timer = document.createElement('div')
     timer.classList.add("timer")
     //-----------------------------------------
-    vic_section.innerHTML = `<h3>${texte}</h3>`
-    stats.forEach((stat) => {
-        cadre = document.createElement('div')
-        cadre.classList.add("statframe")
-        cadre.style.setProperty("--stat_title", `"${stat[0]}"`)
-        cadre.style.setProperty("--stat", `"${stat[1]}"`)
-        recap_row.appendChild(cadre)
+    // stats.forEach((stat) => {
+    //     cadre = document.createElement('div')
+    //     cadre.classList.add("statframe")
+    //     cadre.style.setProperty("--stat_title", `"${stat[0]}"`)
+    //     cadre.style.setProperty("--stat", `"${stat[1]}"`)
+    //     recap_row.appendChild(cadre)
 
-    })
+    // })
     recap_section.appendChild(recap_row)
     if (getFromStorage('fr_trouve') == 'true' || getFromStorage('fr_ligne6') != null) {
+        vic_section.innerHTML = `<h3>${texte}</h3>`
         recap = ""
         lignes.forEach(ligne => {
             if (ligne[0].getAttribute('state') != null) {
@@ -228,6 +227,8 @@ function summonRecapBanner(mot, texte, stats) {
             navigator.clipboard.writeText(`Leuhan's Wordle | ${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} | FR\n\n${recap}\nhttps://wordle.leuhan.dev`)
             summonSimpleBanner('Copié !', 1000)
         })
+    } else {
+        vic_section.innerHTML = `<h3>Terminez la partie pour voir le récapitulatif</h3>`
     }
 
     // Statistiques graphiques
@@ -245,7 +246,7 @@ function summonRecapBanner(mot, texte, stats) {
             } else {
                 num.innerHTML = "💀"
             }
-            stat_bar.style.setProperty('--bar_length', `${(stat/stat_max)*100}px`)
+            stat_bar.style.setProperty('--bar_length', `${(stat/stat_max)*125}px`)
             stat_bar.style.setProperty('--stat_value', `"${stat}"`)
             stat_row.appendChild(stat_bar)
             stat_row.appendChild(num)
@@ -1012,43 +1013,43 @@ if (getFromStorage('fr_taux') != null) {
 
 // Statistiques Graphiques
 if (getFromStorage('fr_l1') != null) {
-    fr_l1 = getFromStorage('fr_l1')
+    fr_l1 = Number(getFromStorage('fr_l1'))
 } else {
     fr_l1 = 0
     localStorage.setItem('fr_l1', 0)
 }
 if (getFromStorage('fr_l2') != null) {
-    fr_l2 = getFromStorage('fr_l2')
+    fr_l2 = Number(getFromStorage('fr_l2'))
 } else {
     fr_l2 = 0
     localStorage.setItem('fr_l2', 0)
 }
 if (getFromStorage('fr_l3') != null) {
-    fr_l3 = getFromStorage('fr_l3')
+    fr_l3 = Number(getFromStorage('fr_l3'))
 } else {
     fr_l3 = 0
     localStorage.setItem('fr_l3', 0)
 }
 if (getFromStorage('fr_l4') != null) {
-    fr_l4 = getFromStorage('fr_l4')
+    fr_l4 = Number(getFromStorage('fr_l4'))
 } else {
     fr_l4 = 0
     localStorage.setItem('fr_l4', 0)
 }
 if (getFromStorage('fr_l5') != null) {
-    fr_l5 = getFromStorage('fr_l5')
+    fr_l5 = Number(getFromStorage('fr_l5'))
 } else {
     fr_l5 = 0
     localStorage.setItem('fr_l5', 0)
 }
 if (getFromStorage('fr_l6') != null) {
-    fr_l6 = getFromStorage('fr_l6')
+    fr_l6 = Number(getFromStorage('fr_l6'))
 } else {
     fr_l6 = 0
     localStorage.setItem('fr_l6', 0)
 }
 if (getFromStorage('fr_defaites') != null) {
-    fr_defaites = getFromStorage('fr_defaites')
+    fr_defaites = Number(getFromStorage('fr_defaites'))
 } else {
     fr_defaites = 0
     localStorage.setItem('fr_defaites', 0)
@@ -1090,6 +1091,8 @@ if (getFromStorage('fr_mot') !== nouveau_mot) {
     fr_cherches += 1
     localStorage.setItem('fr_cherches', fr_cherches)
 }
+
+
 
 /////////////////
 ///// DEBUG /////

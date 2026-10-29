@@ -97,7 +97,6 @@ async function initGrid() {
             cell.style.scale = "0"
         }
     })
-    grid.style.width = `min(${col * 70}px, 90dvw)`
     cells_list = Array.from(document.querySelectorAll('.cell'))
     ligne1 = cells_list.slice(0 * mot.length, 1 * mot.length);
     ligne2 = cells_list.slice(1 * mot.length, 2 * mot.length);
@@ -158,20 +157,12 @@ function summonRecapBanner(mot, texte, stats) {
     })
     recap_row = document.createElement("div")
     recap_row.classList.add("recap_row")
-    timer = document.createElement('div')
+    let timer = document.createElement('div')
     timer.classList.add("timer")
     //-----------------------------------------
-    vic_section.innerHTML = `<h3>${texte}</h3>`
-    stats.forEach((stat) => {
-        cadre = document.createElement('div')
-        cadre.classList.add("statframe")
-        cadre.style.setProperty("--stat_title", `"${stat[0]}"`)
-        cadre.style.setProperty("--stat", `"${stat[1]}"`)
-        recap_row.appendChild(cadre)
-
-    })
     recap_section.appendChild(recap_row)
     if (getFromStorage('en_trouve') == 'true' || getFromStorage('en_ligne6') != null) {
+        vic_section.innerHTML = `<h3>${texte}</h3>`
         recap = ""
         lignes.forEach(ligne => {
             if (ligne[0].getAttribute('state') != null) {
@@ -228,6 +219,8 @@ function summonRecapBanner(mot, texte, stats) {
             navigator.clipboard.writeText(`Leuhan's Wordle | ${date.getDate()}/${date.getMonth()+1}/${date.getFullYear()} | EN\n\n${recap}\nhttps://wordle.leuhan.dev/en`)
             summonSimpleBanner('Copied !', 1000)
         })
+    } else {
+        vic_section.innerHTML = `<h3>Finish the game to see the summary</h3>`
     }
 
     // Statistiques graphiques
@@ -245,7 +238,7 @@ function summonRecapBanner(mot, texte, stats) {
             } else {
                 num.innerHTML = "💀"
             }
-            stat_bar.style.setProperty('--bar_length', `${(stat/stat_max)*100}px`)
+            stat_bar.style.setProperty('--bar_length', `${(stat/stat_max)*125}px`)
             stat_bar.style.setProperty('--stat_value', `"${stat}"`)
             stat_row.appendChild(stat_bar)
             stat_row.appendChild(num)
@@ -412,7 +405,7 @@ async function verification() {
                     // Graphique Statistiques
                     n_l =  lignes.indexOf(ligne_active)+1
                     graph_stats[lignes.indexOf(ligne_active)]++
-                    localStorage.setItem(`en_l${n_l}`, Number(getFromStorage(`en_l${n_l}`)+1))
+                    localStorage.setItem(`en_l${n_l}`, Number(getFromStorage(`en_l${n_l}`))+1)
                     summonRecapBanner(mot, "You Won !", [["Games", en_cherches], ["Wins", en_n_trouves], ["Wins (%)", `${Math.floor((en_n_trouves / Math.max(en_cherches, 1)) * 100)}%`]])
                     ligne_active = null
 
@@ -766,7 +759,7 @@ settings_button.addEventListener(('change'), () => {
 
 const stat_button = document.getElementById('stat_button')
 stat_button.addEventListener('click', () => {
-    summonRecapBanner(mot, "Statistiques", [["Games", en_cherches], ["Wins", en_n_trouves], ["Wins (%)", `${Math.floor((en_n_trouves / Math.max(en_cherches, 1)) * 100)}`]])
+    summonRecapBanner(mot, "Statistics", [["Games", en_cherches], ["Wins", en_n_trouves], ["Wins (%)", `${Math.floor((en_n_trouves / Math.max(en_cherches, 1)) * 100)}`]])
 })
 
 const lang_button = document.getElementById('lang_button')
@@ -1012,43 +1005,43 @@ if (getFromStorage('en_taux') != null) {
 
 // Statistiques Graphiques
 if (getFromStorage('en_l1') != null) {
-    en_l1 = getFromStorage('en_l1')
+    en_l1 = Number(getFromStorage('en_l1'))
 } else {
     en_l1 = 0
     localStorage.setItem('en_l1', 0)
 }
 if (getFromStorage('en_l2') != null) {
-    en_l2 = getFromStorage('en_l2')
+    en_l2 = Number(getFromStorage('en_l2'))
 } else {
     en_l2 = 0
     localStorage.setItem('en_l2', 0)
 }
 if (getFromStorage('en_l3') != null) {
-    en_l3 = getFromStorage('en_l3')
+    en_l3 = Number(getFromStorage('en_l3'))
 } else {
     en_l3 = 0
     localStorage.setItem('en_l3', 0)
 }
 if (getFromStorage('en_l4') != null) {
-    en_l4 = getFromStorage('en_l4')
+    en_l4 = Number(getFromStorage('en_l4'))
 } else {
     en_l4 = 0
     localStorage.setItem('en_l4', 0)
 }
 if (getFromStorage('en_l5') != null) {
-    en_l5 = getFromStorage('en_l5')
+    en_l5 = Number(getFromStorage('en_l5'))
 } else {
     en_l5 = 0
     localStorage.setItem('en_l5', 0)
 }
 if (getFromStorage('en_l6') != null) {
-    en_l6 = getFromStorage('en_l6')
+    en_l6 = Number(getFromStorage('en_l6'))
 } else {
     en_l6 = 0
     localStorage.setItem('en_l6', 0)
 }
 if (getFromStorage('en_defaites') != null) {
-    en_defaites = getFromStorage('en_defaites')
+    en_defaites = Number(getFromStorage('en_defaites'))
 } else {
     en_defaites = 0
     localStorage.setItem('en_defaites', 0)
@@ -1097,5 +1090,5 @@ if (getFromStorage('en_mot') !== nouveau_mot) {
 /////////////////
 
 // document.addEventListener('dblclick', (event) => {
-//     reset()
+
 // })
